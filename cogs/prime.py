@@ -7,7 +7,7 @@ class Prime(commands.Cog):
 
     @commands.command()
     async def prime(self, ctx):
-        await ctx.send("Thanks for using my bot! Feel free to browse my github at https://github.com/pryme-svg")
+        await ctx.send("Thanks for using my bot! Feel free to browse my github at https://github.com/pryme-svg\nOr check out my gitlab at https://gitlab.com/pryme-svg")
 
 def setup(bot): 
     bot.add_cog(Prime(bot) 
