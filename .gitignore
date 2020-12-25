@@ -1,0 +1,5 @@
+error.log
+log.txt
+.env
+
+__pycache__/
