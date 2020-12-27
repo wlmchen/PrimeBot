@@ -57,7 +57,7 @@ class Info(commands.Cog):
                         value=f'[discord.py v{self.discord_version()}]'
                               '(https://github.com/Rapptz/discord.py) \n\u200b')
         embed.add_field(name='📁 Gitlab',
-                        value='[DiscordBot repository](https://github.com/pryme-svg/primebot)'
+                        value='[DiscordBot repository](https://gitlab.com/pryme-svg/primebot)'
                               '\n\u200b')
         return embed
 
