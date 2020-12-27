@@ -1,35 +1,79 @@
-import discord
 import aiohttp
-import random
+import discord
+import xkcd_wrapper
 from discord.ext import commands
+
+
+class Xkcd(commands.Cog):
+    """
+    Commands that deal with XKCD webcomics
+    """
 
     def __init__(self, bot):
         self.bot = bot
+        self.emoji = '🗨️'
+        self.xkcd_api_client = xkcd_wrapper.AsyncClient()
 
-    @commands.command()
-    async def xkcd(self, ctx,  *searchterm: str):
-            if num is None:
-        num = await bot.latest()
-    async with bot.session.get(f'https://xkcd.com/{num}/info.0.json') as resp: #getting data
-        data = await resp.json() #Pulling data
-    num = data['num']
-    alt = data['alt']
-    title = data['safe_title']
-    desc = f'{alt} Link to the original [here](https://xkcd.com/{num}).'
-    em = discord.Embed(title=f'{title}: #{num}', color = 0x000000, timestamp=datetime.datetime.now(), description = desc) #Because black is nice.
-    em.set_image(url = data['img']) #making embed
-    em.set_footer(text=f'Requested by {ctx.message.author.display_name}')
-    return em
-        apiUrl = 'https://xkcd.com{}info.0.json'
-        async with aiohttp.ClientSession() as cs:
-            async with cs.get(apiUrl.format('/')) as r:
-                js = await r.json()
-                if ''.join(searchterm) == 'random':
-                    randomComic = random.randint(0, js['num'])
-                    async with cs.get(apiUrl.format('/' + str(randomComic) + '/')) as r:
-                        if r.status == 200:
-                            js = await r.json()
-                comicUrl = 'https://xkcd.com/{}/'.format(js['num'])
-                date = '{}.{}.{}'.format(js['day'], js['month'], js['year'])
-                msg = '**{}**\n{}\nAlt Text:```{}```XKCD Link: <{}> ({})'.format(js['safe_title'], js['img'], js['alt'], comicUrl, date)
-                await ctx.send(msg)
+    def embed_comic(self, xkcd_comic, color=None):
+        comic = discord.Embed()
+        comic.set_author(name=f'xkcd #{xkcd_comic.id}: {xkcd_comic.title}',
+                         url=f'https://xkcd.com/{xkcd_comic.id}',
+                         icon_url='https://xkcd.com/s/0b7742.png')
+        comic.set_image(url=xkcd_comic.image_url)
+        comic.set_footer(text=xkcd_comic.description)
+        return comic
+
+    ##########
+    # COMMANDS
+    #########
+
+    # XKCD
+    @commands.group(name='xkcd', ignore_extra=False, invoke_without_command=True)
+    async def command_xkcd(self, context):
+        """
+        Shows a random xkcd comic
+
+        Retrieves a random xkcd webcomic from xkcd.com
+
+        ex:
+        `<prefix>xkcd`
+        """
+        random_comic = await self.xkcd_api_client.random(raw_comic_image=False)
+        embed_comic = self.embed_comic(random_comic)
+        await context.send(embed=embed_comic)
+
+    @command_xkcd.command(name='id', ignore_extra=False, aliases=['n', '-n', 'number'])
+    async def command_xkcd_id(self, context, comic_id):
+        comic_id = int(comic_id)
+
+        """
+        Shows the selected xkcd comic
+        Retrieves the xkcd webcomic with the specified ID from xkcd.com
+        ex:
+        `<prefix>xkcd id` 100
+        `<prefix>xkcd n` 1234
+        """
+        comic = await self.xkcd_api_client.get(comic_id, raw_comic_image=False)
+        embed_comic = self.embed_comic(comic)
+        await context.send(embed=embed_comic)
+
+
+    # XKCD LATEST
+    @command_xkcd.command(name='latest', ignore_extra=False, aliases=['l', '-l', 'last'])
+    async def command_xkcd_latest(self, context):
+        """
+        Shows the latest xkcd comic
+
+        Retrieves the latest xkcd webcomic from xkcd.com
+
+        ex:
+        `<prefix>xkcd latest`
+        `<prefix>xkcd l`
+        """
+        comic = await self.xkcd_api_client.latest(raw_comic_image=False)
+        embed_comic = self.embed_comic(comic)
+        await context.send(embed=embed_comic)
+
+def setup(bot):
+    bot.add_cog(Xkcd(bot)
+            )
