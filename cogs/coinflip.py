@@ -12,10 +12,10 @@ class Flip(commands.Cog):
     async def flip(self, ctx):
        value = randint(1,2)
        if value == 1:
-           coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Heads!".format)
+           coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Heads!")
            await ctx.send(embed=coinflipembed)
        if value == 2:
-           coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Tails!".format)
+           coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Tails!")
            await ctx.send(embed=coinflipembed)
 
 
