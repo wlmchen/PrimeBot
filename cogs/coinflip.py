@@ -15,7 +15,7 @@ class Flip(commands.Cog):
            coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Heads!".format)
            await ctx.send(embed=coinflipembed)
        if value == 2:
-           embedVar = discord.Embed(title="Coin Flip", description=":coin: Tails!".format)
+           coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Tails!".format)
            await ctx.send(embed=coinflipembed)
 
 
