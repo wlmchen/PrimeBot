@@ -9,7 +9,7 @@ class Flip(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def roll(self, ctx):
+    async def flip(self, ctx):
        value = randint(1,2)
        if value == 1:
            embedVar = discord.Embed(title="Coin Flip", description=":coin: Heads!".format)
