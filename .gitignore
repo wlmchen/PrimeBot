@@ -1,5 +1,5 @@
 error.log
 log.txt
 .env
-
+prefixes.json
 __pycache__/
