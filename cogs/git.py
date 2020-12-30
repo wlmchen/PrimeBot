@@ -27,6 +27,7 @@ class Git(commands.Cog):
         if len(log.stdout.decode('utf-8')) > 2000:
             mystr = log.stdout.decode('utf-8')
             mystr = mystr[0:2030]
+            mystr = "```\n" + mystr + "```"
         else:
             mystr = log.stdout.decode('utf-8')
             mystr = "```\n" + mystr + "```"
