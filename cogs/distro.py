@@ -10,7 +10,7 @@ class Distro(commands.Cog):
         self.bot = bot 
  
     @commands.command()
-    @commands.cooldown(1, 20, commands.BucketType.user)
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def distro(self, ctx, arg):
         url = urljoin("http://www.distrowatch.com/", arg)
         html_string = requests.get(url).content
@@ -21,7 +21,9 @@ class Distro(commands.Cog):
             if len(line) > 100 and not '<' in line and 'is a' in line:
                 description = line
                 break
-
+        
+        if description == None:
+            description = ":x: That distro doesn't exist!"
         soup = BeautifulSoup(html_string)
         title = soup.title.string
         embed = discord.Embed(title=title, description = description)
