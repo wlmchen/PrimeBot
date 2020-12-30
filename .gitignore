@@ -3,3 +3,4 @@ log.txt
 .env
 prefixes.json
 __pycache__/
+distro_cache.sqlite
