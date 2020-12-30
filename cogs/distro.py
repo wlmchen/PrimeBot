@@ -21,7 +21,7 @@ class Distro(commands.Cog):
                 description = line
                 break
 
-        soup = BeautiflSoup(html_string)
+        soup = BeautifulSoup(html_string)
         title = soup.title.string
         embed = discord.Embed(title=title, description = description)
         await ctx.send(embed=embed)
