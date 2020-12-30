@@ -22,8 +22,11 @@ class Distro(commands.Cog):
                 description = line
                 break
         
-        if description == None:
+        try:
+            description
+        except NameError:
             description = ":x: That distro doesn't exist!"
+
         soup = BeautifulSoup(html_string)
         title = soup.title.string
         embed = discord.Embed(title=title, description = description)
