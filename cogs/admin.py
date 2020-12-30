@@ -46,7 +46,7 @@ class Admin(commands.Cog):
     @commands.is_owner()
     async def restartBot(self, ctx):
         await ctx.send(":robot: Bot is restarting")
-        subprocess.call(["cd", "~/PrimeBot"])
+        os.chdir('/home/primebot/PrimeBot')
         subprocess.call(["git", "pull --rebase"])
         await ctx.bot.logout()
         await login(TOKEN, bot=True)
