@@ -46,6 +46,7 @@ class Admin(commands.Cog):
     async def restartBot(self, ctx):
         await ctx.bot.logout()
         await login(TOKEN, bot=True)
+        await ctx.send(":robot: Bot has been restarted")
 
 def setup(bot):
     bot.add_cog(Admin(bot))
