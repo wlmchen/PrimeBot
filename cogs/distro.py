@@ -10,6 +10,7 @@ class Distro(commands.Cog):
         self.bot = bot 
  
     @commands.command()
+    @commands.cooldown(1, 20, commands.BucketType.user)
     async def distro(self, ctx, arg):
         url = urljoin("http://www.distrowatch.com/", arg)
         html_string = requests.get(url).content
