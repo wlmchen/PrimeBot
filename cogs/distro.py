@@ -13,7 +13,7 @@ class Distro(commands.Cog):
     requests_cache.install_cache('distro_cache')
  
     @commands.command()
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def distro(self, ctx, arg):
         url = urljoin("http://www.distrowatch.com/", arg)
         html_string = requests.get(url).content
