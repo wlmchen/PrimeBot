@@ -6,13 +6,16 @@ A personal bot that runs on Discord.
 
 1. Install dependencies
 
-`pip install -U -r requirements.txt`
+`make install_dependencies`
 
 2. Create a `.env` file
 
 In the `.env` file, add the following line, `DISCORD_TOKEN="YOUR_TOKEN"`
 
+3. Initialize prefixes
 
-3. Run the bot
+`make initialize`
+
+4. Run the bot
 
 `python bot.py`
