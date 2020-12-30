@@ -17,7 +17,8 @@ class Git(commands.Cog):
         else:
             mystr = head.stdout.decode('utf-8')
         mystr = "```diff\n" + mystr + "```"
-        embedLog = discord.Embed(title="Git Head", description=mystr)
+        embedHead = discord.Embed(title="Git Head", description=mystr)
+        embedHead.set_footer(text="[Git Repository](https://gitlab.com/pryme-svg/primebot)")
         await ctx.send(embed=embedLog)
 
     @commands.command()
@@ -32,6 +33,7 @@ class Git(commands.Cog):
             mystr = log.stdout.decode('utf-8')
             mystr = "```\n" + mystr + "```"
         embedLog = discord.Embed(title="Git Log(truncated)", description=mystr)
+        embedLog.set_footer(text="[Git Repository](https://gitlab.com/pryme-svg/primebot)")
         await ctx.send(embed=embedLog)
 
 def setup(bot):
