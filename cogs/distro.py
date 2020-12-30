@@ -17,7 +17,7 @@ class Distro(commands.Cog):
         html_string = html_string.decode('utf-8')
 
         for line in html_string.splitlines():
-            if len(line) > 100 and not '<' in line and not '(' in line and 'is a' in line:
+            if len(line) > 100 and not '<' in line and 'is a' in line:
                 description = line
                 break
 
@@ -25,6 +25,7 @@ class Distro(commands.Cog):
         title = soup.title.string
         embed = discord.Embed(title=title, description = description)
         await ctx.send(embed=embed)
+
 def setup(bot):
     bot.add_cog(Distro(bot))
 
