@@ -1,6 +1,7 @@
 import discord 
 from bs4 import BeautifulSoup
 import requests
+import requests_cache
 import lxml.html
 from urllib.parse import urljoin
 from discord.ext import commands 
@@ -8,6 +9,8 @@ from discord.ext import commands
 class Distro(commands.Cog): 
     def __init__(self, bot): 
         self.bot = bot 
+
+    requests_cache.install_cache('distro_cache')
  
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
