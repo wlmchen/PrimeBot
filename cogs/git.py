@@ -11,9 +11,9 @@ class Git(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def githead(self, ctx):
         head = subprocess.run(['git', '--no-pager', 'show', 'HEAD'], stdout=subprocess.PIPE)
-        if len(head.stdout.decode('utf-8')) > 6000:
+        if len(head.stdout.decode('utf-8')) > 2000:
             mystr = head.stdout.decode('utf-8')
-            mystr = mystr[0:5000]
+            mystr = mystr[0:2030]
         else:
             mystr = head.stdout.decode('utf-8')
         mystr = "```diff\n" + mystr + "```"
@@ -24,9 +24,9 @@ class Git(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def gitlog(self, ctx):
         log = subprocess.run(['git', '--no-pager', 'log'], stdout=subprocess.PIPE)
-        if len(log.stdout.decode('utf-8')) > 6000:
+        if len(log.stdout.decode('utf-8')) > 2000:
             mystr = log.stdout.decode('utf-8')
-            mystr = mystr[0:2048]
+            mystr = mystr[0:2030]
         else:
             mystr = log.stdout.decode('utf-8')
             mystr = "```\n" + mystr + "```"
