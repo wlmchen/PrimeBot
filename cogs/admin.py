@@ -1,4 +1,5 @@
 import discord
+import subprocess
 import os
 from dotenv import load_dotenv
 from discord.ext import commands
@@ -45,6 +46,8 @@ class Admin(commands.Cog):
     @commands.is_owner()
     async def restartBot(self, ctx):
         await ctx.send(":robot: Bot is restarting")
+        subprocess.call(["cd", "~/PrimeBot"])
+        subprocess.call(["git", "pull --rebase"])
         await ctx.bot.logout()
         await login(TOKEN, bot=True)
 
