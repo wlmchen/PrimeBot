@@ -9,7 +9,7 @@ class ball(commands.Cog):
 
     @commands.command(aliases=['8ball'])
     async def _8ball(self, ctx, *, question):
-        if ctx.message.mention_everyone:
+        if "@" in ctx.message.content:
             await ctx.send("You may not tag everyone in this command {}".format(ctx.message.author.mention))
             return
         responses = [
