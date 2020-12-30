@@ -19,7 +19,7 @@ class Git(commands.Cog):
         mystr = "```diff\n" + mystr + "```"
         embedHead = discord.Embed(title="Git Head", description=mystr)
         embedHead.set_footer(text="[Git Repository](https://gitlab.com/pryme-svg/primebot)")
-        await ctx.send(embed=embedLog)
+        await ctx.send(embed=embedHead)
 
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
