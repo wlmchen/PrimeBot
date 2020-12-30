@@ -46,6 +46,7 @@ class Admin(commands.Cog):
     @commands.is_owner()
     async def restartBot(self, ctx):
         await ctx.send(":robot: Bot is restarting")
+        await ctx.send("Performing `git pull`")
         subprocess.call(["git", "pull", "--rebase"])
         await ctx.bot.logout()
         await login(TOKEN, bot=True)
