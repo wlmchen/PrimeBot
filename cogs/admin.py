@@ -1,5 +1,11 @@
 import discord
+import os
+from dotenv import load_dotenv
 from discord.ext import commands
+
+load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
+
 
 class Admin(commands.Cog):
     def __init__(self, bot):
@@ -34,6 +40,12 @@ class Admin(commands.Cog):
         else:
             await ctx.send("Cog is unloaded")
             self.bot.unload_extension(f"cogs.{cog_name}")
+
+    @commands.command()
+    @commands.is_owner()
+    async def restartBot(self, ctx):
+        await ctx.bot.logout()
+        await login(TOKEN, bot=True)
 
 def setup(bot):
     bot.add_cog(Admin(bot))
