@@ -1,18 +1,23 @@
 import discord 
 from discord.ext import commands 
+from discord.ext.commands import MemberConverter
 class Moderation(commands.Cog): 
     def __init__(self, bot): 
         self.bot = bot 
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member: discord.Member, *, reason=None):
+    async def kick(self, ctx, member, *, reason=None):
+        converter = discord.ext.commands.MemberConverter()
+        member = await convert.convert(ctx, member)
         await member.kick(reason= 'Kicked by: {}, Reason: {}'.format(ctx.message.author,reason))
         await ctx.send(f'User {member.mention} has been kicked')
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member: discord.Member, *, reason=None):
+    async def ban(self, ctx, member, *, reason=None):
+        converter = discord.ext.commands.MemberConverter()
+        member = await convert.convert(ctx, member)
         await member.ban(reason= 'Banned by: {}, Reason: {}'.format(ctx.message.author,reason))
         await ctx.send(f'User {member.mention} has been banned')
 
