@@ -23,7 +23,7 @@ class Events(commands.Cog):
         if 'happy birthday' in message.content.lower():
             await message.channel.send('Happy Birthday! 🎈🎉')
         if 'i want to die' in message.content.lower():
-            await message.channel.send("Call the suicide prevention hotline at 800-273-8255")
+            await message.channel.send("Are you considering suicide? You are not alone. If you feel suicidal, please call the suicide prevention hotline at 800-273-8255.")
 
 def setup(bot):
     bot.add_cog(Events(bot))
