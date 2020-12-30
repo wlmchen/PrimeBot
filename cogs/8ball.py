@@ -12,7 +12,7 @@ class ball(commands.Cog):
         if ctx.message.mention_everyone:
             await ctx.send("You may not tag everyone in this command {}".format(ctx.message.author.mention))
             return
-      responses = [
+        responses = [
                 "It is certain.",
                 "It is decidedly so.",
                 "Without a doubt.",
