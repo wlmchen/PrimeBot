@@ -54,7 +54,7 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def serverlist(self, ctx):
-        for guild in bot.guilds:
+        for guild in self.bot.guilds:
             await ctx.send(guild.name)
 
 def setup(bot):
