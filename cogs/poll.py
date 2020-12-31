@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 
-
 class Poll(commands.Cog):
 
     def __init__(self, bot):
@@ -9,7 +8,7 @@ class Poll(commands.Cog):
 
     @commands.command(pass_context=True)
     async def poll(self, ctx, question, *options: str):
-        options = [[(word.lower()) for word in option] for option in options]
+        options = [(word.lower()) for word in options]
         if "@" in ctx.message.content:
             await ctx.send("You may not tag everyone in this command {}".format(ctx.message.author.mention))
             return
