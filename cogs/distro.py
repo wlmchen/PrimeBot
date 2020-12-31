@@ -1,9 +1,9 @@
 import discord 
 from bs4 import BeautifulSoup
 import requests
+import random
 import requests_cache
 import lxml.html
-from urllib.parse import urljoin
 from discord.ext import commands 
 
 class Distro(commands.Cog): 
@@ -15,7 +15,9 @@ class Distro(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def distro(self, ctx, arg):
-        url = urljoin("http://www.distrowatch.com/", arg)
+        if arg == "random":
+            arg = (random.choice(list(open('linux.list')))
+        url = "http://www.distrowatch.com/table.php?distribution=" + arg
         html_string = requests.get(url).content
 
         html_string = html_string.decode('utf-8')
