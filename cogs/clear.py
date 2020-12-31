@@ -6,7 +6,7 @@ class Clear(commands.Cog):
 
     @commands.cooldown(20, 30, commands.BucketType.user)
     @commands.has_permissions(manage_messages=True)
-    @commands.command()
+    @commands.command(aliases=['clean'])
     async def clear(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount)
 

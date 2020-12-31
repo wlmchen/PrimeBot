@@ -9,6 +9,7 @@ class Poll(commands.Cog):
 
     @commands.command(pass_context=True)
     async def poll(self, ctx, question, *options: str):
+        options = options.lower()
         if "@" in ctx.message.content:
             await ctx.send("You may not tag everyone in this command {}".format(ctx.message.author.mention))
             return
