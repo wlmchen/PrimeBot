@@ -17,6 +17,7 @@ class Distro(commands.Cog):
     async def distro(self, ctx, arg):
         if arg == "random":
             arg = (random.choice(list(open('linux.list')))
+
         url = "http://www.distrowatch.com/table.php?distribution=" + arg
         html_string = requests.get(url).content
 
