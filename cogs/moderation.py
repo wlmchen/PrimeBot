@@ -10,6 +10,9 @@ class Moderation(commands.Cog):
     async def kick(self, ctx, member, *, reason=None):
         converter = discord.ext.commands.MemberConverter()
         member = await converter.convert(ctx, member)
+        if member == None or member == ctx.message.author:
+            await ctx.send("You cannot kick yourself {}".format(ctx.message.author.mention))
+            return
         await member.kick(reason= 'Kicked by: {}, Reason: {}'.format(ctx.message.author,reason))
         await ctx.send(f'User {member.mention} has been kicked')
 
@@ -17,6 +20,9 @@ class Moderation(commands.Cog):
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member, *, reason=None):
         converter = discord.ext.commands.MemberConverter()
+        if member == None or member == ctx.message.author:
+            await ctx.send("You cannot ban yourself {}".format(ctx.message.author.mention))
+            return
         member = await converter.convert(ctx, member)
         await member.ban(reason= 'Banned by: {}, Reason: {}'.format(ctx.message.author,reason))
         await ctx.send(f'User {member.mention} has been banned')
