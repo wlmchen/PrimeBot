@@ -1,6 +1,6 @@
 [![Discord](https://img.shields.io/discord/794255644915007559.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/AtecbFZPZv)
 [![License](https://img.shields.io/github/license/pryme-svg/PrimeBot)](https://gitlab.com/pryme-svg/primebot/-/raw/master/LICENSE)
-![PY](https://img.shields.io/badge/--orange?logo=python)
+[![PY](https://img.shields.io/badge/--orange?logo=python)]
 
 # PrimeBot
 
