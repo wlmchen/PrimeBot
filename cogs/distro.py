@@ -16,7 +16,7 @@ class Distro(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def distro(self, ctx, arg):
         if arg == "random":
-            arg = (random.choice(list(open('linux.list')))
+            arg = (random.choice(list(open('linux.list'))))
 
         url = "http://www.distrowatch.com/table.php?distribution=" + arg
         html_string = requests.get(url).content
