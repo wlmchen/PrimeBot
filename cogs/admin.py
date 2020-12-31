@@ -51,6 +51,12 @@ class Admin(commands.Cog):
         await ctx.bot.logout()
         await login(TOKEN, bot=True)
 
+    @commands.command()
+    @commands.is_owner()
+    async def serverlist(self, ctx):
+        for guild in bot.guilds:
+            await ctx.send(guild.name)
+
 def setup(bot):
     bot.add_cog(Admin(bot))
 
