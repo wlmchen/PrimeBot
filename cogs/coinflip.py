@@ -4,13 +4,14 @@ import random
 
 randint = random.randint
 
+
 class Flip(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
     async def flip(self, ctx):
-       value = randint(1,2)
+       value = randint(1, 2)
        if value == 1:
            coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Heads!")
            await ctx.send(embed=coinflipembed)
