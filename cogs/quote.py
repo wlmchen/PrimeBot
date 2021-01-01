@@ -1,4 +1,5 @@
 import discord
+import requests_cache
 import requests
 import json
 from discord.ext import commands
@@ -10,7 +11,9 @@ class Quote(commands.Cog):
 
     @commands.command()
     async def quote(self, ctx):
-        response = requests.get("https://zenquotes.io/api/random")
+        s = requests_cache.CachedSession()
+        with s.cache_disabled():
+            response = requests.get("https://zenquotes.io/api/random")
         json_data = json.loads(response.text)
         quote = json_data[0]['q'] + " -" + json_data[0]['a']
         embedQuote = discord.Embed(title="Inspirational Quote", description=quote, color=0x282828)
