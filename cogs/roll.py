@@ -17,7 +17,7 @@ class Roll(commands.Cog):
         if value == 7:
             await ctx.send("{} has rolled a pi! :pie: {} ".format(ctx.message.author, mathpi))
             return
-       await ctx.send("{} has rolled a {}!".format(ctx.message.author, value))
+        await ctx.send("{} has rolled a {}!".format(ctx.message.author, value))
 
 def setup(bot):
     bot.add_cog(Roll(bot))
