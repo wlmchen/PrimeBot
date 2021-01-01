@@ -1,13 +1,9 @@
 import os
 import discord
-import requests
 import json
-import random
 from dotenv import load_dotenv
 from discord.ext import commands
-from discord.ext.commands import has_permissions, MissingPermissions
-import traceback
-import logging
+
 
 def get_prefix(bot, message):
     with open('prefixes.json', 'r') as f:
@@ -15,11 +11,13 @@ def get_prefix(bot, message):
 
     return prefixes[str(message.guild.id)]
 
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot(command_prefix = get_prefix)
+bot = commands.Bot(command_prefix=get_prefix)
 bot.remove_command('help')
+
 
 @bot.event
 async def on_guild_join(guild):
@@ -27,7 +25,7 @@ async def on_guild_join(guild):
         prefixes = json.load(f)
 
     prefixes[str(guild.id)] = '>'
-    
+
     with open('prefixes.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
 
@@ -41,6 +39,7 @@ async def on_guild_remove(guild):
 
     with open('prefixes.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
+
 
 @bot.command()
 @commands.has_permissions(manage_roles=True)

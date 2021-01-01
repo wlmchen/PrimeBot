@@ -1,12 +1,13 @@
-import discord 
 import random
-from discord.ext import commands 
+import discord
+from discord.ext import commands
 
-class ball(commands.Cog): 
-    def __init__(self, bot): 
-        self.bot = bot 
+
+class ball(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
     @commands.cooldown(20, 30, commands.BucketType.user)
-
     @commands.command(aliases=['8ball'])
     async def _8ball(self, ctx, *, question):
         if "@" in ctx.message.content:
@@ -34,6 +35,7 @@ class ball(commands.Cog):
                 "Outlook not so good.",
                 "Very doubtful."]
         await ctx.send(f'Question: {question}\nAnswer: {random.choice(responses)}')
+
 
 def setup(bot):
     bot.add_cog(ball(bot))

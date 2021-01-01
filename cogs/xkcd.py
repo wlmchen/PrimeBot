@@ -1,4 +1,3 @@
-import aiohttp
 import discord
 import xkcd_wrapper
 from discord.ext import commands
@@ -57,7 +56,6 @@ class Xkcd(commands.Cog):
         embed_comic = self.embed_comic(comic)
         await context.send(embed=embed_comic)
 
-
     # XKCD LATEST
     @command_xkcd.command(name='latest', ignore_extra=False, aliases=['l', '-l', 'last'])
     async def command_xkcd_latest(self, context):
@@ -74,6 +72,6 @@ class Xkcd(commands.Cog):
         embed_comic = self.embed_comic(comic)
         await context.send(embed=embed_comic)
 
+
 def setup(bot):
-    bot.add_cog(Xkcd(bot)
-            )
+    bot.add_cog(Xkcd(bot))

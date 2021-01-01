@@ -5,6 +5,7 @@ import discord
 import psutil
 from discord.ext import commands
 
+
 class Info(commands.Cog):
     """
     Commands that show information about the bot
@@ -120,6 +121,7 @@ class Info(commands.Cog):
              commands.NoPrivateMessage, commands.CheckFailure),
             (commands.TooManyArguments, bot_message),
             (commands.BadArgument, bot_message))
+
 
 def setup(bot):
     bot.add_cog(Info(bot))

@@ -1,17 +1,17 @@
-import discord 
+import discord
 from bs4 import BeautifulSoup
 import requests
 import random
 import requests_cache
-import lxml.html
-from discord.ext import commands 
+from discord.ext import commands
 
-class Distro(commands.Cog): 
-    def __init__(self, bot): 
-        self.bot = bot 
+
+class Distro(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
     requests_cache.install_cache('distro_cache')
- 
+
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def distro(self, ctx, arg):
@@ -24,10 +24,10 @@ class Distro(commands.Cog):
         html_string = html_string.decode('utf-8')
 
         for line in html_string.splitlines():
-            if len(line) > 100 and not '<' in line and 'is a' in line:
+            if len(line) > 100 and '<' not in line and 'is a' in line:
                 description = line
                 break
-        
+
         try:
             description
         except NameError:
@@ -35,9 +35,9 @@ class Distro(commands.Cog):
 
         soup = BeautifulSoup(html_string)
         title = soup.title.string
-        embed = discord.Embed(title=title, description = description)
+        embed = discord.Embed(title=title, description=description)
         await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Distro(bot))
-

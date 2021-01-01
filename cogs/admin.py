@@ -49,7 +49,7 @@ class Admin(commands.Cog):
         await ctx.send("Performing `git pull`")
         subprocess.call(["git", "pull", "--rebase"])
         await ctx.bot.logout()
-        await login(TOKEN, bot=True)
+        await bot.login(TOKEN, bot=True)
 
     @commands.command()
     @commands.is_owner()
@@ -57,6 +57,6 @@ class Admin(commands.Cog):
         for guild in self.bot.guilds:
             await ctx.send(guild.name)
 
+
 def setup(bot):
     bot.add_cog(Admin(bot))
-

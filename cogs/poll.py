@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+
 class Poll(commands.Cog):
 
     def __init__(self, bot):
@@ -33,6 +34,7 @@ class Poll(commands.Cog):
             await react_message.add_reaction(reaction)
         embed.set_footer(text='Poll ID: {}'.format(react_message.id))
         await self.bot.edit_message(react_message, embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Poll(bot))

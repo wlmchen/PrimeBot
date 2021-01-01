@@ -1,7 +1,7 @@
 import subprocess
 import discord
 from discord.ext import commands
-import subprocess
+
 
 class Git(commands.Cog):
     def __init__(self, bot):
@@ -18,7 +18,7 @@ class Git(commands.Cog):
             mystr = head.stdout.decode('utf-8')
         mystr = "```diff\n" + mystr + "```"
         embedHead = discord.Embed(title="Git Head", description=mystr)
-        embedHead.add_field(name=".", value = "[Git Repository](https://gitlab.com/pryme-svg/primebot)")
+        embedHead.add_field(name=".", value="[Git Repository](https://gitlab.com/pryme-svg/primebot)")
         await ctx.send(embed=embedHead)
 
     @commands.command()
@@ -33,8 +33,9 @@ class Git(commands.Cog):
             mystr = log.stdout.decode('utf-8')
             mystr = "```\n" + mystr + "```"
         embedLog = discord.Embed(title="Git Log(truncated)", description=mystr)
-        embedLog.add_field(name=".", value = "[Git Repository](https://gitlab.com/pryme-svg/primebot)")
+        embedLog.add_field(name=".", value="[Git Repository](https://gitlab.com/pryme-svg/primebot)")
         await ctx.send(embed=embedLog)
+
 
 def setup(bot):
     bot.add_cog(Git(bot))

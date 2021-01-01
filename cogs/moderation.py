@@ -1,19 +1,20 @@
-import discord 
-from discord.ext import commands 
-from discord.ext.commands import MemberConverter
-class Moderation(commands.Cog): 
-    def __init__(self, bot): 
-        self.bot = bot 
+import discord
+from discord.ext import commands
+
+
+class Moderation(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member, *, reason=None):
         converter = discord.ext.commands.MemberConverter()
         member = await converter.convert(ctx, member)
-        if member == None or member == ctx.message.author:
+        if member is None or member == ctx.message.author:
             await ctx.send("You cannot kick yourself {}".format(ctx.message.author.mention))
             return
-        await member.kick(reason= 'Kicked by: {}, Reason: {}'.format(ctx.message.author,reason))
+        await member.kick(reason='Kicked by: {}, Reason: {}'.format(ctx.message.author, reason))
         await ctx.send(f'User {member.mention} has been kicked')
 
     @commands.command()
@@ -21,19 +22,19 @@ class Moderation(commands.Cog):
     async def ban(self, ctx, member, *, reason=None):
         converter = discord.ext.commands.MemberConverter()
         member = await converter.convert(ctx, member)
-        if member == None or member == ctx.message.author:
+        if member is None or member == ctx.message.author:
             await ctx.send("You cannot ban yourself {}".format(ctx.message.author.mention))
             return
-        await member.ban(reason= 'Banned by: {}, Reason: {}'.format(ctx.message.author,reason))
+        await member.ban(reason='Banned by: {}, Reason: {}'.format(ctx.message.author, reason))
         await ctx.send(f'User {member.mention} has been banned')
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def unban (ctx, *, member):
+    async def unban(self, ctx, *, member):
         if '@' in member:
             member = member[1:]
         if '#' not in member:
-            user = await bot.fetch_user(member)
+            user = await self.bot.fetch_user(member)
             await ctx.guild.unban(user)
             await ctx.send(f'Unbanned {user.mention}')
             return
@@ -48,5 +49,6 @@ class Moderation(commands.Cog):
                 await ctx.send(f'Unbanned {user.mention}')
                 return
 
-def setup(bot): 
+
+def setup(bot):
     bot.add_cog(Moderation(bot))
