@@ -13,7 +13,7 @@ class Quote(commands.Cog):
     async def quote(self, ctx):
         s = requests_cache.CachedSession()
         with s.cache_disabled():
-            response = requests.get("https://zenquotes.io/api/random")
+            response = s.requests.get("https://zenquotes.io/api/random")
         json_data = json.loads(response.text)
         quote = json_data[0]['q'] + " -" + json_data[0]['a']
         embedQuote = discord.Embed(title="Inspirational Quote", description=quote, color=0x282828)
