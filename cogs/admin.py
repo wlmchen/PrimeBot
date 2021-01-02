@@ -42,6 +42,73 @@ class Admin(commands.Cog):
             await ctx.send("Cog is unloaded")
             self.bot.unload_extension(f"cogs.{cog_name}")
 
+    
+    @commands.command(hidden=True, aliases=['game'])
+    @commands.is_owner()
+    async def changegame(self, ctx, gameType: str, *, gameName: str):
+        gameType = gameType.lower()
+        if gameType == 'playing':
+            type = discord.Activity.playing
+        elif gameType == 'watching':
+            type = discord.Activity.watching
+        elif gameType == 'listening':
+            type = discord.Activity.listening
+        elif gameType == 'streaming':
+            type = discord.Activity.streaming
+        guildsCount = len(self.bot.guilds)
+        memberCount = len(list(self.bot.get_all_members()))
+        gameName = gameName.format(guilds = guildsCount, members = memberCount)
+        await self.bot.change_presence(activity=discord.Activity(type=type, name=gameName))
+        await ctx.send(f'**:ok:** Changed the game to: {gameType} **{gameName}**')
+
+    @commands.command(hidden=True)
+    @commands.is_owner()
+    async def changestatus(self, ctx, status: str):
+        status = status.lower()
+        if status == 'offline' or status == 'off' or status == 'invisible':
+            discordStatus = discord.Status.invisible
+        elif status == 'idle':
+            discordStatus = discord.Status.idle
+        elif status == 'dnd' or status == 'disturb':
+            discordStatus = discord.Status.dnd
+        else:
+            discordStatus = discord.Status.online
+        await self.bot.change_presence(status=discordStatus)
+        await ctx.send(f'**:ok:** Changed the status to: **{discordStatus}**')
+
+    @commands.command()
+    @commands.is_owner()
+    async def leaveserver(self, ctx, guildid: str):
+        if guildid == 'this':
+            await ctx.guild.leave()
+            return
+        else:
+            guild = self.bot.get_guild(guildid)
+            if guild:
+                await guild.leave()
+                msg = f':ok: I have left {guild.name}!'
+            else:
+                msg = ':x: Couldn\'t find this guild id!'
+        await ctx.send(msg)
+
+
+    @commands.command()
+    @commands.is_owner()
+    async def echo(self, ctx, *, a):
+        ctx.send(a)
+
+    @commands.command(hidden=True)
+    @commands.is_owner()
+    async def nickname(self, ctx, *name):
+        nickname = ' '.join(name)
+        me = ctx.message.server.me
+        await bot.change_nickname(me, nickname)
+        if nickname:
+            msg = f':ok: Nickname changed to: **{nickname}**'
+        else:
+            msg = f':ok: Reset nickname'
+        await ctx.send(msg)
+
     @commands.command()
     @commands.is_owner()
     async def restartBot(self, ctx):
