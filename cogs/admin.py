@@ -48,30 +48,22 @@ class Admin(commands.Cog):
     async def changegame(self, ctx, gameType: str, *, gameName: str):
         gameType = gameType.lower()
         if gameType == 'playing':
-            type = discord.Activity.playing
+            await bot.change_presence(activity=discord.Game(name=gameName))
         elif gameType == 'watching':
-            type = discord.Activity.watching
+            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=gameName))
         elif gameType == 'listening':
-            type = discord.Activity.listening
+            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=gameName))
         elif gameType == 'streaming':
-            type = discord.Activity.streaming
-        guildsCount = len(self.bot.guilds)
-        memberCount = len(list(self.bot.get_all_members()))
-        gameName = gameName.format(guilds = guildsCount, members = memberCount)
-        await self.bot.change_presence(activity=discord.Activity(type=type, name=gameName))
+            await bot.change_presence(activity=discord.Streaming(name=gameName, url="http://github.com/pryme-svg/primebot"))
         await ctx.send(f'**:ok:** Changed the game to: {gameType} **{gameName}**')
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def changestatus(self, ctx, status: str):
         status = status.lower()
-        if status == 'offline' or status == 'off' or status == 'invisible':
-            discordStatus = discord.Status.invisible
-        elif status == 'idle':
+        if status == 'idle':
             discordStatus = discord.Status.idle
-        elif status == 'dnd' or status == 'disturb':
-            discordStatus = discord.Status.dnd
-        else:
+        elif status == 'online' or status == 'on':
             discordStatus = discord.Status.online
         await self.bot.change_presence(status=discordStatus)
         await ctx.send(f'**:ok:** Changed the status to: **{discordStatus}**')
