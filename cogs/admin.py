@@ -99,7 +99,7 @@ class Admin(commands.Cog):
     async def nickname(self, ctx, *name):
         nickname = ' '.join(name)
         me = ctx.me
-        await self.bot.change_nickname(me, nickname)
+        await me.edit(nick=nickname)
         if nickname:
             msg = f':ok: Nickname changed to: **{nickname}**'
         else:
