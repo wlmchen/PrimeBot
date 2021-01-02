@@ -48,13 +48,13 @@ class Admin(commands.Cog):
     async def changegame(self, ctx, gameType: str, *, gameName: str):
         gameType = gameType.lower()
         if gameType == 'playing':
-            await bot.change_presence(activity=discord.Game(name=gameName))
+            await self.bot.change_presence(activity=discord.Game(name=gameName))
         elif gameType == 'watching':
-            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=gameName))
+            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=gameName))
         elif gameType == 'listening':
-            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=gameName))
+            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=gameName))
         elif gameType == 'streaming':
-            await bot.change_presence(activity=discord.Streaming(name=gameName, url="http://github.com/pryme-svg/primebot"))
+            await self.bot.change_presence(activity=discord.Streaming(name=gameName, url="http://github.com/pryme-svg/primebot"))
         await ctx.send(f'**:ok:** Changed the game to: {gameType} **{gameName}**')
 
     @commands.command(hidden=True)
