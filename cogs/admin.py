@@ -54,7 +54,7 @@ class Admin(commands.Cog):
         elif gameType == 'listening':
             await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=gameName))
         elif gameType == 'streaming':
-            await self.bot.change_presence(activity=discord.Streaming(name=gameName, url="http://github.com/pryme-svg/primebot"))
+            await self.bot.change_presence(activity=discord.Streaming(name=gameName, url="https://www.twitch.tv/primebot5"))
         await ctx.send(f'**:ok:** Changed the game to: {gameType} **{gameName}**')
 
     @commands.command(hidden=True)
