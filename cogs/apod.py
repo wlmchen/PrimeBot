@@ -14,7 +14,6 @@ class Apod(commands.Cog):
     async def apod(self, ctx, date = None):
         load_dotenv()
         API_KEY = os.getenv('API_KEY')
-        API_KEY = "Fg0Ftq29Up6UZxGqyyekYwekDjHfOc5P3bPxjEww"
 
         if date == None:
             url = "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY
