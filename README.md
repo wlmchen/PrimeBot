@@ -16,6 +16,10 @@ A personal bot that runs on Discord.
 
 In the `.env` file, add the following line, `DISCORD_TOKEN="YOUR_TOKEN"`
 
+For apod functionality, retrieve an API key [here](https://api.nasa.gov/) and add the following line.
+
+`API_KEY="YOUR API KEY"`
+
 3. Initialize prefixes
 
 `make initialize`
