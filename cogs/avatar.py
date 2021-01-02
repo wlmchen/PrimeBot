@@ -6,9 +6,12 @@ class Avatar(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def avatar(self, ctx, *,  avamember):
-        converter = discord.ext.commands.MemberConverter()
-        avamember = await converter.convert(ctx, avamember)
+    async def avatar(self, ctx, *,  avamember=None):
+        if avamember=None:
+            avamember = ctx.message.author
+        else:
+            converter = discord.ext.commands.MemberConverter()
+            avamember = await converter.convert(ctx, avamember)
         userAvatarUrl = avamember.avatar_url
         embedAvatar = discord.Embed(title=str(avamember), description = '')
         embedAvatar.set_image(url=userAvatarUrl)
