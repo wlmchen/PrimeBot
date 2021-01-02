@@ -8,7 +8,7 @@ class Prime(commands.Cog):
 
     @commands.command()
     async def prime(self, ctx):
-        embed = discord.Embed(title="Prime", description="Thanks for using my bot! Feel free to browse my [github](https://github.com/pryme-svg)\nOr check out my [gitlab](https://gitlab.com/pryme-svg)\nThis bot is open source, please star the [repository](https://gitlab.com/pryme-svg/primebot/)!")
+        embed = discord.Embed(title="Prime", description="Thanks for using my bot! Feel free to browse my [github](https://github.com/pryme-svg)\nOr check out my [gitlab](https://gitlab.com/pryme-svg)\nThis bot is open source, please star the repository! [gitlab](https://gitlab.com/pryme-svg/primebot/) [github](https://github.com/pryme-svg/primebot/)!")
         await ctx.send(embed=embed)
 
 

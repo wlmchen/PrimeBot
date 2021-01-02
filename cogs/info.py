@@ -57,8 +57,8 @@ class Info(commands.Cog):
         embed.add_field(name='🏗️ Framework',
                         value=f'[discord.py v{self.discord_version()}]'
                               '(https://github.com/Rapptz/discord.py) \n\u200b')
-        embed.add_field(name='📁 Gitlab',
-                        value='[DiscordBot repository](https://gitlab.com/pryme-svg/primebot)'
+        embed.add_field(name='📁 Repos',
+                value='[Gitlab](https://gitlab.com/pryme-svg/primebot) [Github](https://github.com/pryme-svg/primebot)'
                               '\n\u200b')
         return embed
 
