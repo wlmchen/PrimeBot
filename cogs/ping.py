@@ -8,6 +8,7 @@ class Ping(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.cooldown(1, 3, commands.BucketType.user)
     async def ping(self, ctx):
         pingEmbed = discord.Embed(title="Ping!", description='🏓 Pong! {0}s'.format(self.bot.latency))
         await ctx.send(embed=pingEmbed)
