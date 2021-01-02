@@ -20,13 +20,21 @@ class Distro(commands.Cog):
 
         url = "http://www.distrowatch.com/table.php?distribution=" + arg
         html_string = requests.get(url).content
+        pattern = "<b><a href=\"dwres.php?resource=popularity\">"
+
 
         html_string = html_string.decode('utf-8')
 
-        for line in html_string.splitlines():
-            if len(line) > 100 and '<' not in line and 'is a' in line:
-                description = line
-                break
+#        for line in html_string.splitlines():
+#            if len(line) > 100 and '<' not in line and 'is a' in line:
+#                description = line
+#                break
+
+        for (num, line) in enumerate(html_string.splitlines()):
+            if pattern in line:
+                linenum = num
+
+        description = html_string.splitlines()[linenum-2]
 
         try:
             description
