@@ -7,8 +7,8 @@ class Avatar(commands.Cog):
 
     @commands.command()
     async def avatar(self, ctx, *,  avamember=None):
-        if avamember=None:
-            avamember == ctx.message.author
+        if avamember==None:
+            avamember = ctx.message.author
         else:
             converter = discord.ext.commands.MemberConverter()
             avamember = await converter.convert(ctx, avamember)
