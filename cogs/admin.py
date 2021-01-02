@@ -78,30 +78,27 @@ class Admin(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def leaveserver(self, ctx, guildid: str):
+    async def leaveserver(self, ctx, guildid):
         if guildid == 'this':
             await ctx.guild.leave()
             return
         else:
-            guild = self.bot.get_guild(guildid)
-            if guild:
-                await guild.leave()
-                msg = f':ok: I have left {guild.name}!'
-            else:
-                msg = ':x: Couldn\'t find this guild id!'
+            guild = self.bot.get_guild(guildid).leave()
+            msg = f':ok: I have left {guild.name}!'
+
         await ctx.send(msg)
 
 
     @commands.command()
     @commands.is_owner()
     async def echo(self, ctx, *, a):
-        ctx.send(a)
+        await ctx.send(a)
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def nickname(self, ctx, *name):
         nickname = ' '.join(name)
-        me = ctx.message.server.me
+        me = ctx.me
         await bot.change_nickname(me, nickname)
         if nickname:
             msg = f':ok: Nickname changed to: **{nickname}**'
