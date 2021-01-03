@@ -20,7 +20,11 @@ class Archwiki(commands.Cog):
 
         html_string = requests.get(url).content
         html_string = html_string.decode('utf-8')
-        test1 = html_string[html_string.index("</ul></div>"):html_string.index("Contents")]
+        try:
+            test1 = html_string[html_string.index("</ul></div>"):html_string.index("Contents")]
+        except ValueError:
+            await ctx.send(":x: Page not Found!")
+            return
         soup = BeautifulSoup(test1, "html.parser")
         description = "".join(soup.strings)
 
