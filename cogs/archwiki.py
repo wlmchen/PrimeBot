@@ -25,7 +25,7 @@ class Archwiki(commands.Cog):
         description = "".join(soup.strings)
 
 
-        embedAw= discord.Embed(title="Arch Wiki: " + query, description="description", color=0x1793d1)
+        embedAw= discord.Embed(title="Arch Wiki: " + query, description=description, color=0x1793d1)
         embedAw.set_footer(text=url)
         await ctx.send(embed=embedAw)
 
