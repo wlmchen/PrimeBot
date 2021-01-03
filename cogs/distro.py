@@ -14,7 +14,7 @@ class Distro(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def distro(self, ctx, arg):
+    async def distro(self, ctx, *, arg):
         if arg == "random":
             arg = (random.choice(list(open('linux.list'))))
 
@@ -34,13 +34,15 @@ class Distro(commands.Cog):
             if pattern in line:
                 linenum = num
 
-        description = html_string.splitlines()[linenum-2]
-
         try:
-            description
+            linenum 
         except NameError:
             description = ":x: That distro doesn't exist!"
+            embed = discord.Embed(title='Distro not Found', description=description)
+            await ctx.send(embed=embed)
+            return
 
+        description = html_string.splitlines()[linenum-2]
         soup = BeautifulSoup(html_string)
         title = soup.title.string
         embed = discord.Embed(title=title, description=description)
