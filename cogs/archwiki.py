@@ -12,7 +12,7 @@ class Archwiki(commands.Cog):
     @commands.command(aliases=['aw'])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def archwiki(self, ctx, *, query):
-        query1 = query + "site:https://wiki.archlinux.org"
+        query1 = query + " site:https://wiki.archlinux.org"
         
         for j in search(query1): 
             url = j
