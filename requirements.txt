@@ -5,4 +5,4 @@ xkcd-wrapper
 psutil
 bs4
 requests-cache
-googlesearch
+google

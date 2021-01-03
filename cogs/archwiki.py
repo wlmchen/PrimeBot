@@ -13,8 +13,9 @@ class Archwiki(commands.Cog):
     async def archwiki(self, ctx, *, query):
         query1 = query + "site:https://wiki.archlinux.org"
         
-        for j in search(query1, num=1, stop=1, pause=2): 
+        for j in search(query1): 
             url = j
+            break
 
         html_string = requests.get(url).content
         html_string = html_string.decode('utf-8')
