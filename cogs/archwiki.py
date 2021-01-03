@@ -2,6 +2,7 @@ import discord
 import requests
 from discord.ext import commands
 from googlesearch import search 
+from bs4 import BeautifulSoup
 
 
 class Archwiki(commands.Cog):
