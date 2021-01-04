@@ -20,7 +20,7 @@ class Urban(commands.Cog):
             return
         defintion = data["list"][0]["definition"]
         title = "Urban Dictionary: " + arg
-        embed = discord.Embed(title=title, description=description)
+        embed = discord.Embed(title=title, description=definition)
         await ctx.send(embed=embed)
 
 
