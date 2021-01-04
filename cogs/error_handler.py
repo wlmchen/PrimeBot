@@ -18,6 +18,8 @@ class Error(commands.Cog):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The command is incomplete, missing one or more parameters!"))
         if isinstance(error, commands.BadArgument):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The command was entered incorrectly, one or more parameters are wrong or in the wrong place!"))
+        if isinstance(error, commands.CommandOnCooldown):
+            await ctx.send("This command is on cooldown, please retry in {}s.".format(math.ceil(error.retry_after)))
 
 
 def setup(bot):
