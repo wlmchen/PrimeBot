@@ -18,7 +18,7 @@ class Urban(commands.Cog):
         if not data["list"]:
             await ctx.send("Word not Found!")
             return
-        defintion = data["list"][0]["definition"]
+        definition = data["list"][0]["definition"]
         title = "Urban Dictionary: " + arg
         embed = discord.Embed(title=title, description=definition)
         await ctx.send(embed=embed)
