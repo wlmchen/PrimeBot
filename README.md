@@ -6,10 +6,6 @@
 
 A personal bot that runs on Discord.
 
-## Invite Link
-
-[Invite](https://discord.com/api/oauth2/authorize?client_id=788810436535386112&permissions=6&scope=bot)
-
 ## How to Run
 
 1. Install dependencies
