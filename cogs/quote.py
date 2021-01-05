@@ -10,6 +10,7 @@ class Quote(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def quote(self, ctx):
         s = requests_cache.CachedSession()
         with s.cache_disabled():
