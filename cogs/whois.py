@@ -36,8 +36,8 @@ class Whois(commands.Cog):
             else:
                 fullName = member
             embed.add_field(name=member.name, value=fullName, inline=False)
-            embed.add_field(name='Joined Discord on:', value='{}\n(Tage seitdem: {})'.format(member.created_at.strftime('%d.%m.%Y'), (datetime.now()-member.created_at).days), inline=True)
-            embed.add_field(name='Joined Server on', value='{}\n(Tage seitdem: {})'.format(member.joined_at.strftime('%d.%m.%Y'), (datetime.now()-member.joined_at).days), inline=True)
+            embed.add_field(name='Joined Discord on:', value='{}\n)'.format(member.created_at.strftime('%d.%m.%Y')), inline=True)
+            embed.add_field(name='Joined Server on', value='{}\n)'.format(member.joined_at.strftime('%d.%m.%Y')), inline=True)
             embed.add_field(name='Avatar Link', value=member.avatar_url, inline=False)
             embed.add_field(name='Roles', value=self._getRoles(member.roles), inline=True)
             embed.add_field(name='Status', value=member.status, inline=True)
