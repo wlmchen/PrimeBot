@@ -5,6 +5,18 @@ from discord.ext import commands
 class Whois(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
+    
+    @staticmethod
+    def _getRoles(roles):
+        string = ''
+        for role in roles[::-1]:
+            if not role.is_default():
+                string += f'{role.mention}, '
+        if string == '':
+            return 'None'
+        else:
+            return string[:-2]
+
 
     @commands.command()
     async def whois(self, ctx, member: discord.Member=None):
