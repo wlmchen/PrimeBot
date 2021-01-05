@@ -6,6 +6,10 @@
 
 A personal bot that runs on Discord.
 
+## Invite Link
+
+[Invite](https://discord.com/api/oauth2/authorize?client_id=788810436535386112&permissions=6&scope=bot)
+
 ## How to Run
 
 1. Install dependencies
@@ -27,6 +31,47 @@ For apod functionality, retrieve an API key [here](https://api.nasa.gov/) and ad
 4. Run the bot
 
 `python bot.py`
+
+---
+
+Alternatively, create a systemd service using `primebot.service.example`:
+
+```
+[Unit]
+Description=PrimeBot
+After=syslog.target
+After=network.target
+
+[Service]
+RestartSec=2s
+Type=simple
+User=primebot
+Group=primebot
+WorkingDirectory=/home/primebot/PrimeBot
+ExecStart=python3 /home/primebot/PrimeBot/bot.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Copy the file to `/etc/system/systemd/primebot.service`
+
+Start the service 
+
+`# systemctl start primebot.service`
+
+Autostart with 
+
+`# systemctl enable primebot.service`
+
+## Support
+
+Get help at our discord server: `https://discord.gg/AtecbFZPZv`
+
+## Troubleshooting
+
+Create an issue or ask in the discord server with a copy of the `error.log` file
 
 ### Licensing
 
