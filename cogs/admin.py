@@ -55,6 +55,9 @@ class Admin(commands.Cog):
             await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=gameName))
         elif gameType == 'streaming':
             await self.bot.change_presence(activity=discord.Streaming(name=gameName, url="https://www.twitch.tv/primebot5"))
+        else:
+            await ctx.send("The only game types are available: playing, streaming, watching, listening, streaming.")
+            return
         await ctx.send(f'**:ok:** Changed the game to: {gameType} **{gameName}**')
 
     @commands.command(hidden=True)
@@ -65,6 +68,9 @@ class Admin(commands.Cog):
             discordStatus = discord.Status.idle
         elif status == 'online' or status == 'on':
             discordStatus = discord.Status.online
+        else:
+            await ctx.send("The only statuses available are online and idle.")
+            return
         await self.bot.change_presence(status=discordStatus)
         await ctx.send(f'**:ok:** Changed the status to: **{discordStatus}**')
 
