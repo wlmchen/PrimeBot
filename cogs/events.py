@@ -20,7 +20,7 @@ class Events(commands.Cog):
             return
         if message.content[0] == '>':
             with open('log.txt', 'a') as log:
-                log.write('Message Author: {}\nMessage Content: {}\nLocation: {} {}\n\n'.format(message.author, message.content, message.guild.name, message.channel.name))
+                log.write('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(message.author, message.content, message.guild.name, message.channel.name))
         if 'happy birthday' in message.content.lower():
             await message.channel.send('Happy Birthday! 🎈🎉')
         if 'i want to die' in message.content.lower():
