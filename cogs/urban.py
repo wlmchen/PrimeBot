@@ -20,8 +20,8 @@ class Urban(commands.Cog):
             return
         definition = data["list"][0]["definition"]
         title = "Urban Dictionary: " + arg
-        if len(defintion) > 2000:
-            defintion = defintion[0:2000]
+        if len(definition) > 2000:
+            definition = definition[0:2000]
             title = title + " (Truncated)"
         embed = discord.Embed(title=title, description=definition)
         await ctx.send(embed=embed)
