@@ -10,7 +10,7 @@ class Error(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         with open('error.log', 'a') as f:
-            f.write('Unhandled Message: {} \n Content: {} \n Error: {}'.format(ctx.message, ctx.message.content, error))
+            f.write('Unhandled Message: {} \n Content: {} \n Error: {}\n'.format(ctx.message, ctx.message.content, error))
         if isinstance(error, commands.CheckFailure):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: You don't have the permission to execute this bot command!"))
         if isinstance(error, commands.CommandNotFound):
