@@ -1,5 +1,5 @@
 import discord
-import datetime
+from datetime import datetime, timedelta
 from discord.ext import commands
 
 class Whois(commands.Cog):
@@ -11,8 +11,8 @@ class Whois(commands.Cog):
         if member == None:
             member = ctx.message.author
 
-        if '@' in ctx.message.content:
-            await ctx.send("You may not ping in this command! {}".format(ctx.message.author.mention))
+        if '@everyone' in ctx.message.content:
+            await ctx.send("You may not ping everyone in this command! {}".format(ctx.message.author.mention))
             return
 
         if member is not None:
