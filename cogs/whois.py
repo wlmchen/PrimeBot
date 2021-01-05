@@ -18,6 +18,7 @@ class Whois(commands.Cog):
             return string[:-2]
 
 
+    @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
     async def whois(self, ctx, member: discord.Member=None):
         if member == None:
