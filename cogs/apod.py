@@ -10,6 +10,7 @@ class Apod(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.command()
     async def apod(self, ctx, date = None):
         load_dotenv()
