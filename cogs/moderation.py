@@ -53,6 +53,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     @commands.command(aliases=['clean'])
     async def clear(self, ctx, amount):
+        amount = int(amount)
         await ctx.channel.purge(limit=amount)
 
 def setup(bot):

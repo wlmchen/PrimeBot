@@ -44,7 +44,7 @@ class Admin(commands.Cog):
 
     
     @commands.command(hidden=True, aliases=['game'])
-    @commands.cooldown(1, 60, commands.BucketType.user)
+    @commands.is_owner()
     async def changegame(self, ctx, gameType: str, *, gameName: str):
         gameType = gameType.lower()
         if gameType == 'playing':
