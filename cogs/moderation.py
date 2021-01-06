@@ -49,6 +49,11 @@ class Moderation(commands.Cog):
                 await ctx.send(f'Unbanned {user.mention}')
                 return
 
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    @commands.has_permissions(manage_messages=True)
+    @commands.command(aliases=['clean'])
+    async def clear(self, ctx, amount):
+        await ctx.channel.purge(limit=amount)
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
