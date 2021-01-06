@@ -123,5 +123,10 @@ class Info(commands.Cog):
             (commands.BadArgument, bot_message))
 
 
+    @commands.command()
+    async def prime(self, ctx):
+        embed = discord.Embed(title="Prime", description="Thanks for using my bot! Feel free to browse my [github](https://github.com/pryme-svg)\nOr check out my [gitlab](https://gitlab.com/pryme-svg)\nThis bot is open source, please star the repository! [gitlab](https://gitlab.com/pryme-svg/primebot/) [github](https://github.com/pryme-svg/primebot/)!")
+        await ctx.send(embed=embed)
+
 def setup(bot):
     bot.add_cog(Info(bot))

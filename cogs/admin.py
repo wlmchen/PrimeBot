@@ -119,6 +119,11 @@ class Admin(commands.Cog):
         for guild in self.bot.guilds:
             await ctx.send(guild.name)
 
+    @commands.cooldown(20, 30, commands.BucketType.user)
+    @commands.command()
+    async def botservers(self, ctx):
+        await ctx.send("I'm in " + str(len(self.bot.guilds)) + " servers")
+
 
 def setup(bot):
     bot.add_cog(Admin(bot))
