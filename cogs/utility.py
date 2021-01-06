@@ -31,7 +31,7 @@ class Utility(commands.Cog):
     @staticmethod
     def _getRoles(roles):
         string = ''
-        for role in roes[::-1]:
+        for role in roles[::-1]:
             if not role.is_default():
                 string += f'{role.mention}, '
         if string == '':
