@@ -50,6 +50,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def flip(self, ctx):
+       randint = random.randint
        value = randint(1, 2)
        if value == 1:
            coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Heads!")
