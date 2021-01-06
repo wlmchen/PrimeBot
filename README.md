@@ -20,11 +20,7 @@ For apod functionality, retrieve an API key [here](https://api.nasa.gov/) and ad
 
 `API_KEY="YOUR API KEY"`
 
-3. Initialize prefixes
-
-`make initialize`
-
-4. Run the bot
+3. Run the bot
 
 `python bot.py`
 
