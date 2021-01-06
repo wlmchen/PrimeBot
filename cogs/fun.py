@@ -20,10 +20,7 @@ class Fun(commands.Cog):
         self.xkcd_api_client = xkcd_wrapper.AsyncClient()
         self.bot = bot
 
-        mathpi = math.pi
-        randint = random.randint
-
-    @commands.cooldown(20, 30, commands.BucketType.user)
+            @commands.cooldown(20, 30, commands.BucketType.user)
     @commands.command(aliases=['8ball'])
     async def _8ball(self, ctx, *, question):
         if "@" in ctx.message.content:
@@ -124,6 +121,8 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def roll(self, ctx):
+        mathpi = math.pi
+        randint = random.randint
         value = randint(1, 7)
         if value == 7:
             await ctx.send("{} has rolled a pi! :pie: {} ".format(ctx.message.author, mathpi))
