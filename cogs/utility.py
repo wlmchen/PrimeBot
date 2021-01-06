@@ -1,4 +1,5 @@
 import json
+import discord
 import urllib
 import requests
 import os
