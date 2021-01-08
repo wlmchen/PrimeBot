@@ -170,10 +170,12 @@ class Utility(commands.Cog):
 
         if date == None:
             url = "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY
+            s = requests_cache.CachedSession()
+            with s.cache_disabled():
+                r = s.get(url)
         else:
             url = "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY + "&date=" + date
-
-        r = requests.get(url)
+            r = requests.get(url)
 
         json_file = r.json()
         if 'code' in json_file:
