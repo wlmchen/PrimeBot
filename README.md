@@ -6,6 +6,36 @@
 
 A personal bot that runs on Discord.
 
+## Running
+
+1. Create a `.env` file with the following contents [nasa api key](https://api.nasa.gov/)
+
+```
+DISCORD_TOKEN="your_token"
+API_KEY="nasa_api_key"
+```
+
+2. Run the bot
+
+```
+python3 bot.py
+```
+
+---
+
+### Deploying to Heroku
+
+1. Create an app
+
+2. Set environemnt variables
+
+```
+heroku config set API_KEY="your_api_key"
+heroku config set DISCORD_TOKEN="your_token"
+```
+
+3. Push and Run
+
 ## Support
 
 Get help at our discord server: `https://discord.gg/AtecbFZPZv`
