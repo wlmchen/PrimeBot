@@ -1,0 +1,1 @@
+worker: primebot/bot.py

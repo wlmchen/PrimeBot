@@ -27,7 +27,7 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def admintest(self, ctx):
-        await ctx.send('You are the owner')
+        await ctx.send('You are the owner of this bot')
 
     @commands.command()
     @commands.is_owner()
@@ -42,7 +42,7 @@ class Admin(commands.Cog):
             await ctx.send("Cog is unloaded")
             self.bot.unload_extension(f"cogs.{cog_name}")
 
-    
+
     @commands.command(hidden=True, aliases=['game'])
     @commands.is_owner()
     async def changegame(self, ctx, gameType: str, *, gameName: str):
