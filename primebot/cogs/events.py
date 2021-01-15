@@ -12,7 +12,7 @@ class Events(commands.Cog):
         print('Logged in as ---->', self.bot.user)
         print('ID:', self.bot.user.id)
 #        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(self.bot.guilds)} servers!"))
-        await self.bot.change_presence(status=discord.Status.online, activity=discord.Game(name='>help | {} servers'.format(len(self.bot.guilds)))
+        await self.bot.change_prescence(activity=discord.Game(name=">help | {}".format(len(self.bot.guilds))))
 
     @commands.Cog.listener()
     async def on_message(self, message):
