@@ -1,1 +1,1 @@
-worker: primebot/bot.py
+worker: cd primebot && python bot.py
