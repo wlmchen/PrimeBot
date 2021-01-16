@@ -6,3 +6,4 @@ psutil
 bs4
 requests-cache
 google
+py-cpuinfo
