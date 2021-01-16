@@ -17,7 +17,6 @@ class Utility(commands.Cog):
     requests_cache.install_cache('distro_cache')
 
     @commands.command()
-    @commands.cooldown(1, 3, commands.BucketType.user)
     async def ping(self, ctx):
         pingEmbed = discord.Embed(title="Ping!", description='🏓 Pong! {0}s'.format(self.bot.latency))
         await ctx.send(embed=pingEmbed)
@@ -33,7 +32,6 @@ class Utility(commands.Cog):
         else:
             return string[:-2]
 
-    @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
     async def whois(self, ctx, member: discord.Member = None):
         if member is None:
@@ -119,7 +117,6 @@ class Utility(commands.Cog):
         await self.bot.edit_message(react_message, embed=embed)
 
     @commands.command(aliases=['aw'])
-    @commands.cooldown(1, 5, commands.BucketType.user)
     async def archwiki(self, ctx, *, query):
         query1 = query + " site:https://wiki.archlinux.org"
         
@@ -153,7 +150,6 @@ class Utility(commands.Cog):
         embedAvatar.set_image(url=userAvatarUrl)
         await ctx.send(embed=embedAvatar)
 
-    @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.command()
     async def apod(self, ctx, date=None):
         load_dotenv()
@@ -179,7 +175,6 @@ class Utility(commands.Cog):
         await ctx.send(embed=embedApod)
 
     @commands.command()
-    @commands.cooldown(1, 5, commands.BucketType.user)
     async def distro(self, ctx, *, arg):
         if arg == "random":
             arg = (random.choice(list(open('linux.list'))))
