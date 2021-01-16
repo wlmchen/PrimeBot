@@ -1,5 +1,6 @@
 import datetime
 import platform
+from cpuinfo import get_cpu_info
 import time
 import discord
 import psutil
@@ -30,7 +31,8 @@ class Info(commands.Cog):
     def cpu_info():
         cores = psutil.cpu_count()
         cores = f'{cores} cores' if cores > 1 else f'{cores} core'
-        return cores + ' ({:.2f}GHz)'.format(psutil.cpu_freq().current/1000)
+        model = get_cpu_info()['brand_raw']
+        return model + cores + ' ({:.2f}GHz)'.format(psutil.cpu_freq().current/1000)
 
     @staticmethod
     def ram():
