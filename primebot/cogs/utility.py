@@ -211,6 +211,7 @@ class Utility(commands.Cog):
         soup = BeautifulSoup(html_string, 'html.parser')
         title = soup.title.string
         embed = discord.Embed(title=title, description=description)
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
