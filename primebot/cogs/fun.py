@@ -13,7 +13,6 @@ class Fun(commands.Cog):
         self.xkcd_api_client = xkcd_wrapper.AsyncClient()
         self.bot = bot
 
-    @commands.cooldown(20, 30, commands.BucketType.user)
     @commands.command(aliases=['8ball'])
     async def _8ball(self, ctx, *, question):
         if "@" in ctx.message.content:
@@ -122,7 +121,6 @@ class Fun(commands.Cog):
         await ctx.send("{} has rolled a {}!".format(ctx.message.author, value))
 
     @commands.command(alises=["ud", "urbandict"])
-    @commands.cooldown(1, 5, commands.BucketType.user)
     async def define(self, ctx, *, arg):
 
         url = "https://api.urbandictionary.com/v0/define?term=" + arg
@@ -140,7 +138,7 @@ class Fun(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 3, commands.BucketType.user)
     async def quote(self, ctx):
         s = requests_cache.CachedSession()
         with s.cache_disabled():
