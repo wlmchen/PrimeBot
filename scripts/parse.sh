@@ -9,4 +9,4 @@ q=$(wget --no-check-certificate -q -O - distrowatch.com/weekly.php?issue=current
 echo "There are$q linux distibutions @ $(date +%d.%m.%Y)"
 
 echo "Loading distros list..." 
-wget  --no-check-certificate -q -O - distrowatch.com | grep -A $q "height: 20%" | awk -F"<" '{ print $1 }' > linux.list
+wget  --no-check-certificate -q -O - distrowatch.com | grep -A $q "height: 20%" | awk -F"<" '{ print $1 }' | tail -n  +2 > ./primebot/linux.list
