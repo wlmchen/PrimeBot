@@ -208,7 +208,7 @@ class Utility(commands.Cog):
             return
 
         description = html_string.splitlines()[linenum - 2]
-        soup = BeautifulSoup(html_string)
+        soup = BeautifulSoup(html_string, 'html.parser')
         title = soup.title.string
         embed = discord.Embed(title=title, description=description)
 
