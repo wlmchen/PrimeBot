@@ -56,5 +56,6 @@ class Moderation(commands.Cog):
         amount = int(amount)
         await ctx.channel.purge(limit=amount)
 
+
 def setup(bot):
     bot.add_cog(Moderation(bot))

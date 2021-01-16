@@ -1,19 +1,13 @@
-import json
 import discord
-import urllib
 import requests
 import os
 from dotenv import load_dotenv
-
 from googlesearch import search 
 from bs4 import BeautifulSoup
-
-import subprocess
-from datetime import datetime, timedelta
 from discord.ext import commands
-
 import random
 import requests_cache
+
 
 class Utility(commands.Cog):
 
@@ -39,11 +33,10 @@ class Utility(commands.Cog):
         else:
             return string[:-2]
 
-
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.command()
-    async def whois(self, ctx, member: discord.Member=None):
-        if member == None:
+    async def whois(self, ctx, member: discord.Member = None):
+        if member is None:
             member = ctx.message.author
 
         if '@everyone' in ctx.message.content:
@@ -67,35 +60,35 @@ class Utility(commands.Cog):
         else:
             msg = 'You have not specified a user!'
             await ctx.send(msg)
-
-    @commands.command()
-    @commands.cooldown(1, 10, commands.BucketType.user)
-    async def githead(self, ctx):
-        head = subprocess.run(['git', '--no-pager', 'show', 'HEAD'], stdout=subprocess.PIPE)
-        if len(head.stdout.decode('utf-8')) > 2000:
-            mystr = head.stdout.decode('utf-8')
-            mystr = mystr[0:2030]
-        else:
-            mystr = head.stdout.decode('utf-8')
-        mystr = "```diff\n" + mystr + "```"
-        embedHead = discord.Embed(title="Git Head", description=mystr)
-        embedHead.add_field(name=".", value="[Git Repository](https://gitlab.com/pryme-svg/primebot)")
-        await ctx.send(embed=embedHead)
-
-    @commands.command()
-    @commands.cooldown(1, 10, commands.BucketType.user)
-    async def gitlog(self, ctx):
-        log = subprocess.run(['git', '--no-pager', 'log'], stdout=subprocess.PIPE)
-        if len(log.stdout.decode('utf-8')) > 2000:
-            mystr = log.stdout.decode('utf-8')
-            mystr = mystr[0:2030]
-            mystr = "```\n" + mystr + "```"
-        else:
-            mystr = log.stdout.decode('utf-8')
-            mystr = "```\n" + mystr + "```"
-        embedLog = discord.Embed(title="Git Log(truncated)", description=mystr)
-        embedLog.add_field(name=".", value="[Git Repository](https://gitlab.com/pryme-svg/primebot)")
-        await ctx.send(embed=embedLog)
+#
+#    @commands.command()
+#    @commands.cooldown(1, 10, commands.BucketType.user)
+#    async def githead(self, ctx):
+#        head = subprocess.run(['git', '--no-pager', 'show', 'HEAD'], stdout=subprocess.PIPE)
+#        if len(head.stdout.decode('utf-8')) > 2000:
+#            mystr = head.stdout.decode('utf-8')
+#            mystr = mystr[0:2030]
+#        else:
+#            mystr = head.stdout.decode('utf-8')
+#        mystr = "```diff\n" + mystr + "```"
+#        embedHead = discord.Embed(title="Git Head", description=mystr)
+#        embedHead.add_field(name=".", value="[Git Repository](https://gitlab.com/pryme-svg/primebot)")
+#        await ctx.send(embed=embedHead)
+#
+#    @commands.command()
+#    @commands.cooldown(1, 10, commands.BucketType.user)
+#    async def gitlog(self, ctx):
+#        log = subprocess.run(['git', '--no-pager', 'log'], stdout=subprocess.PIPE)
+#        if len(log.stdout.decode('utf-8')) > 2000:
+#            mystr = log.stdout.decode('utf-8')
+#            mystr = mystr[0:2030]
+#            mystr = "```\n" + mystr + "```"
+#        else:
+#            mystr = log.stdout.decode('utf-8')
+#            mystr = "```\n" + mystr + "```"
+#        embedLog = discord.Embed(title="Git Log(truncated)", description=mystr)
+#        embedLog.add_field(name=".", value="[Git Repository](https://gitlab.com/pryme-svg/primebot)")
+#        await ctx.send(embed=embedLog)
 
     @commands.command(pass_context=True)
     async def poll(self, ctx, question, *options: str):
@@ -144,31 +137,29 @@ class Utility(commands.Cog):
         soup = BeautifulSoup(test1, "html.parser")
         description = "".join(soup.strings)
 
-
-        embedAw= discord.Embed(title="Arch Wiki: " + query, description=description, color=0x1793d1)
+        embedAw = discord.Embed(title="Arch Wiki: " + query, description=description, color=0x1793d1)
         embedAw.set_footer(text=url)
         await ctx.send(embed=embedAw)
 
     @commands.command()
-    async def avatar(self, ctx, *,  avamember=None):
-        if avamember==None:
+    async def avatar(self, ctx, *, avamember=None):
+        if avamember is None:
             avamember = ctx.message.author
         else:
             converter = discord.ext.commands.MemberConverter()
             avamember = await converter.convert(ctx, avamember)
         userAvatarUrl = avamember.avatar_url
-        embedAvatar = discord.Embed(title=str(avamember), description = '')
+        embedAvatar = discord.Embed(title=str(avamember), description='')
         embedAvatar.set_image(url=userAvatarUrl)
         await ctx.send(embed=embedAvatar)
 
-
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.command()
-    async def apod(self, ctx, date = None):
+    async def apod(self, ctx, date=None):
         load_dotenv()
         API_KEY = os.getenv('API_KEY')
 
-        if date == None:
+        if date is None:
             url = "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY
             s = requests_cache.CachedSession()
             with s.cache_disabled():
@@ -182,11 +173,10 @@ class Utility(commands.Cog):
             await ctx.send(json_file['msg'])
             return
 
-        embedApod = discord.Embed(title=json_file['title'] , description = json_file['explanation'])
+        embedApod = discord.Embed(title=json_file['title'], description=json_file['explanation'])
         embedApod.set_footer(text=json_file['date'])
         embedApod.set_image(url=json_file['url'])
         await ctx.send(embed=embedApod)
-
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -197,7 +187,6 @@ class Utility(commands.Cog):
         url = "http://www.distrowatch.com/table.php?distribution=" + arg
         html_string = requests.get(url).content
         pattern = "<b><a href=\"dwres.php?resource=popularity\">"
-
 
         html_string = html_string.decode('utf-8')
 
@@ -211,19 +200,18 @@ class Utility(commands.Cog):
                 linenum = num
 
         try:
-            linenum 
+            linenum
         except NameError:
             description = ":x: That distro doesn't exist!"
             embed = discord.Embed(title='Distro not Found', description=description)
             await ctx.send(embed=embed)
             return
 
-        description = html_string.splitlines()[linenum-2]
+        description = html_string.splitlines()[linenum - 2]
         soup = BeautifulSoup(html_string)
         title = soup.title.string
         embed = discord.Embed(title=title, description=description)
-        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Utility(bot))
-

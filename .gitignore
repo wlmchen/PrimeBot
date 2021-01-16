@@ -4,3 +4,4 @@ log.txt
 prefixes.json
 __pycache__/
 distro_cache.sqlite
+.vscode/

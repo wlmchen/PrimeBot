@@ -42,7 +42,6 @@ class Admin(commands.Cog):
             await ctx.send("Cog is unloaded")
             self.bot.unload_extension(f"cogs.{cog_name}")
 
-
     @commands.command(hidden=True, aliases=['game'])
     @commands.is_owner()
     async def changegame(self, ctx, gameType: str, *, gameName: str):
@@ -86,7 +85,6 @@ class Admin(commands.Cog):
 
         await ctx.send(msg)
 
-
     @commands.command()
     @commands.is_owner()
     async def echo(self, ctx, *, a):
@@ -101,7 +99,7 @@ class Admin(commands.Cog):
         if nickname:
             msg = f':ok: Nickname changed to: **{nickname}**'
         else:
-            msg = f':ok: Reset nickname'
+            msg = ':ok: Reset nickname'
         await ctx.send(msg)
 
     @commands.command()
@@ -111,7 +109,7 @@ class Admin(commands.Cog):
         await ctx.send("Performing `git pull`")
         subprocess.call(["git", "pull", "--rebase"])
         await ctx.bot.logout()
-        await bot.login(TOKEN, bot=True)
+        await self.bot.login(TOKEN, bot=True)
 
     @commands.command()
     @commands.is_owner()
