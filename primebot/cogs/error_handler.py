@@ -9,6 +9,8 @@ class Error(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
+        errorChannel = self.bot.get_channel(799848546823307295)
+        await errorChannel.send('Unhandled Message: {} \n Content: {} \n Error: {}\n'.format(ctx.message, ctx.message.content, error))
         with open('error.log', 'a') as f:
             f.write('Unhandled Message: {} \n Content: {} \n Error: {}\n'.format(ctx.message, ctx.message.content, error))
         if isinstance(error, commands.CheckFailure):

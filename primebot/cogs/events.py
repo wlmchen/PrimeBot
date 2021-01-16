@@ -19,6 +19,8 @@ class Events(commands.Cog):
         if message.author == self.bot.user:
             return
         if message.content[0] == '>':
+            logChannel = self.bot.get_channel(799848536371888130)
+            await logChannel.send('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(message.author, message.content, message.guild.name, message.channel.name))
             with open('log.txt', 'a') as log:
                 log.write('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(message.author, message.content, message.guild.name, message.channel.name))
         if 'happy birthday' in message.content.lower():
