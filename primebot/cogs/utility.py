@@ -181,7 +181,7 @@ class Utility(commands.Cog):
 
         url = "http://www.distrowatch.com/table.php?distribution=" + arg
         html_string = requests.get(url).content
-        pattern = "<b><a href=\"dwres.php?resource=popularity\">"
+        pattern = "<br /><br />"
 
         html_string = html_string.decode('utf-8')
 
@@ -193,6 +193,7 @@ class Utility(commands.Cog):
         for (num, line) in enumerate(html_string.splitlines()):
             if pattern in line:
                 linenum = num
+                break
 
         try:
             linenum
@@ -202,7 +203,8 @@ class Utility(commands.Cog):
             await ctx.send(embed=embed)
             return
 
-        description = html_string.splitlines()[linenum - 2]
+        description = html_string.splitlines()[linenum - 1]
+        await ctx.send(linenum)
         soup = BeautifulSoup(html_string, 'html.parser')
         title = soup.title.string
         embed = discord.Embed(title=title, description=description)
