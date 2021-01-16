@@ -1,6 +1,4 @@
 import os
-import discord
-import json
 from dotenv import load_dotenv
 from discord.ext import commands
 

@@ -32,7 +32,7 @@ class Info(commands.Cog):
         cores = psutil.cpu_count()
         cores = f'{cores} cores' if cores > 1 else f'{cores} core'
         model = get_cpu_info()['brand_raw']
-        return model + cores + ' ({:.2f}GHz)'.format(psutil.cpu_freq().current/1000)
+        return model + cores + ' ({:.2f}GHz)'.format(psutil.cpu_freq().current / 1000)
 
     @staticmethod
     def ram():
@@ -60,8 +60,9 @@ class Info(commands.Cog):
                         value=f'[discord.py v{self.discord_version()}]'
                               '(https://github.com/Rapptz/discord.py) \n\u200b')
         embed.add_field(name='📁 Repos',
-                value='[Gitlab](https://gitlab.com/pryme-svg/primebot) [Github](https://github.com/pryme-svg/primebot)'
+                        value='[Gitlab](https://gitlab.com/pryme-svg/primebot) [Github](https://github.com/pryme-svg/primebot)'
                               '\n\u200b')
+        embed.set_footer(text="Created by PrimeTime09#1847, Running on Heroku")
         return embed
 
     def create_system_embed(self):
@@ -71,6 +72,7 @@ class Info(commands.Cog):
         embed.add_field(name='🎛️ CPU', value=(self.cpu_info()) + '\n\u200b')
         embed.add_field(name='🧠 RAM', value=(self.ram()) + '\n\u200b')
         embed.add_field(name='🐍 Python version', value=(self.python_version()) + '\n\u200b')
+        embed.set_footer(text="Created by PrimeTime09#1847, Running on Heroku")
 
         return embed
 
@@ -109,26 +111,11 @@ class Info(commands.Cog):
 
         embed.remove_field(-1)
 
-    ################
-    # ERROR HANDLING
-    ################
-
-    @command_info.error
-    @command_system.error
-    async def info_system_on_error(self, context, error):
-        bot_message = f'`{context.prefix}{context.invoked_with}` takes no arguments'
-        await self.generic_error_handler(
-            context, error,
-            (commands.MissingRequiredArgument, commands.CommandOnCooldown,
-             commands.NoPrivateMessage, commands.CheckFailure),
-            (commands.TooManyArguments, bot_message),
-            (commands.BadArgument, bot_message))
-
-
     @commands.command()
     async def prime(self, ctx):
         embed = discord.Embed(title="Prime", description="Thanks for using my bot! Feel free to browse my [github](https://github.com/pryme-svg)\nOr check out my [gitlab](https://gitlab.com/pryme-svg)\nThis bot is open source, please star the repository! [gitlab](https://gitlab.com/pryme-svg/primebot/) [github](https://github.com/pryme-svg/primebot/)!")
         await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Info(bot))

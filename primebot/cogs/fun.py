@@ -3,16 +3,9 @@ import requests_cache
 import requests
 import json
 from discord.ext import commands
-
-import requests
 import random
-
 import math
-import random
-import random
-import discord
 import xkcd_wrapper
-from discord.ext import commands
 
 
 class Fun(commands.Cog):
@@ -26,38 +19,38 @@ class Fun(commands.Cog):
         if "@" in ctx.message.content:
             await ctx.send("You may not tag everyone in this command {}".format(ctx.message.author.mention))
             return
-        responses = [ "It is certain.",
-                "It is decidedly so.",
-                "Without a doubt.",
-                "Yes - definitely.",
-                "You may rely on it.",
-                "As I see it, yes.",
-                "Most likely.",
-                "Outlook good.",
-                "Yes.",
-                "Signs point to yes.",
-                "Reply hazy, try again.",
-                "Ask again later.",
-                "Better not tell you now.",
-                "Cannot predict now.",
-                "Concentrate and ask again.",
-                "Don't count on it.",
-                "My reply is no.",
-                "My sources say no.",
-                "Outlook not so good.",
-                "Very doubtful."]
+        responses = ["It is certain.",
+                     "It is decidedly so.",
+                     "Without a doubt.",
+                     "Yes - definitely.",
+                     "You may rely on it.",
+                     "As I see it, yes.",
+                     "Most likely.",
+                     "Outlook good.",
+                     "Yes.",
+                     "Signs point to yes.",
+                     "Reply hazy, try again.",
+                     "Ask again later.",
+                     "Better not tell you now.",
+                     "Cannot predict now.",
+                     "Concentrate and ask again.",
+                     "Don't count on it.",
+                     "My reply is no.",
+                     "My sources say no.",
+                     "Outlook not so good.",
+                     "Very doubtful."]
         await ctx.send(f'Question: {question}\nAnswer: {random.choice(responses)}')
 
     @commands.command()
     async def flip(self, ctx):
-       randint = random.randint
-       value = randint(1, 2)
-       if value == 1:
-           coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Heads!")
-           await ctx.send(embed=coinflipembed)
-       if value == 2:
-           coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Tails!")
-           await ctx.send(embed=coinflipembed)
+        randint = random.randint
+        value = randint(1, 2)
+        if value == 1:
+            coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Heads!")
+            await ctx.send(embed=coinflipembed)
+        if value == 2:
+            coinflipembed = discord.Embed(title="Coin Flip", description=":coin: Tails!")
+            await ctx.send(embed=coinflipembed)
 
     def embed_comic(self, xkcd_comic, color=None):
         comic = discord.Embed()
@@ -118,8 +111,6 @@ class Fun(commands.Cog):
         embed_comic = self.embed_comic(comic)
         await context.send(embed=embed_comic)
 
-
-
     @commands.command()
     async def roll(self, ctx):
         mathpi = math.pi
@@ -148,7 +139,6 @@ class Fun(commands.Cog):
         embed = discord.Embed(title=title, description=definition)
         await ctx.send(embed=embed)
 
-
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def quote(self, ctx):
@@ -162,14 +152,13 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def myquote(self, ctx):
-        quotes = [
-                "I'm tired of trying to do something worthwhile for the human race, they simply don't want to change! - August Dvorak",
-                "More than 95% of people could be using a computer from 2008 or before without any problems. - Luke Smith",
-                "A computer is like air conditioning – it becomes useless when you open Windows. - Linus Torvalds"]
+        quotes = ["I'm tired of trying to do something worthwhile for the human race, they simply don't want to change! - August Dvorak",
+                  "More than 95% of people could be using a computer from 2008 or before without any problems. - Luke Smith",
+                  "A computer is like air conditioning – it becomes useless when you open Windows. - Linus Torvalds"]
         quote = random.choice(quotes)
         embedQuote = discord.Embed(title="Quotes curated by PrimeTime", description=quote, color=0x282828)
         await ctx.send(embed=embedQuote)
 
+
 def setup(bot):
     bot.add_cog(Fun(bot))
-
