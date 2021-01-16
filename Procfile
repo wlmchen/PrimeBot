@@ -1,1 +1,1 @@
-worker: cd primebot && python bot.py
+worker: sh -c 'cd primebot && python bot.py'
