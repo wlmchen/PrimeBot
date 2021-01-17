@@ -97,18 +97,18 @@ class Fun(commands.Cog):
     # XKCD LATEST
     @command_xkcd.command(name='latest', ignore_extra=False, aliases=['l', '-l', 'last'])
     async def command_xkcd_latest(self, context):
-        """
-        Shows the latest xkcd comic
 
-        Retrieves the latest xkcd webcomic from xkcd.com
-
-        ex:
-        `<prefix>xkcd latest`
-        `<prefix>xkcd l`
-        """
-        comic = await self.xkcd_api_client.latest(raw_comic_image=False)
-        embed_comic = self.embed_comic(comic)
-        await context.send(embed=embed_comic)
+#        Shows the latest xkcd comic
+#
+#        Retrieves the latest xkcd webcomic from xkcd.com
+#
+#        ex:
+#        `<prefix>xkcd latest`
+#        `<prefix>xkcd l`
+#
+#        comic = await self.xkcd_api_client.latest(raw_comic_image=False)
+#        embed_comic = self.embed_comic(comic)
+#        await context.send(embed=embed_comic)
 
     @commands.command()
     async def roll(self, ctx):
@@ -129,18 +129,23 @@ class Fun(commands.Cog):
         if not data["list"]:
             await ctx.send("Word not Found!")
             return
+
         definition = data["list"][0]["definition"]
+        arg = data["list"][0]["word"]
         title = "Urban Dictionary: " + arg
         if len(definition) > 2000:
             definition = definition[0:2000]
             title = title + " (Truncated)"
         embed = discord.Embed(title=title, description=definition)
+        embed.set_footer(text=data["list"][0]["permalink"]
         await ctx.send(embed=embed)
 
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
+    # cooldown because of rate limiting
     async def quote(self, ctx):
         s = requests_cache.CachedSession()
+        # don't cache this page or every quote will be the same
         with s.cache_disabled():
             response = s.get("https://zenquotes.io/api/random")
         json_data = json.loads(response.text)
@@ -150,6 +155,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def myquote(self, ctx):
+        # just random quotes I like
         quotes = ["I'm tired of trying to do something worthwhile for the human race, they simply don't want to change! - August Dvorak",
                   "More than 95% of people could be using a computer from 2008 or before without any problems. - Luke Smith",
                   "A computer is like air conditioning – it becomes useless when you open Windows. - Linus Torvalds"]

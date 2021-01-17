@@ -80,6 +80,7 @@ class Admin(commands.Cog):
             await ctx.guild.leave()
             return
         else:
+            # broken
             guild = self.bot.get_guild(guildid).leave()
             msg = f':ok: I have left {guild.name}!'
 

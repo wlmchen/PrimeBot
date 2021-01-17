@@ -12,13 +12,14 @@ class Events(commands.Cog):
         print('Logged in as ---->', self.bot.user)
         print('ID:', self.bot.user.id)
 #        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(self.bot.guilds)} servers!"))
-        await self.bot.change_presence(activity=discord.Game(name=">help | Watching {} servers".format(len(self.bot.guilds))))
+        await self.bot.change_presence(activity=discord.Game(name=">help | {} servers".format(len(self.bot.guilds))))
 
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author == self.bot.user:
             return
         if message.content[0] == '>':
+            # my log channel
             logChannel = self.bot.get_channel(799848536371888130)
             await logChannel.send('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(message.author, message.content, message.guild.name, message.channel.name))
             with open('log.txt', 'a') as log:
