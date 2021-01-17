@@ -194,17 +194,22 @@ class Utility(commands.Cog):
             if pattern in line:
                 linenum = num
                 break
+#
+#        try:
+#            linenum
+#        except NameError:
+#            description = ":x: That distro doesn't exist!"
+#            embed = discord.Embed(title='Distro not Found', description=description)
+#            await ctx.send(embed=embed)
+#            return
+#
+        description = html_string.splitlines()[linenum - 1]
 
-        try:
-            linenum
-        except NameError:
+        if description == "</h2><br><br><br><br>":
             description = ":x: That distro doesn't exist!"
             embed = discord.Embed(title='Distro not Found', description=description)
-            await ctx.send(embed=embed)
             return
 
-        description = html_string.splitlines()[linenum - 1]
-        await ctx.send(linenum)
         soup = BeautifulSoup(html_string, 'html.parser')
         title = soup.title.string
         embed = discord.Embed(title=title, description=description)
