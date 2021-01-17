@@ -122,7 +122,6 @@ class Fun(commands.Cog):
 
     @commands.command(alises=["ud", "urbandict"])
     async def define(self, ctx, *, arg):
-
         url = "https://api.urbandictionary.com/v0/define?term=" + arg
         json1 = requests.get(url)
         data = json1.json()
@@ -137,7 +136,8 @@ class Fun(commands.Cog):
             definition = definition[0:2000]
             title = title + " (Truncated)"
         embed = discord.Embed(title=title, description=definition)
-        embed.set_footer(text=data["list"][0]["permalink"]
+        embed.set_footer(text=data["list"][0]["permalink"])
+
         await ctx.send(embed=embed)
 
     @commands.command()
