@@ -185,6 +185,12 @@ class Utility(commands.Cog):
 
         html_string = html_string.decode('utf-8')
 
+        if "The distribution you requested" in html_string:
+            description = ":x: That distro doesn't exist!"
+            embed = discord.Embed(title='Distro not Found', description=description)
+            await ctx.send(embed=embed)
+            return
+
 #        for line in html_string.splitlines():
 #            if len(line) > 100 and '<' not in line and 'is a' in line:
 #                description = line
@@ -204,11 +210,6 @@ class Utility(commands.Cog):
 #            return
 #
         description = html_string.splitlines()[linenum - 1]
-
-        if description == "</h2><br><br><br><br>":
-            description = ":x: That distro doesn't exist!"
-            embed = discord.Embed(title='Distro not Found', description=description)
-            return
 
         soup = BeautifulSoup(html_string, 'html.parser')
         title = soup.title.string
