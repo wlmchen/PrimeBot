@@ -106,9 +106,9 @@ class Fun(commands.Cog):
 #        `<prefix>xkcd latest`
 #        `<prefix>xkcd l`
 #
-#        comic = await self.xkcd_api_client.latest(raw_comic_image=False)
-#        embed_comic = self.embed_comic(comic)
-#        await context.send(embed=embed_comic)
+        comic = await self.xkcd_api_client.latest(raw_comic_image=False)
+        embed_comic = self.embed_comic(comic)
+        await context.send(embed=embed_comic)
 
     @commands.command()
     async def roll(self, ctx):
