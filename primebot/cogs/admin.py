@@ -31,9 +31,9 @@ class Admin(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def dm(self, ctx, user_id: int, *, message: str):
-        """ DM the user of your choice """
-        user = self.bot.get_user(user_id)
+    async def dm(self, ctx, member, *, message: str):
+        converter = discord.ext.commands.MemberConverter()
+        user = await converter.convert(ctx, member)
         if not user:
             return await ctx.send(f"Could not find any UserID matching **{user_id}**")
 
