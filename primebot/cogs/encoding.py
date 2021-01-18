@@ -17,7 +17,7 @@ class Encoding(commands.Cog):
     @staticmethod
     def b64_to_str(arg):
         base64_bytes = arg.encode('ascii')
-        message_btytes = base64.b64decode(base64_bytes)
+        message_bytes = base64.b64decode(base64_bytes)
         message = message_bytes.decode('ascii')
         return message
 
