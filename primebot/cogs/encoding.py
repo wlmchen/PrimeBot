@@ -21,12 +21,12 @@ class Encoding(commands.Cog):
         message = message_bytes.decode('ascii')
         return message
 
-    @commands.command()
+    @commands.command(aliases=['b64e'])
     async def b64encode(self, ctx, *, arg):
         to_encode = arg
         await ctx.send(self.str_to_b64(to_encode))
 
-    @commands.command()
+    @commands.command(aliases=['b64d'])
     async def b64decode(self, ctx, *, arg):
         to_decode = arg
         await ctx.send(self.b64_to_str(to_decode))
