@@ -104,6 +104,7 @@ class Admin(commands.Cog):
     @commands.is_owner()
     async def echo(self, ctx, *, a):
         await ctx.send(a)
+        await self.bot.delete_message(ctx.message)
 
     @commands.command(hidden=True)
     @commands.is_owner()
