@@ -131,7 +131,7 @@ class Admin(commands.Cog):
     async def serverlist(self, ctx):
         list = []
         for guild in self.bot.guilds:
-            list.append(guild.name + ':' + str(len(ctx.guild.members)))
+            list.append(guild.name + ':' + str(len(guild.members)))
         await ctx.send(list)
 
     @commands.command()
