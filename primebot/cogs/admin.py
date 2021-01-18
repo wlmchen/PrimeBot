@@ -104,7 +104,7 @@ class Admin(commands.Cog):
     @commands.is_owner()
     async def echo(self, ctx, *, a):
         await ctx.send(a)
-        ctx.message.delete()
+        await ctx.message.delete()
 
     @commands.command(hidden=True)
     @commands.is_owner()
