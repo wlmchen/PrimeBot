@@ -5,6 +5,7 @@ import json
 from discord.ext import commands
 import random
 import math
+from pyfiglet import Figlet
 import xkcd_wrapper
 
 
@@ -97,19 +98,19 @@ class Fun(commands.Cog):
     # XKCD LATEST
     @command_xkcd.command(name='latest', ignore_extra=False, aliases=['l', '-l', 'last'])
     async def command_xkcd_latest(self, context):
+        """
+        Shows the latest xkcd comic
 
-#        Shows the latest xkcd comic
-#
-#        Retrieves the latest xkcd webcomic from xkcd.com
-#
-#        ex:
-#        `<prefix>xkcd latest`
-#        `<prefix>xkcd l`
-#
+        Retrieves the latest xkcd webcomic from xkcd.com
+
+        ex:
+        `<prefix>xkcd latest`
+        `<prefix>xkcd l`
+
         comic = await self.xkcd_api_client.latest(raw_comic_image=False)
         embed_comic = self.embed_comic(comic)
         await context.send(embed=embed_comic)
-
+        """
     @commands.command()
     async def roll(self, ctx):
         mathpi = math.pi
@@ -162,6 +163,13 @@ class Fun(commands.Cog):
         quote = random.choice(quotes)
         embedQuote = discord.Embed(title="Quotes curated by PrimeTime", description=quote, color=0x282828)
         await ctx.send(embed=embedQuote)
+
+    @commands.command(aliases=['ascii'])
+    async def figlet(self, ctx, arg):
+        f = Figlet(font='slant')
+        text = f.renderText(arg)
+        msg = '```fix\n' + text + '\n```'
+        await ctx.send(msg)
 
 
 def setup(bot):

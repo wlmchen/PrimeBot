@@ -8,7 +8,7 @@ A personal bot that runs on Discord.
 
 ## Running
 
-1. Create a `.env` file with the following contents [nasa api key](https://api.nasa.gov/)
+1. Retrieve a [nasa api key](https://api.nasa.gov/) and create a `.env` file with the following contents 
 
 ```
 DISCORD_TOKEN="your_token"
@@ -38,7 +38,7 @@ heroku config set DISCORD_TOKEN="your_token"
 
 ## Support
 
-Get help at our discord server: `https://discord.gg/AtecbFZPZv`
+Get help at our [discord server](https://discord.gg/AtecbFZPZv)
 
 ## Troubleshooting
 
@@ -46,4 +46,4 @@ Create an issue or ask in the discord server with a copy of the `error.log` file
 
 ### Licensing
 
-Everything is licensed under the AGPLv3+ License.
+Everything in this repository is licensed under the AGPLv3+ License.

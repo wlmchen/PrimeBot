@@ -51,7 +51,7 @@ class Moderation(commands.Cog):
 
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.has_permissions(manage_messages=True)
-    @commands.command(aliases=['clean'])
+    @commands.command(aliases=['clean', 'purge'])
     async def clear(self, ctx, amount):
         amount = int(amount)
         await ctx.channel.purge(limit=amount)

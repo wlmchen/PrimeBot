@@ -2,7 +2,7 @@ import discord
 import requests
 import os
 from dotenv import load_dotenv
-from googlesearch import search 
+from googlesearch import search
 from bs4 import BeautifulSoup
 from discord.ext import commands
 import random
@@ -45,11 +45,13 @@ class Utility(commands.Cog):
             embed = discord.Embed()
             embed.set_footer(text=f'UserID: {member.id}')
             embed.set_thumbnail(url=member.avatar_url)
-            if member.name != member.display_name:
-                fullName = f'{member} ({member.display_name})'
-            else:
-                fullName = member
-            embed.add_field(name=member.name, value=fullName, inline=False)
+            # if member.name != member.display_name:
+            #    fullName = f'{member} ({member.display_name})'
+            # else:
+            #    fullName = member
+            embed.set_author(name=member.name, icon_url=member.avatar_url)
+            # embed.add_field(name=member.name, value=fullName, inline=False)
+            embed.add_field(name=ctx.author.mention, inline=False)
             embed.add_field(name='Joined Discord on:', value='{}\n'.format(member.created_at.strftime('%m/%d/%Y %H:%M:%S')), inline=True)
             embed.add_field(name='Joined Server on', value='{}\n'.format(member.joined_at.strftime('%m/%d/%Y %H:%M:%S')), inline=True)
             embed.add_field(name='Avatar Link', value=member.avatar_url, inline=False)
@@ -119,8 +121,8 @@ class Utility(commands.Cog):
     @commands.command(aliases=['aw'])
     async def archwiki(self, ctx, *, query):
         query1 = query + " site:https://wiki.archlinux.org"
-        
-        for j in search(query1): 
+
+        for j in search(query1):
             url = j
             break
 
