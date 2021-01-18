@@ -129,8 +129,10 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def serverlist(self, ctx):
+        list = []
         for guild in self.bot.guilds:
-            await ctx.send(guild.name)
+            list.append(guild.name + ':' + str(len(ctx.guild.members)))
+        await ctx.send(list)
 
     @commands.command()
     async def botservers(self, ctx):
