@@ -100,7 +100,7 @@ class Admin(commands.Cog):
 
         await ctx.send(msg)
 
-    @commands.command()
+    @commands.command(pass_context=True)
     @commands.is_owner()
     async def echo(self, ctx, *, a):
         await ctx.send(a)
