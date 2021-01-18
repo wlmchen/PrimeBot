@@ -33,14 +33,16 @@ class Utility(commands.Cog):
             return string[:-2]
 
     @commands.command()
-    async def whois(self, ctx, member: discord.Member = None):
+    async def whois(self, ctx, member=None):
         if member is None:
-            member = ctx.message.author
+            member = str(ctx.message.author.id)
 
         if '@everyone' in ctx.message.content:
             await ctx.send("You may not ping everyone in this command! {}".format(ctx.message.author.mention))
             return
 
+        converter = discord.ext.commands.MemberConverter()
+        member = await converter.convert(ctx, member)
         if member is not None:
             embed = discord.Embed()
             embed.set_footer(text=f'UserID: {member.id}')
@@ -51,7 +53,7 @@ class Utility(commands.Cog):
             #    fullName = member
             embed.set_author(name=member.name, icon_url=member.avatar_url)
             # embed.add_field(name=member.name, value=fullName, inline=False)
-            embed.add_field(name=ctx.author.mention, inline=False)
+            embed.add_field(name='whois', value=ctx.author.mention, inline=False)
             embed.add_field(name='Joined Discord on:', value='{}\n'.format(member.created_at.strftime('%m/%d/%Y %H:%M:%S')), inline=True)
             embed.add_field(name='Joined Server on', value='{}\n'.format(member.joined_at.strftime('%m/%d/%Y %H:%M:%S')), inline=True)
             embed.add_field(name='Avatar Link', value=member.avatar_url, inline=False)

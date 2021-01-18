@@ -165,7 +165,7 @@ class Fun(commands.Cog):
         await ctx.send(embed=embedQuote)
 
     @commands.command(aliases=['ascii'])
-    async def figlet(self, ctx, arg):
+    async def figlet(self, ctx, *, arg):
         f = Figlet(font='slant')
         text = f.renderText(arg)
         msg = '```fix\n' + text + '\n```'
