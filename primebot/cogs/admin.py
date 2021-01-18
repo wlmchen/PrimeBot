@@ -35,7 +35,7 @@ class Admin(commands.Cog):
         converter = discord.ext.commands.MemberConverter()
         user = await converter.convert(ctx, member)
         if not user:
-            return await ctx.send(f"Could not find any UserID matching **{user_id}**")
+            return await ctx.send("Could not find any Umatching UserID ")
 
         try:
             await user.send(message)
