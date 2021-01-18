@@ -2,7 +2,7 @@ from discord.ext import commands
 import base64
 
 
-class Encoding(commands.cog):
+class Encoding(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
