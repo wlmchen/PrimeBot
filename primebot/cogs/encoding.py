@@ -7,53 +7,29 @@ class Encoding(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @staticmethod
+    def str_to_b64(arg):
+        message_bytes = arg.encode('ascii')
+        base64_bytes = base64.b64encode(message_bytes)
+        base64_message = base64_bytes.decode('ascii')
+        return base64_message
+
+    @staticmethod
+    def b64_to_str(arg):
+        base64_bytes = arg.encode('ascii')
+        message_btytes = base64.b64decode(base64_bytes)
+        message = message_bytes.decode('ascii')
+        return message
+
     @commands.command()
     async def b64encode(self, ctx, *, arg):
         to_encode = arg
-        encoded = base64.b64encode(bytes(to_encode, 'utf-8'))
-        await ctx.send(encoded)
+        await ctx.send(self.str_to_b64(to_encode))
 
     @commands.command()
     async def b64decode(self, ctx, *, arg):
         to_decode = arg
-        decoded = base64.b64decode(to_decode)
-        await ctx.send(decoded)
-
-    @commands.command()
-    async def b16encode(self, ctx, *, arg):
-        to_encode = arg
-        encoded = base64.b16encode(bytes(to_encode, 'utf-8'))
-        await ctx.send(encoded)
-
-    @commands.command()
-    async def b16decode(self, ctx, *, arg):
-        to_decode = arg
-        decoded = base64.b16decode(to_decode)
-        await ctx.send(decoded)
-
-    @commands.command()
-    async def a85encode(self, ctx, *, arg):
-        to_encode = arg
-        encoded = base64.a85encode(bytes(to_encode, 'utf-8'))
-        await ctx.send(encoded)
-
-    @commands.command()
-    async def a85decode(self, ctx, *, arg):
-        to_decode = arg
-        decoded = base64.a85decode(to_decode)
-        await ctx.send(decoded)
-
-    @commands.command()
-    async def b85encode(self, ctx, *, arg):
-        to_encode = arg
-        encoded = base64.b85encode(bytes(to_encode, 'utf-8'))
-        await ctx.send(encoded)
-
-    @commands.command()
-    async def b85decode(self, ctx, *, arg):
-        to_decode = arg
-        decoded = base64.b85decode(to_decode)
-        await ctx.send(decoded)
+        await ctx.send(self.b64_to_str(to_decode))
 
 
 def setup(bot):
