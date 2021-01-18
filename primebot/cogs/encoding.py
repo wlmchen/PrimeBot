@@ -29,6 +29,9 @@ class Encoding(commands.Cog):
     @commands.command(aliases=['b64d'])
     async def b64decode(self, ctx, *, arg):
         to_decode = arg
+        if '@' in self.b64_to_str(to_decode):
+            await ctx.send("you may not ping")
+            return
         await ctx.send(self.b64_to_str(to_decode))
 
 
