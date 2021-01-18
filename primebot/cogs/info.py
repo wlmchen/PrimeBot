@@ -116,6 +116,11 @@ class Info(commands.Cog):
         embed = discord.Embed(title="Prime", description="Thanks for using my bot! Feel free to browse my [github](https://github.com/pryme-svg)\nOr check out my [gitlab](https://gitlab.com/pryme-svg)\nThis bot is open source, please star the repository! [gitlab](https://gitlab.com/pryme-svg/primebot/) [github](https://github.com/pryme-svg/primebot/)!")
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def invite(self, ctx):
+        embed = discord.Embed(title="Invite", description="Invite PrimeBot [here](https://discord.com/api/oauth2/authorize?client_id=788810436535386112&permissions=8198&scope=bot)")
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Info(bot))

@@ -31,6 +31,20 @@ class Admin(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
+    async def dm(self, ctx, user_id: int, *, message: str):
+        """ DM the user of your choice """
+        user = self.bot.get_user(user_id)
+        if not user:
+            return await ctx.send(f"Could not find any UserID matching **{user_id}**")
+
+        try:
+            await user.send(message)
+            await ctx.send(f"✉️ Sent a DM to **{user_id}**")
+        except discord.Forbidden:
+            await ctx.send("This user might be having DMs blocked or it's a bot account...")
+
+    @commands.command()
+    @commands.is_owner()
     async def check_cogs(self, ctx, cog_name):
         try:
             self.bot.load_extension(f"cogs.{cog_name}")
