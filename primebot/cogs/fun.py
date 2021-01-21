@@ -169,7 +169,6 @@ class Fun(commands.Cog):
         if len(arg) > 1900:
             await ctx.send("Discord API limits message content to 2000 characters, please send a shorter message")
             return
-        arg = (''.join(arg)).encode('utf-8')
         f = Figlet(font='slant')
         text = f.renderText(arg)
         msg = '```fix\n' + text + '\n```'
