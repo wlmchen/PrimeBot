@@ -166,7 +166,7 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=['ascii'])
     async def figlet(self, ctx, *, arg):
-                f = Figlet(font='slant')
+        f = Figlet(font='slant')
         text = f.renderText(arg)
         msg = '```fix\n' + text + '\n```'
         if len(msg) >= 2000:
