@@ -166,12 +166,12 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=['ascii'])
     async def figlet(self, ctx, *, arg):
-        if len(arg) > 1900:
-            await ctx.send("Discord API limits message content to 2000 characters, please send a shorter message")
-            return
-        f = Figlet(font='slant')
+                f = Figlet(font='slant')
         text = f.renderText(arg)
         msg = '```fix\n' + text + '\n```'
+        if len(msg) >= 2000:
+            await ctx.send("Discord API limits message content to 2000 characters, please send a shorter message")
+            return
         await ctx.send(msg)
 
 
