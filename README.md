@@ -31,7 +31,7 @@ python3 bot.py
 
 1. Create an app
 
-2. Set environemnt variables
+2. Set environment variables
 
 ```
 heroku config set API_KEY="your_api_key"
@@ -39,6 +39,37 @@ heroku config set DISCORD_TOKEN="your_token"
 ```
 
 3. Push and Run
+
+## Commands
+
+| Command | Aliases | Description |
+| ------- | ------- | ----------- |
+| `>ping` | N/A | Get the latency of the bot |
+| `>quote` | N/A | Get a random quote |
+| `>prime` | N/A | Get a description of the developer |
+| `>ban (member)` | N/A | Ban a member |
+| `>unban (member)` | N/A | Unban a member |
+| `>kick (member)` | N/A | Kick a member |
+| `>roll` | N/A | Roll a dice |
+| `>8ball (question)` | N/A | 8ball |
+| `>clear (amount)` | `clean`, `purge` | Delete a number of messages |
+| `>poll "question" item1 item2` | N/A | Create a poll |
+| `>xkcd` | N/A | Get a random xkcd comic |
+| `>xkcd latest` | N/A | Get the latest xkcd comic |
+| `>xkcd n (number)` | N/A | Get a specific xkcd comic |
+| `>sys` | N/A | Get system information of the host |
+| `>info` | N/A | Get information about the bot |
+| `>flip` | N/A | Flip a coin |
+| `>distro (distro)` | N/A | Get information about a GNU/Linux distribution from distrowatch |
+| `>distro random` | N/A | Get information about a random GNU/Linux distro |
+| `>apod` | N/A | Get the latest astronomy picture of the day |
+| `>apod (date)` | N/A | Get a random apod |
+| `>archwiki (term)` | `aw` | Get information from the Arch Wiki |
+| `>define (term)` | `df`,  `urbandict`, `ud` | Get definitions from urbandict |
+| `>figlet (text)` | `ascii` | Get ascii art |
+| `>invite` | N/A | Invite the bot |
+| `>b64encode` | `b64e` | Encode text into base64 |
+| `>b64decode` | `b646` | Decode text from base64 |
 
 ## Support
 
