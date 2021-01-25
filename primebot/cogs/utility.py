@@ -117,8 +117,6 @@ class Utility(commands.Cog):
         react_message = await ctx.send(embed=embed)
         for reaction in reactions[:len(options)]:
             await react_message.add_reaction(reaction)
-        embed.set_footer(text='Poll ID: {}'.format(react_message.id))
-        await self.bot.edit_message(react_message, embed=embed)
 
     @commands.command(aliases=['aw'])
     async def archwiki(self, ctx, *, query):

@@ -39,7 +39,7 @@ class Admin(commands.Cog):
 
         try:
             await user.send(message)
-            await ctx.send(f"✉️ Sent a DM to **{user_id}**")
+            await ctx.send(f"✉️ Sent a DM to **{member}**")
         except discord.Forbidden:
             await ctx.send("This user might be having DMs blocked or it's a bot account...")
 
