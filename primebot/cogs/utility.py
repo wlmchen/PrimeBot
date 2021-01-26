@@ -150,7 +150,7 @@ class Utility(commands.Cog):
         userAvatarUrl = avamember.avatar_url
         embedAvatar = discord.Embed(title=str(avamember), description='')
         embedAvatar.set_image(url=userAvatarUrl)
-        embedAvatar.set_author(name=member.name, icon_url=member.avatar_url)
+        embedAvatar.set_author(name=avamember.name, icon_url=avamember.avatar_url)
         await ctx.send(embed=embedAvatar)
 
     @commands.command()
