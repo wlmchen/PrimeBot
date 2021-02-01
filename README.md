@@ -1,5 +1,6 @@
 [![Discord](https://img.shields.io/discord/794255644915007559.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/AtecbFZPZv)
 [![License](https://img.shields.io/github/license/pryme-svg/PrimeBot)](https://gitlab.com/pryme-svg/primebot/-/raw/master/LICENSE)
+![Relase](https://img.shields.io/github/release/pryme-svg/primebot)
 ![Code Size](https://img.shields.io/github/languages/code-size/pryme-svg/primebot)
 ![Total Lines](https://img.shields.io/tokei/lines/github/pryme-svg/primebot)
 ![Commit Activity](https://img.shields.io/github/commit-activity/m/pryme-svg/primebot?foo=bar)
