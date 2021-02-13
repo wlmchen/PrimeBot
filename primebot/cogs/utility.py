@@ -94,7 +94,7 @@ class Utility(commands.Cog):
 
     @commands.command(pass_context=True)
     async def poll(self, ctx, question, *options: str):
-        options = [(word.lower()) for word in options]
+        #options = [(word.lower()) for word in options]
         if "@" in ctx.message.content:
             await ctx.send("You may not tag everyone in this command {}".format(ctx.message.author.mention))
             return
@@ -105,7 +105,7 @@ class Utility(commands.Cog):
             await ctx.send('You cannot make a poll for more than 10 things!')
             return
 
-        if len(options) == 2 and options[0] == 'yes' and options[1] == 'no':
+        if len(options) == 2 and options[0].lower() == 'yes' and options[1].lower() == 'no':
             reactions = ['✅', '❌']
         else:
             reactions = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟']
