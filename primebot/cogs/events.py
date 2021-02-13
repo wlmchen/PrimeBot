@@ -18,7 +18,7 @@ class Events(commands.Cog):
     async def on_message(self, message):
         if message.author == self.bot.user:
             return
-        if message.content[0] == '>':
+        if message.content[0] == '>' and message.content[1] != ' ':
             # my log channel
             logChannel = self.bot.get_channel(799848536371888130)
             await logChannel.send('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(message.author, message.content, message.guild.name, message.channel.name))
