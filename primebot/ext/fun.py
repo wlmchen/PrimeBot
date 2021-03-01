@@ -61,10 +61,6 @@ class Fun(commands.Cog):
         comic.set_footer(text=xkcd_comic.description)
         return comic
 
-    ##########
-    # COMMANDS
-    #########
-
     # XKCD
     @commands.group(name='xkcd', ignore_extra=False, invoke_without_command=True)
     async def command_xkcd(self, context):
@@ -152,16 +148,6 @@ class Fun(commands.Cog):
         json_data = json.loads(response.text)
         quote = json_data[0]['q'] + " -" + json_data[0]['a']
         embedQuote = discord.Embed(title="Inspirational Quote", description=quote, color=0x282828)
-        await ctx.send(embed=embedQuote)
-
-    @commands.command()
-    async def myquote(self, ctx):
-        # just random quotes I like
-        quotes = ["I'm tired of trying to do something worthwhile for the human race, they simply don't want to change! - August Dvorak",
-                  "More than 95% of people could be using a computer from 2008 or before without any problems. - Luke Smith",
-                  "A computer is like air conditioning – it becomes useless when you open Windows. - Linus Torvalds"]
-        quote = random.choice(quotes)
-        embedQuote = discord.Embed(title="Quotes curated by PrimeTime", description=quote, color=0x282828)
         await ctx.send(embed=embedQuote)
 
     @commands.command(aliases=['ascii'])
