@@ -1,0 +1,8 @@
+token:
+cogs:
+  - admin
+  - utility
+error_channel: 
+log_channel: 
+nasa_api_key: 
+prefix:
