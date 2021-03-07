@@ -11,24 +11,24 @@ class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(hidden=True)
     @is_owner()
     async def load(self, ctx, extension):
         self.bot.load_extension(f'cogs.{extension}')
         await ctx.send("{} has been loaded".format(extension))
 
-    @commands.command()
+    @commands.command(hidden=True)
     @is_owner()
     async def unload(self, ctx, extension):
         self.bot.unload_extension(f'cogs.{extension}')
         await ctx.send("{} has been unloaded".format(extension))
 
-    @commands.command()
+    @commands.command(hidden=True)
     @is_owner()
     async def admintest(self, ctx):
         await ctx.send('You are the owner of this bot')
 
-    @commands.command()
+    @commands.command(hidden=True)
     @is_owner()
     async def dm(self, ctx, member, *, message: str):
         converter = discord.ext.commands.MemberConverter()
@@ -42,7 +42,7 @@ class Admin(commands.Cog):
         except discord.Forbidden:
             await ctx.send("This user might be having DMs blocked or it's a bot account...")
 
-    @commands.command()
+    @commands.command(hidden=True)
     @is_owner()
     async def check_cogs(self, ctx, cog_name):
         try:
@@ -55,7 +55,7 @@ class Admin(commands.Cog):
             await ctx.send("Cog is unloaded")
             self.bot.unload_extension(f"cogs.{cog_name}")
 
-    @commands.command()
+    @commands.command(hidden=True)
     @is_owner()
     async def eval(self, ctx, *, code):
         str_obj = io.StringIO()  # Retrieves a stream of data
@@ -97,7 +97,7 @@ class Admin(commands.Cog):
         await self.bot.change_presence(status=discordStatus)
         await ctx.send(f'**:ok:** Changed the status to: **{discordStatus}**')
 
-    @commands.command()
+    @commands.command(hidden=True)
     @is_owner()
     async def leaveserver(self, ctx, guildid):
         if guildid == 'this':
@@ -110,7 +110,7 @@ class Admin(commands.Cog):
 
         await ctx.send(msg)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True,hidden=True)
     @is_owner()
     async def echo(self, ctx, *, a):
         await ctx.send(a)
@@ -128,7 +128,7 @@ class Admin(commands.Cog):
             msg = ':ok: Reset nickname'
         await ctx.send(msg)
 
-    @commands.command()
+    @commands.command(hidden=True)
     @is_owner()
     async def restartBot(self, ctx):
         await ctx.send(":robot: Bot is restarting")
@@ -137,7 +137,7 @@ class Admin(commands.Cog):
         await ctx.bot.logout()
         await self.bot.login(primebot.conf['token'], bot=True)
 
-    @commands.command()
+    @commands.command(hidden=True)
     @is_owner()
     async def serverlist(self, ctx):
         list = []
@@ -145,7 +145,7 @@ class Admin(commands.Cog):
             list.append(guild.name + ':' + str(len(guild.members)))
         await ctx.send(list)
 
-    @commands.command()
+    @commands.command(hidden=True)
     async def botservers(self, ctx):
         await ctx.send("I'm in " + str(len(self.bot.guilds)) + " servers")
 
