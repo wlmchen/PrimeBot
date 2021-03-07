@@ -94,7 +94,7 @@ class Utility(commands.Cog):
 
     @commands.command(pass_context=True)
     async def poll(self, ctx, question, *options: str):
-        #options = [(word.lower()) for word in options]
+        # options = [(word.lower()) for word in options]
         if len(options) <= 1:
             await ctx.send('You need more than one option to make a poll!')
             return
