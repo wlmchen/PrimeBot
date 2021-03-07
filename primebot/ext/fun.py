@@ -1,4 +1,5 @@
 import discord
+import aiohttp
 import requests_cache
 import requests
 import json
@@ -39,6 +40,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def flip(self, ctx):
+        """Flip a Coin"""
         randint = random.randint
         value = randint(1, 2)
         if value == 1:
@@ -57,21 +59,9 @@ class Fun(commands.Cog):
         comic.set_footer(text=xkcd_comic.description)
         return comic
 
-    ##########
-    # COMMANDS
-    #########
-
-    # XKCD
     @commands.group(name='xkcd', ignore_extra=False, invoke_without_command=True)
     async def command_xkcd(self, context):
-        """
-        Shows a random xkcd comic
-
-        Retrieves a random xkcd webcomic from xkcd.com
-
-        ex:
-        `<prefix>xkcd`
-        """
+        """Show a random xkcd comic"""
         random_comic = await self.xkcd_api_client.random(raw_comic_image=False)
         embed_comic = self.embed_comic(random_comic)
         await context.send(embed=embed_comic)
@@ -109,12 +99,14 @@ class Fun(commands.Cog):
         """
     @commands.command()
     async def roll(self, ctx):
+        """Roll a dice"""
         randint = random.randint
         value = randint(1, 6)
         await ctx.send("{} has rolled a {}!".format(ctx.message.author, value))
 
     @commands.command(alises=["ud", "urbandict", "df"])
     async def define(self, ctx, *, arg):
+        """Search Urban Dictionary"""
         url = "https://api.urbandictionary.com/v0/define?term=" + arg
         json1 = requests.get(url)
         data = json1.json()
@@ -132,6 +124,21 @@ class Fun(commands.Cog):
         embed.set_footer(text=data["list"][0]["permalink"])
 
         await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def lyrics(self, ctx, artist, *, title):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://api.lyrics.ovh/v1/{artist}/{title}") as response:
+                data = await response.json()
+                lyrics = data['lyrics']
+                if lyrics is None:
+                    raise commands.CommandError("Song not found! Please enter correct Artist and Song title")
+                if len(lyrics) > 2048:
+                    lyrics = lyrics[:2048]
+                emb = discord.Embed(title=f"{title}", description=f"{lyrics}", color=0xa3a3ff)
+                await ctx.send(embed=emb)
+        await session.close()
 
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)

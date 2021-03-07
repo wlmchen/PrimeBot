@@ -1,4 +1,5 @@
 import discord
+from typing import Union
 import requests
 from googlesearch import search
 from bs4 import BeautifulSoup
@@ -128,26 +129,26 @@ class Utility(commands.Cog):
         try:
             test1 = html_string[html_string.index("</ul></div>"):html_string.index("Contents")]
         except ValueError:
-            await ctx.send(":x: Page not Found!")
+            raise commands.CommandError("Page not found!")
             return
         soup = BeautifulSoup(test1, "html.parser")
         description = "".join(soup.strings)
 
-        embedAw = discord.Embed(title="Arch Wiki: " + query, description=description, color=0x1793d1)
-        embedAw.set_footer(text=url)
+        embedAw = discord.Embed(title="Arch Wiki: " + query, description=description, url=url, color=0x1793d1)
         await ctx.send(embed=embedAw)
 
     @commands.command()
-    async def avatar(self, ctx, *, avamember=None):
-        if avamember is None:
-            avamember = ctx.message.author
+    async def avatar(self, ctx, *, member: Union[discord.Member, int]=None):
+        if member is None:
+            member = ctx.message.author
         else:
-            converter = discord.ext.commands.MemberConverter()
-            avamember = await converter.convert(ctx, avamember)
-        userAvatarUrl = avamember.avatar_url
-        embedAvatar = discord.Embed(title=str(avamember), description='')
+            member = (await self.bot.fetch_user(member) if isinstance(member, int) else member)
+            #converter = discord.ext.commands.MemberConverter()
+            #avamember = await converter.convert(ctx, avamember)
+        userAvatarUrl = member.avatar_url
+        embedAvatar = discord.Embed(title=str(member), description='', url=str(userAvatarUrl))
         embedAvatar.set_image(url=userAvatarUrl)
-        embedAvatar.set_author(name=avamember.name, icon_url=avamember.avatar_url)
+        embedAvatar.set_author(name=member.name, icon_url=member.avatar_url)
         await ctx.send(embed=embedAvatar)
 
     @commands.command()
