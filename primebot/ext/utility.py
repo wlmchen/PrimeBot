@@ -95,9 +95,6 @@ class Utility(commands.Cog):
     @commands.command(pass_context=True)
     async def poll(self, ctx, question, *options: str):
         #options = [(word.lower()) for word in options]
-        if "@" in ctx.message.content:
-            await ctx.send("You may not tag everyone in this command {}".format(ctx.message.author.mention))
-            return
         if len(options) <= 1:
             await ctx.send('You need more than one option to make a poll!')
             return

@@ -1,6 +1,6 @@
 import yaml
 
-__all__ = ("conf")
+__all__ = ['conf']
 
 
 def load_config():

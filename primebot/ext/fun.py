@@ -16,9 +16,6 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=['8ball'])
     async def _8ball(self, ctx, *, question):
-        if "@" in ctx.message.content:
-            await ctx.send("You may not tag everyone in this command {}".format(ctx.message.author.mention))
-            return
         responses = ["It is certain.",
                      "It is decidedly so.",
                      "Without a doubt.",
@@ -115,10 +112,7 @@ class Fun(commands.Cog):
     async def roll(self, ctx):
         mathpi = math.pi
         randint = random.randint
-        value = randint(1, 7)
-        if value == 7:
-            await ctx.send("{} has rolled a pi! :pie: {} ".format(ctx.message.author, mathpi))
-            return
+        value = randint(1, 6)
         await ctx.send("{} has rolled a {}!".format(ctx.message.author, value))
 
     @commands.command(alises=["ud", "urbandict", "df"])
@@ -152,16 +146,6 @@ class Fun(commands.Cog):
         json_data = json.loads(response.text)
         quote = json_data[0]['q'] + " -" + json_data[0]['a']
         embedQuote = discord.Embed(title="Inspirational Quote", description=quote, color=0x282828)
-        await ctx.send(embed=embedQuote)
-
-    @commands.command()
-    async def myquote(self, ctx):
-        # just random quotes I like
-        quotes = ["I'm tired of trying to do something worthwhile for the human race, they simply don't want to change! - August Dvorak",
-                  "More than 95% of people could be using a computer from 2008 or before without any problems. - Luke Smith",
-                  "A computer is like air conditioning – it becomes useless when you open Windows. - Linus Torvalds"]
-        quote = random.choice(quotes)
-        embedQuote = discord.Embed(title="Quotes curated by PrimeTime", description=quote, color=0x282828)
         await ctx.send(embed=embedQuote)
 
     @commands.command(aliases=['ascii'])

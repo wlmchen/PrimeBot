@@ -1,8 +1,8 @@
-token:
-cogs:
+token: ''
+exts:
   - admin
   - utility
 error_channel: 
 log_channel: 
-nasa_api_key: 
-prefix:
+nasa_api_key: '' # https://api.nasa.gov/
+prefix: ''
