@@ -1,7 +1,5 @@
 import discord
 import requests
-import os
-from dotenv import load_dotenv
 from googlesearch import search
 from bs4 import BeautifulSoup
 from discord.ext import commands
@@ -62,35 +60,35 @@ class Utility(commands.Cog):
         else:
             msg = 'You have not specified a user!'
             await ctx.send(msg)
-#
-#    @commands.command()
-#    @commands.cooldown(1, 10, commands.BucketType.user)
-#    async def githead(self, ctx):
-#        head = subprocess.run(['git', '--no-pager', 'show', 'HEAD'], stdout=subprocess.PIPE)
-#        if len(head.stdout.decode('utf-8')) > 2000:
-#            mystr = head.stdout.decode('utf-8')
-#            mystr = mystr[0:2030]
-#        else:
-#            mystr = head.stdout.decode('utf-8')
-#        mystr = "```diff\n" + mystr + "```"
-#        embedHead = discord.Embed(title="Git Head", description=mystr)
-#        embedHead.add_field(name=".", value="[Git Repository](https://gitlab.com/pryme-svg/primebot)")
-#        await ctx.send(embed=embedHead)
-#
-#    @commands.command()
-#    @commands.cooldown(1, 10, commands.BucketType.user)
-#    async def gitlog(self, ctx):
-#        log = subprocess.run(['git', '--no-pager', 'log'], stdout=subprocess.PIPE)
-#        if len(log.stdout.decode('utf-8')) > 2000:
-#            mystr = log.stdout.decode('utf-8')
-#            mystr = mystr[0:2030]
-#            mystr = "```\n" + mystr + "```"
-#        else:
-#            mystr = log.stdout.decode('utf-8')
-#            mystr = "```\n" + mystr + "```"
-#        embedLog = discord.Embed(title="Git Log(truncated)", description=mystr)
-#        embedLog.add_field(name=".", value="[Git Repository](https://gitlab.com/pryme-svg/primebot)")
-#        await ctx.send(embed=embedLog)
+
+    @commands.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    async def githead(self, ctx):
+        head = subprocess.run(['git', '--no-pager', 'show', 'HEAD'], stdout=subprocess.PIPE)
+        if len(head.stdout.decode('utf-8')) > 2000:
+            mystr = head.stdout.decode('utf-8')
+            mystr = mystr[0:2030]
+        else:
+            mystr = head.stdout.decode('utf-8')
+        mystr = "```diff\n" + mystr + "```"
+        embedHead = discord.Embed(title="Git Head", description=mystr)
+        embedHead.add_field(name=".", value="[Git Repository](https://github.com/pryme-svg/primebot)")
+        await ctx.send(embed=embedHead)
+
+    @commands.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    async def gitlog(self, ctx):
+        log = subprocess.run(['git', '--no-pager', 'log'], stdout=subprocess.PIPE)
+        if len(log.stdout.decode('utf-8')) > 2000:
+            mystr = log.stdout.decode('utf-8')
+            mystr = mystr[0:2030]
+            mystr = "```\n" + mystr + "```"
+        else:
+            mystr = log.stdout.decode('utf-8')
+            mystr = "```\n" + mystr + "```"
+        embedLog = discord.Embed(title="Git Log(truncated)", description=mystr)
+        embedLog.add_field(name=".", value="[Git Repository](https://github.com/pryme-svg/primebot)")
+        await ctx.send(embed=embedLog)
 
     @commands.command(pass_context=True)
     async def poll(self, ctx, question, *options: str):
@@ -152,8 +150,7 @@ class Utility(commands.Cog):
 
     @commands.command()
     async def apod(self, ctx, date=None):
-        load_dotenv()
-        API_KEY = os.getenv('API_KEY')
+        API_KEY = primebot.conf['nasa_api_key']
 
         if date is None:
             url = "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY
@@ -177,7 +174,7 @@ class Utility(commands.Cog):
     @commands.command()
     async def distro(self, ctx, *, arg):
         if arg == "random":
-            arg = (random.choice(list(open('linux.list'))))
+            arg = (random.choice(list(open('assets/linux.list'))))
 
         url = "http://www.distrowatch.com/table.php?distribution=" + arg
         html_string = requests.get(url).content

@@ -11,10 +11,6 @@
 
 A personal bot that runs on Discord.
 
-## Running
-
-1. Retrieve a [nasa api key](https://api.nasa.gov/) and create a `.env` file with the following contents 
-
 ## Commands
 
 | Command | Aliases | Description |
