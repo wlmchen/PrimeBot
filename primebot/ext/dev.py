@@ -1,13 +1,11 @@
 import discord
-import contextlib
-import io
 from primebot.utils.checks import is_owner
-import subprocess
 from discord.ext import commands
 import primebot
+import git
 
 
-class Admin(commands.Cog):
+class Dev(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -55,17 +53,6 @@ class Admin(commands.Cog):
             await ctx.send("Cog is unloaded")
             self.bot.unload_extension(f"cogs.{cog_name}")
 
-    @commands.command(hidden=True)
-    @is_owner()
-    async def eval(self, ctx, *, code):
-        str_obj = io.StringIO()  # Retrieves a stream of data
-        try:
-            with contextlib.redirect_stdout(str_obj):
-                exec(code)
-        except Exception as e:
-            return await ctx.send(f"```{e.__class__.__name__}: {e}```")
-        await ctx.send(f'```{str_obj.getvalue()}```')
-
     @commands.command(hidden=True, aliases=['game'])
     @is_owner()
     async def changegame(self, ctx, gameType: str, *, gameName: str):
@@ -104,13 +91,13 @@ class Admin(commands.Cog):
             await ctx.guild.leave()
             return
         else:
-            # broken
-            guild = self.bot.get_guild(guildid).leave()
-            msg = f':ok: I have left {guild.name}!'
+            guild = discord.utils.get(self.bot.guilds, name=guildid)
+            if guild is None:
+                raise commands.CommandError("I can't find that guild")
+            await self.bot.leave_guild(guild)
+        await ctx.send(':ok: I have left {guild.name} ({guild.id})')
 
-        await ctx.send(msg)
-
-    @commands.command(pass_context=True,hidden=True)
+    @commands.command(pass_context=True, hidden=True)
     @is_owner()
     async def echo(self, ctx, *, a):
         await ctx.send(a)
@@ -130,10 +117,15 @@ class Admin(commands.Cog):
 
     @commands.command(hidden=True)
     @is_owner()
-    async def restartBot(self, ctx):
+    async def pull(self, ctx):
         await ctx.send(":robot: Bot is restarting")
-        await ctx.send("Performing `git pull`")
-        subprocess.call(["git", "pull", "--rebase"])
+        g = git.cmd.Git('.')
+        msg = g.pull()
+        await ctx.send('```\n' + msg + '\n```')
+
+    @commands.command(hidden=True)
+    @is_owner()
+    async def restart(self, ctx):
         await ctx.bot.logout()
         await self.bot.login(primebot.conf['token'], bot=True)
 
@@ -151,4 +143,4 @@ class Admin(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Admin(bot))
+    bot.add_cog(Dev(bot))

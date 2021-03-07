@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from typing import Union
 
 
 class Moderation(commands.Cog):
@@ -19,12 +20,16 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member, *, reason=None):
-        converter = discord.ext.commands.MemberConverter()
-        member = await converter.convert(ctx, member)
+    async def ban(self, ctx, member: Union[discord.Member, int], *, reason=None):
+        user_obj = (
+            await self.bot.fetch_user(member) if isinstance(member, int) else member
+        )
         if member is None or member == ctx.message.author:
             await ctx.send("You cannot ban yourself {}".format(ctx.message.author.mention))
             return
+        await ctx.guild.ban(
+            user_obj, reason=f"{ctx.author} ({ctx.author.id}) - {reason}"
+        )
         await member.ban(reason='Banned by: {}, Reason: {}'.format(ctx.message.author, reason))
         await ctx.send(f'User {member.mention} has been banned')
 
