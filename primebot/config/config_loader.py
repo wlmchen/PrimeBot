@@ -8,5 +8,5 @@ def load_config():
         raw = yaml.safe_load(config)
     return raw
 
-conf = load_config()
 
+conf = load_config()

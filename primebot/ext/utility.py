@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 from discord.ext import commands
 import random
 import requests_cache
+import primebot
+import subprocess
 
 
 class Utility(commands.Cog):
