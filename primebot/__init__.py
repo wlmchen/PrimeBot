@@ -1,8 +1,7 @@
-from .config.config_loader import *
+from .config.config_loader import * # noqa
 import primebot
 import discord
 from discord.ext import commands
-from .utils import *
 
 
 class PrimeBot(commands.Bot):
