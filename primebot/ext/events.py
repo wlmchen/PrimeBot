@@ -1,4 +1,5 @@
 import discord
+import primebot
 from discord.ext import commands
 
 
@@ -19,8 +20,7 @@ class Events(commands.Cog):
         if message.author == self.bot.user:
             return
         if message.content[0] == '>' and message.content[1] != ' ':
-            # my log channel
-            logChannel = self.bot.get_channel(799848536371888130)
+            logChannel = self.bot.get_channel(primebot.conf['log_channel'])
             await logChannel.send('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(message.author, message.content, message.guild.name, message.channel.name))
             with open('log.txt', 'a') as log:
                 log.write('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(message.author, message.content, message.guild.name, message.channel.name))
