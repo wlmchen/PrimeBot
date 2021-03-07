@@ -9,8 +9,19 @@ class Error(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        # my log channel
-        errorChannel = self.bot.get_channel(799848546823307295)
+        ignore_errors = (
+            commands.CommandNotFound,
+            commands.NotOwner,
+        )
+
+        if isinstance(error, ignore_errors):
+            return
+
+        if str(error) is not None:
+            await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: " + str(error)))
+            return
+
+        errorChannel = self.bot.get_channel(primebot.conf['error_channel'])
         await errorChannel.send('Unhandled Message: {} \n Content: {} \n Error: {}\n'.format(ctx.message, ctx.message.content, error))
         with open('error.log', 'a') as f:
             f.write('Unhandled Message: {} \n Content: {} \n Error: {}\n'.format(ctx.message, ctx.message.content, error))

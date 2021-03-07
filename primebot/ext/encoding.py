@@ -71,9 +71,6 @@ class Encoding(commands.Cog):
     @commands.command(aliases=['b64d'])
     async def b64decode(self, ctx, *, arg):
         to_decode = arg
-        if '@' in self.b64_to_str(to_decode):
-            await ctx.send("you may not ping")
-            return
         await ctx.send(self.b64_to_str(to_decode))
 
     @commands.command(aliases=['b16e'])
@@ -84,9 +81,6 @@ class Encoding(commands.Cog):
     @commands.command(aliases=['b16d'])
     async def b16decode(self, ctx, *, arg):
         to_decode = arg
-        if '@' in self.b16_to_str(to_decode):
-            await ctx.send("you may not ping")
-            return
         await ctx.send(self.b16_to_str(to_decode))
 
     @commands.command(aliases=['b32e'])
@@ -97,9 +91,6 @@ class Encoding(commands.Cog):
     @commands.command(aliases=['b32d'])
     async def b32decode(self, ctx, *, arg):
         to_decode = arg
-        if '@' in self.b32_to_str(to_decode):
-            await ctx.send("you may not ping")
-            return
         await ctx.send(self.b32_to_str(to_decode))
 
     @commands.command(aliases=['b85e'])
@@ -110,9 +101,6 @@ class Encoding(commands.Cog):
     @commands.command(aliases=['b85d'])
     async def b85decode(self, ctx, *, arg):
         to_decode = arg
-        if '@' in self.b85_to_str(to_decode):
-            await ctx.send("you may not ping")
-            return
         await ctx.send(self.b85_to_str(to_decode))
 
 
