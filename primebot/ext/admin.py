@@ -4,6 +4,8 @@ import io
 from primebot.utils.checks import is_owner
 import subprocess
 from discord.ext import commands
+import primebot
+
 
 class Admin(commands.Cog):
     def __init__(self, bot):
@@ -56,7 +58,7 @@ class Admin(commands.Cog):
     @commands.command()
     @is_owner()
     async def eval(self, ctx, *, code):
-        str_obj = io.StringIO() #Retrieves a stream of data
+        str_obj = io.StringIO()  # Retrieves a stream of data
         try:
             with contextlib.redirect_stdout(str_obj):
                 exec(code)
@@ -133,7 +135,7 @@ class Admin(commands.Cog):
         await ctx.send("Performing `git pull`")
         subprocess.call(["git", "pull", "--rebase"])
         await ctx.bot.logout()
-        await self.bot.login(TOKEN, bot=True)
+        await self.bot.login(primebot.conf['token'], bot=True)
 
     @commands.command()
     @is_owner()

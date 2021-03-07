@@ -4,7 +4,6 @@ import requests
 import json
 from discord.ext import commands
 import random
-import math
 from pyfiglet import Figlet
 import xkcd_wrapper
 
@@ -110,7 +109,6 @@ class Fun(commands.Cog):
         """
     @commands.command()
     async def roll(self, ctx):
-        mathpi = math.pi
         randint = random.randint
         value = randint(1, 6)
         await ctx.send("{} has rolled a {}!".format(ctx.message.author, value))
