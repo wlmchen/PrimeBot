@@ -109,7 +109,7 @@ class Fun(commands.Cog):
         value = randint(1, 6)
         await ctx.send("{} has rolled a {}!".format(ctx.message.author, value))
 
-    @commands.command(alises=["ud", "urbandict", "df"])
+    @commands.command(aliases=["ud", "urbandict", "df"])
     async def define(self, ctx, *, arg):
         """Search Urban Dictionary"""
         url = "https://api.urbandictionary.com/v0/define?term=" + arg
