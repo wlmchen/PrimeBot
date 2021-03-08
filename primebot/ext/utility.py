@@ -1,7 +1,6 @@
 import discord
 from typing import Union
 import requests
-from googlesearch import search
 from bs4 import BeautifulSoup
 from discord.ext import commands
 import random
@@ -54,7 +53,7 @@ class Utility(commands.Cog):
             #    fullName = member
             embed.set_author(name=member.name, icon_url=member.avatar_url)
             # embed.add_field(name=member.name, value=fullName, inline=False)
-            embed.add_field(name='whois', value=ctx.author.mention, inline=False)
+            embed.add_field(name='whois', value=member.mention, inline=False)
             embed.add_field(name='Joined Discord on:', value='{}\n'.format(member.created_at.strftime('%m/%d/%Y %H:%M:%S')), inline=True)
             embed.add_field(name='Joined Server on', value='{}\n'.format(member.joined_at.strftime('%m/%d/%Y %H:%M:%S')), inline=True)
             embed.add_field(name='Avatar Link', value=member.avatar_url, inline=False)
@@ -118,11 +117,7 @@ class Utility(commands.Cog):
 
     @commands.command(aliases=['aw'])
     async def archwiki(self, ctx, *, query):
-        query1 = query + " site:https://wiki.archlinux.org"
-
-        for j in search(query1):
-            url = j
-            break
+        url = "https://wiki.archlinux.org/index.php?search={}".format(query)
 
         html_string = requests.get(url).content
         html_string = html_string.decode('utf-8')
@@ -138,13 +133,13 @@ class Utility(commands.Cog):
         await ctx.send(embed=embedAw)
 
     @commands.command()
-    async def avatar(self, ctx, *, member: Union[discord.Member, int]=None):
+    async def avatar(self, ctx, *, member: Union[discord.Member, int] = None):
         if member is None:
             member = ctx.message.author
         else:
             member = (await self.bot.fetch_user(member) if isinstance(member, int) else member)
-            #converter = discord.ext.commands.MemberConverter()
-            #avamember = await converter.convert(ctx, avamember)
+            # converter = discord.ext.commands.MemberConverter()
+            # avamember = await converter.convert(ctx, avamember)
         userAvatarUrl = member.avatar_url
         embedAvatar = discord.Embed(title=str(member), description='', url=str(userAvatarUrl))
         embedAvatar.set_image(url=userAvatarUrl)
@@ -177,7 +172,7 @@ class Utility(commands.Cog):
     @commands.command()
     async def distro(self, ctx, *, arg):
         if arg == "random":
-            arg = (random.choice(list(open('assets/linux.list'))))
+            arg = (random.choice(list(open('primebot/assets/linux.list'))))
 
         url = "http://www.distrowatch.com/table.php?distribution=" + arg
         html_string = requests.get(url).content
