@@ -118,7 +118,6 @@ class Dev(commands.Cog):
     @commands.command(hidden=True)
     @is_owner()
     async def pull(self, ctx):
-        await ctx.send(":robot: Bot is restarting")
         g = git.cmd.Git('.')
         msg = g.pull()
         await ctx.send('```\n' + msg + '\n```')
@@ -126,6 +125,7 @@ class Dev(commands.Cog):
     @commands.command(hidden=True)
     @is_owner()
     async def restart(self, ctx):
+        await ctx.send(":robot: Bot is restarting")
         await ctx.bot.logout()
         await self.bot.login(primebot.conf['token'], bot=True)
 

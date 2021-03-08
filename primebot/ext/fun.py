@@ -1,7 +1,9 @@
 import discord
-import aiohttp
-import requests_cache
+from primebot.utils.scrapers import scrape_song_lyrics
+import asyncio
+import primebot
 import requests
+import requests_cache
 import json
 from discord.ext import commands
 import random
@@ -16,6 +18,9 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=['8ball'])
     async def _8ball(self, ctx, *, question):
+        """
+        Ask an 8ball
+        """
         responses = ["It is certain.",
                      "It is decidedly so.",
                      "Without a doubt.",
@@ -127,23 +132,71 @@ class Fun(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
-    async def lyrics(self, ctx, artist, *, title):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://api.lyrics.ovh/v1/{artist}/{title}") as response:
-                data = await response.json()
-                lyrics = data['lyrics']
-                if lyrics is None:
-                    raise commands.CommandError("Song not found! Please enter correct Artist and Song title")
-                if len(lyrics) > 2048:
-                    lyrics = lyrics[:2048]
-                emb = discord.Embed(title=f"{title}", description=f"{lyrics}", color=0xa3a3ff)
-                await ctx.send(embed=emb)
-        await session.close()
+    async def lyrics(self, ctx, *query):
+        """Get song lyrics"""
+        raw = requests.get("https://api.genius.com/search?q={}&access_token={}".format(query, primebot.conf['genius_api_key']))
+        raw = raw.json()
+        titles = []
+        i = 0
+        j = 1
+        s = ""
+        reactions = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣']
+        if not raw['response']['hits']:
+            raise commands.CommandError("Song not Found")
+        try:
+            if raw['error'] == "invalid_token":
+                raise commands.CommandError("Invalid Genius API Key")
+        except KeyError:
+            pass
+        while i < 9:
+            titles.append(raw['response']['hits'][i]['result']['full_title'])
+            i += 1
+        for title in titles:
+            s += str(j) + " " + title + "\n"
+            j += 1
+        react_message = await ctx.send(s) 
+        for reaction in reactions[:len(titles)]:
+            await react_message.add_reaction(reaction)
+
+        # iterate over reactions
+        try:
+            def check(rctn, user):
+                return user.id == ctx.author.id and str(rctn) in reactions
+
+            rctn, user = await self.bot.wait_for("reaction_add", check=check, timeout=30)
+
+            cache_msg = discord.utils.get(self.bot.cached_messages, id=react_message.id)
+            for reaction in cache_msg.reactions:
+                users = await reaction.users().flatten()
+                for user in users:
+                    if user == ctx.message.author:
+                        selected_music = str(reaction)
+        except asyncio.TimeoutError:
+            pass
+
+        # replace emoji with int
+        reaction = str(selected_music)
+        reaction = reaction.replace('1⃣', '1')
+        reaction = reaction.replace('2⃣', '2')
+        reaction = reaction.replace('3⃣', '3')
+        reaction = reaction.replace('4⃣', '4')
+        reaction = reaction.replace('5⃣', '5')
+        reaction = reaction.replace('6⃣', '6')
+        reaction = reaction.replace('7⃣', '7')
+        reaction = reaction.replace('8⃣', '8')
+        reaction = reaction.replace('9⃣', '9')
+
+        lyric_url = raw['response']['hits'][int(str(reaction))]['result']['url']
+        song_title = raw['response']['hits'][int(str(reaction))]['result']['full_title']
+
+        lyrics = scrape_song_lyrics(lyric_url)
+        emb = discord.Embed(title=f"{song_title}", description=f"{lyrics}", color=0xa3a3ff, url=lyric_url)
+        await ctx.send(embed=emb)
 
     @commands.command()
-    @commands.cooldown(1, 3, commands.BucketType.user)
-    # cooldown because of rate limiting
+    @commands.cooldown(1, 3, commands.BucketType.user)  # cooldown because of rate limiting
     async def quote(self, ctx):
+        """Get an inspirational quote"""
         s = requests_cache.CachedSession()
         # don't cache this page or every quote will be the same
         with s.cache_disabled():
@@ -155,6 +208,7 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=['ascii'])
     async def figlet(self, ctx, *, arg):
+        """Get ASCII art"""
         f = Figlet(font='slant')
         text = f.renderText(arg)
         msg = '```fix\n' + text + '\n```'
