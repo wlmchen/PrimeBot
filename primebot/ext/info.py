@@ -62,7 +62,7 @@ class Info(commands.Cog):
         embed.add_field(name='📁 Repos',
                         value='[Gitlab](https://gitlab.com/pryme-svg/primebot) [Github](https://github.com/pryme-svg/primebot)'
                               '\n\u200b')
-        embed.set_footer(text="Created by PrimeTime09#1847, Running on Heroku")
+        embed.set_footer(text="Created by PrimeTime09#1847")
         return embed
 
     def create_system_embed(self):
@@ -72,7 +72,7 @@ class Info(commands.Cog):
         embed.add_field(name='🎛️ CPU', value=(self.cpu_info()) + '\n\u200b')
         embed.add_field(name='🧠 RAM', value=(self.ram()) + '\n\u200b')
         embed.add_field(name='🐍 Python version', value=(self.python_version()) + '\n\u200b')
-        embed.set_footer(text="Created by PrimeTime09#1847, Running on Heroku")
+        embed.set_footer(text="Created by PrimeTime09#1847")
 
         return embed
 
@@ -118,6 +118,9 @@ class Info(commands.Cog):
 
     @commands.command()
     async def invite(self, ctx):
+        """
+        Shows bot invite
+        """
         embed = discord.Embed(title="Invite", description="Invite PrimeBot [here](https://discord.com/api/oauth2/authorize?client_id=788810436535386112&permissions=8198&scope=bot)")
         await ctx.send(embed=embed)
 

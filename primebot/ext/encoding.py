@@ -65,41 +65,65 @@ class Encoding(commands.Cog):
 
     @commands.command(aliases=['b64e'])
     async def b64encode(self, ctx, *, arg):
+        """
+        Encode text into base64
+        """
         to_encode = arg
         await ctx.send(self.str_to_b64(to_encode))
 
     @commands.command(aliases=['b64d'])
     async def b64decode(self, ctx, *, arg):
+        """
+        Decode text from base64
+        """
         to_decode = arg
         await ctx.send(self.b64_to_str(to_decode))
 
     @commands.command(aliases=['b16e'])
     async def b16encode(self, ctx, *, arg):
+        """
+        Encode text into base16
+        """
         to_encode = arg
         await ctx.send(self.str_to_b16(to_encode))
 
     @commands.command(aliases=['b16d'])
     async def b16decode(self, ctx, *, arg):
+        """
+        Decode text from base16
+        """
         to_decode = arg
         await ctx.send(self.b16_to_str(to_decode))
 
     @commands.command(aliases=['b32e'])
     async def b32encode(self, ctx, *, arg):
+        """
+        Encode text into base32
+        """
         to_encode = arg
         await ctx.send(self.str_to_b32(to_encode))
 
     @commands.command(aliases=['b32d'])
     async def b32decode(self, ctx, *, arg):
+        """
+        Decode text from base32
+        """
         to_decode = arg
         await ctx.send(self.b32_to_str(to_decode))
 
     @commands.command(aliases=['b85e'])
     async def b85encode(self, ctx, *, arg):
+        """
+        Encode text into base85
+        """
         to_encode = arg
         await ctx.send(self.str_to_b85(to_encode))
 
     @commands.command(aliases=['b85d'])
     async def b85decode(self, ctx, *, arg):
+        """
+        Decode text from base85
+        """
         to_decode = arg
         await ctx.send(self.b85_to_str(to_decode))
 

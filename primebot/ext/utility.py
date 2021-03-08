@@ -73,7 +73,7 @@ class Utility(commands.Cog):
         else:
             mystr = head.stdout.decode('utf-8')
         mystr = "```diff\n" + mystr + "```"
-        embedHead = discord.Embed(title="Git Head", description=mystr)
+        embedHead = discord.Embed(title="Git Head", description=mystr, url="https://github.com/pryme-svg/PrimeBot/commit/HEAD")
         embedHead.add_field(name=".", value="[Git Repository](https://github.com/pryme-svg/primebot)")
         await ctx.send(embed=embedHead)
 
