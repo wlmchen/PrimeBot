@@ -30,7 +30,7 @@ class Moderation(commands.Cog):
         await ctx.guild.ban(
             user_obj, reason=f"{ctx.author} ({ctx.author.id}) - {reason}"
         )
-        await ctx.send(f'User {user_obj} has been banned')
+        await ctx.send(f'User {user_obj.mention} has been banned')
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
