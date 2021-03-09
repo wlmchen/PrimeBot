@@ -2,6 +2,7 @@ import discord
 import math
 from discord.ext import commands
 import primebot
+import traceback
 
 
 class Error(commands.Cog):
@@ -23,6 +24,8 @@ class Error(commands.Cog):
 
         if isinstance(error, ignore_errors):
             return
+
+        await errorChannel.send("Traceback\n```{}\n```".format(traceback.format_exc()))
 
         if str(error) is not None:
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: " + str(error)))
