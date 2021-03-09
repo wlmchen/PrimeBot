@@ -154,7 +154,7 @@ class Fun(commands.Cog):
         for title in titles:
             s += str(j) + " " + title + "\n"
             j += 1
-        react_message = await ctx.send(s) 
+        react_message = await ctx.send(s)
         for reaction in reactions[:len(titles)]:
             await react_message.add_reaction(reaction)
 
