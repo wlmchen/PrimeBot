@@ -17,15 +17,14 @@ class Meta(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.start_time = datetime.datetime.fromtimestamp(time.time())
-        self.info_embed = self.create_info_embed()
         self.system_embed = self.create_system_embed()
 
-    @commands.command()
-    async def help(self, ctx):
-
-        embedHelp = discord.Embed(title="Help", description="Default Prefix: >\nCommands:\n`>ping`\n`>quote`\n`>prime`\n`>ban`\n`>kick`\n`>roll`\n`>8ball (question)`\n`>clear (amount)`\n`>unban (member)`\n`>poll question item1 item2 ...`\n`>xkcd`\n`>xkcd latest`\n`>xkcd n <number>`\n`>sys`\n`>info`\n`>flip`\n`>distro (distro)`\n`>distro random`\n`>apod`\n`>apod (date)`\n`>archwiki (search)`\n`>define (term)`\n`>figlet (text)`\n`>invite`\n`>b64encode`\n`>b64decode`\n`>b32encode`\n`>b32decode`\n`>b16encode`\n`>b16decode`\n`>b85encode`\n`>b85decode`\n\nGet a complete list of commands [here](https://gitlab.com/pryme-svg/primebot#commands)\n\nThis Bot is Open Source! Check out the repo [here](https://gitlab.com/pryme-svg/primebot)", color=0x282828)
-        embedHelp.set_footer(text="Created by PrimeTime09#1847")
-        await ctx.send(embed=embedHelp)
+#     @commands.command()
+#     async def help(self, ctx):
+#
+#         embedHelp = discord.Embed(title="Help", description="Default Prefix: >\nCommands:\n`>ping`\n`>quote`\n`>prime`\n`>ban`\n`>kick`\n`>roll`\n`>8ball (question)`\n`>clear (amount)`\n`>unban (member)`\n`>poll question item1 item2 ...`\n`>xkcd`\n`>xkcd latest`\n`>xkcd n <number>`\n`>sys`\n`>info`\n`>flip`\n`>distro (distro)`\n`>distro random`\n`>apod`\n`>apod (date)`\n`>archwiki (search)`\n`>define (term)`\n`>figlet (text)`\n`>invite`\n`>b64encode`\n`>b64decode`\n`>b32encode`\n`>b32decode`\n`>b16encode`\n`>b16decode`\n`>b85encode`\n`>b85decode`\n\nGet a complete list of commands [here](https://gitlab.com/pryme-svg/primebot#commands)\n\nThis Bot is Open Source! Check out the repo [here](https://gitlab.com/pryme-svg/primebot)", color=0x282828)
+#         embedHelp.set_footer(text="Created by PrimeTime09#1847")
+#         await ctx.send(embed=embedHelp)
 
     @staticmethod
     def os_name():
@@ -59,27 +58,19 @@ class Meta(commands.Cog):
         commits = list(itertools.islice(repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), count))
         return '\n'.join(self.format_commit(c) for c in commits)
 
+    def format_commit(self, commit):
+        short, _, _ = commit.message.partition('\n')
+        short_sha2 = commit.hex[0:6]
+        commit_tz = datetime.timezone(datetime.timedelta(minutes=commit.commit_time_offset))
+        commit_time = datetime.datetime.fromtimestamp(commit.commit_time).astimezone(commit_tz)
+
+        # [`hash`](url) message (offset)
+        return f'[`{short_sha2}`](https://github.com/pryme-svg/PrimeBot/commit/{commit.hex}) {short} ({commit_time})'
+
     async def uptime(self):
         now = datetime.datetime.fromtimestamp(time.time())
         up_time = now - self.start_time
         return str(up_time).rsplit('.', maxsplit=1)[0]
-
-    def create_info_embed(self):
-        embed = discord.Embed(title='\u200b', description='Lastest Changes:\n' + self.get_last_commits())
-        embed.set_author(name='📓 About')
-        embed.add_field(name='👨‍💻 Author',
-                        value='[pryme-svg](https://github.com/pryme-svg) \n\u200b')
-        embed.add_field(name='🏗️ Framework',
-                        value=f'[discord.py v{self.discord_version()}]'
-                              '(https://github.com/Rapptz/discord.py) \n\u200b')
-        embed.add_field(name='📁 Repo',
-                        value='[Gitlab](https://gitlab.com/pryme-svg/primebot) [Github](https://github.com/pryme-svg/primebot)'
-                              '\n\u200b')
-        embed.add_field(name='🕒 Uptime',
-                        value=await self.uptime
-                        )
-        embed.set_footer(text="Created by PrimeTime09#1847")
-        return embed
 
     def create_system_embed(self):
         embed = discord.Embed(title='\u200b')
@@ -98,7 +89,21 @@ class Meta(commands.Cog):
         """
         About the bot
         """
-        await ctx.send(embed=self.info_embed)
+        embed = discord.Embed(title='\u200b', description='Lastest Changes:\n' + self.get_last_commits())
+        embed.set_author(name='📓 About')
+        embed.add_field(name='👨‍💻 Author',
+                        value='[pryme-svg](https://github.com/pryme-svg) \n\u200b')
+        embed.add_field(name='🏗️ Framework',
+                        value=f'[discord.py v{self.discord_version()}]'
+                              '(https://github.com/Rapptz/discord.py) \n\u200b')
+        embed.add_field(name='📁 Repo',
+                        value='[Gitlab](https://gitlab.com/pryme-svg/primebot) [Github](https://github.com/pryme-svg/primebot)'
+                              '\n\u200b')
+        embed.add_field(name='🕒 Uptime',
+                        value=await self.uptime()
+                        )
+        embed.set_footer(text="Created by PrimeTime09#1847")
+        await ctx.send(embed=embed)
 
     # SYSTEM
     @commands.command(name='system', ignore_extra=False, aliases=['sys'])
