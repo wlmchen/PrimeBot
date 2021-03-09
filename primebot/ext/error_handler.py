@@ -17,6 +17,7 @@ class Error(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         errorChannel = self.bot.get_channel(primebot.conf['error_channel'])
+        original_error = error
         ignore_errors = (
             commands.CommandNotFound,
             commands.NotOwner,
@@ -25,7 +26,9 @@ class Error(commands.Cog):
         if isinstance(error, ignore_errors):
             return
 
-        await errorChannel.send("Traceback\n```{}\n```".format(traceback.format_exc()))
+        tb = "".join(traceback.format_exception(type(original_error), original_error, original_error.__traceback__))
+
+        await errorChannel.send("Traceback\n```{}\n```".format(tb))
 
         if str(error) is not None:
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: " + str(error)))
