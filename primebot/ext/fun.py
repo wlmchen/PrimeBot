@@ -247,7 +247,7 @@ class Fun(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def spoiler(self, ctx, text):
+    async def spoiler(self, ctx, *, text):
         url = "https://nekos.life/api/v2/spoiler?text=" + text
         json1 = requests.get(url)
         data = json1.json()

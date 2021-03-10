@@ -26,6 +26,11 @@ class Error(commands.Cog):
         if isinstance(error, ignore_errors):
             return
 
+        if isinstance(error, commands.errors.NSFWChannelRequired):
+            embed = discord.Embed(color=discord.Color.red(), description=":x: This is not an nsfw channel")
+            await ctx.send(embed=embed)
+            return
+
         tb = "".join(traceback.format_exception(type(original_error), original_error, original_error.__traceback__))
 
         await errorChannel.send("Traceback\n```{}\n```".format(tb))
