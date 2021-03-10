@@ -122,11 +122,13 @@ class Fun(commands.Cog):
         definition = data["list"][0]["definition"]
         arg = data["list"][0]["word"]
         title = "Urban Dictionary: " + arg
+        url = data["list"][0]["permalink"]
+        votes = "👍" + data["list"][0]["thumbs_up"] + "👎" + data['list'][0]['thumbs_down']
         if len(definition) > 2000:
             definition = definition[0:2000]
             title = title + " (Truncated)"
-        embed = discord.Embed(title=title, description=definition)
-        embed.set_footer(text=data["list"][0]["permalink"])
+        embed = discord.Embed(title=title, description=definition, url=url)
+        embed.set_footer(text=votes)
 
         await ctx.send(embed=embed)
 
@@ -216,6 +218,45 @@ class Fun(commands.Cog):
             await ctx.send("Discord API limits message content to 2000 characters, please send a shorter message")
             return
         await ctx.send(msg)
+
+    @commands.command(aliases=['cf'])
+    async def catfact(self, ctx):
+        """Get a random catfact"""
+        url = "https://catfact.ninja/facts"
+        s = requests_cache.CachedSession()
+        with s.cache_disabled():
+            response = s.get(url)
+        data = json.loads(response.text)
+        fact = data['data'][0]['fact']
+        embed = discord.Embed(title="Cat Fact", description=fact)
+        embed.set_footer(text="🐱")
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def name(self, ctx):
+        """Get a random name"""
+        url = "https://nekos.life/api/v2/name"
+
+        s = requests_cache.CachedSession()
+        with s.cache_disabled():
+            response = s.get(url)
+        data = json.loads(response.text)
+        name = data['name']
+        embed = discord.Embed(title="Name", description=name)
+        embed.set_footer(text="📛")
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def spoiler(self, ctx, text):
+        url = "https://nekos.life/api/v2/spoiler?text=" + text
+        json1 = requests.get(url)
+        data = json1.json()
+        try:
+            if data['msg']:
+                raise commands.CommandError(data['msg'])
+        except KeyError:  # should be caught if no arg but why not
+            pass
+        await ctx.send(data['owo'])
 
 
 def setup(bot):
