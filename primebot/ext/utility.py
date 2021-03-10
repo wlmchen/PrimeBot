@@ -1,4 +1,5 @@
 import discord
+from primebot.utils.scrapers import scrape_arch_wiki
 from typing import Union
 import requests
 from bs4 import BeautifulSoup
@@ -117,18 +118,8 @@ class Utility(commands.Cog):
 
     @commands.command(aliases=['aw'])
     async def archwiki(self, ctx, *, query):
+        description = scrape_arch_wiki(query)
         url = "https://wiki.archlinux.org/index.php?search={}".format(query)
-
-        html_string = requests.get(url).content
-        html_string = html_string.decode('utf-8')
-        try:
-            test1 = html_string[html_string.index("</ul></div>"):html_string.index("Contents")]
-        except ValueError:
-            raise commands.CommandError("Page not found!")
-            return
-        soup = BeautifulSoup(test1, "html.parser")
-        description = "".join(soup.strings)
-
         embedAw = discord.Embed(title="Arch Wiki: " + query, description=description, url=url, color=0x1793d1)
         await ctx.send(embed=embedAw)
 
