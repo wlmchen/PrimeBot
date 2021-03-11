@@ -15,11 +15,6 @@ class Utility(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def ping(self, ctx):
-        pingEmbed = discord.Embed(title="Ping!", description='🏓 Pong! {0}s'.format(self.bot.latency))
-        await ctx.send(embed=pingEmbed)
-
     @staticmethod
     def _getRoles(roles):
         string = ''
