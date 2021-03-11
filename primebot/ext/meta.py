@@ -137,6 +137,12 @@ class Meta(commands.Cog):
         embed = discord.Embed(title="Invite", description="Invite PrimeBot [here](https://discord.com/api/oauth2/authorize?client_id=788810436535386112&permissions=8198&scope=bot)")
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def ping(self, ctx):
+        latency = float(self.bot.latency) * 100
+        pingEmbed = discord.Embed(title="Ping!", description='🏓 Pong! {}ms'.format(latency))
+        await ctx.send(embed=pingEmbed)
+
 
 def setup(bot):
     bot.add_cog(Meta(bot))
