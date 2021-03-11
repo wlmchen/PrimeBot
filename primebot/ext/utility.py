@@ -1,11 +1,11 @@
 import discord
+import requests_cache
 from primebot.utils.scrapers import scrape_arch_wiki
 from typing import Union
 import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands
 import random
-import requests_cache
 import primebot
 import subprocess
 
@@ -14,8 +14,6 @@ class Utility(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
-    requests_cache.install_cache('distro_cache')
 
     @commands.command()
     async def ping(self, ctx):
@@ -123,7 +121,7 @@ class Utility(commands.Cog):
         embedAw = discord.Embed(title="Arch Wiki: " + query, description=description, url=url, color=0x1793d1)
         await ctx.send(embed=embedAw)
 
-    @commands.command()
+    @commands.command(aliases=['av'])
     async def avatar(self, ctx, *, member: Union[discord.Member, int] = None):
         if member is None:
             member = ctx.message.author
