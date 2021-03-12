@@ -1,7 +1,6 @@
 error.log
 log.txt
-.env
 __pycache__/
-distro_cache.sqlite
+requests_cache.sqlite
 .vscode/
 config.yml
