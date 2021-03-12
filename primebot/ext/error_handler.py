@@ -30,6 +30,9 @@ class Error(commands.Cog):
             embed = discord.Embed(color=discord.Color.red(), description=":x: This is not an nsfw channel")
             await ctx.send(embed=embed)
             return
+        if isinstance(error, commands.CommandOnCooldown):
+            return await ctx.message.add_reaction("⏰")
+            # await ctx.send("This command is on cooldown, please retry in {}s.".format(math.ceil(error.retry_after)))
 
         tb = "".join(traceback.format_exception(type(original_error), original_error, original_error.__traceback__))
 
@@ -45,9 +48,6 @@ class Error(commands.Cog):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The command is incomplete, missing one or more parameters!"))
         elif isinstance(error, commands.BadArgument):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The command was entered incorrectly, one or more parameters are wrong or in the wrong place!"))
-        elif isinstance(error, commands.CommandOnCooldown):
-            return await ctx.message.add_reaction("⏰")
-            # await ctx.send("This command is on cooldown, please retry in {}s.".format(math.ceil(error.retry_after)))
 
         await self.log_error(ctx, error, errorChannel)
 
