@@ -1,6 +1,5 @@
 discord.py
 requests
-python-dotenv
 xkcd-wrapper
 psutil
 bs4

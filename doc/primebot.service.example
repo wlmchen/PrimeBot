@@ -9,7 +9,7 @@ Type=simple
 User=primebot
 Group=primebot
 WorkingDirectory=/home/primebot/PrimeBot
-ExecStart=python3 -m primebot
+ExecStart=python3 -Bm primebot
 Restart=always
 
 [Install]
