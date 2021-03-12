@@ -1,5 +1,5 @@
 import discord
-import math
+# import math
 from discord.ext import commands
 import primebot
 import traceback
@@ -46,7 +46,8 @@ class Error(commands.Cog):
         elif isinstance(error, commands.BadArgument):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The command was entered incorrectly, one or more parameters are wrong or in the wrong place!"))
         elif isinstance(error, commands.CommandOnCooldown):
-            await ctx.send("This command is on cooldown, please retry in {}s.".format(math.ceil(error.retry_after)))
+            return await ctx.message.add_reaction("⏰")
+            # await ctx.send("This command is on cooldown, please retry in {}s.".format(math.ceil(error.retry_after)))
 
         await self.log_error(ctx, error, errorChannel)
 
