@@ -148,9 +148,8 @@ class Utility(commands.Cog):
 
         if date is None:
             url = "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY
-            s = requests_cache.CachedSession()
-            with s.cache_disabled():
-                r = s.get(url)
+            with requests_cache.disabled():
+                r = requests.get(url)
         else:
             url = "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY + "&date=" + date
             r = requests.get(url)

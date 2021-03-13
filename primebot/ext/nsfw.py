@@ -1,4 +1,5 @@
 import discord
+import requests
 import requests_cache
 import json
 from discord.ext import commands
@@ -27,10 +28,9 @@ class Nsfw(commands.Cog):
 
         if query not in queries:
             raise commands.CommandError("Invalid query for neko")
-        s = requests_cache.CachedSession()
         neko_url = "https://nekos.life/api/v2/img/" + query
-        with s.cache_disabled():
-            response = s.get(neko_url)
+        with requests_cache.disabled():
+            response = requests.get(neko_url)
         data = json.loads(response.text)
         url = data['url']
         embed = discord.Embed(title="Neko")
