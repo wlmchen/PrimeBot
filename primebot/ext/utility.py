@@ -1,6 +1,7 @@
 import discord
 import requests_cache
 from primebot.utils.scrapers import scrape_arch_wiki
+from primebot.utils.scrapers import scrape_pypi
 from typing import Union
 import requests
 from bs4 import BeautifulSoup
@@ -86,6 +87,17 @@ class Utility(commands.Cog):
         embedLog.add_field(name=".", value="[Git Repository](https://github.com/pryme-svg/primebot)")
         await ctx.send(embed=embedLog)
 
+    @commands.command(aliases=['pip'])
+    async def pypi(self, ctx, query):
+        """Retrieve information about a package in pypi"""
+        homepage, author, license, description, url, name = scrape_pypi(query)
+        embed = discord.Embed(title=name, url=url, description=description)
+        embed.add_field(name="Author", value=author)
+        embed.add_field(name="License", value=license)
+        embed.add_field(name="Homepage", value=homepage)
+        embed.set_thumbnail(url="https://raw.githubusercontent.com/github/explore/666de02829613e0244e9441b114edb85781e972c/topics/pip/pip.png")
+        await ctx.send(embed=embed)
+
     @commands.command(pass_context=True)
     async def poll(self, ctx, question, *options: str):
         # options = [(word.lower()) for word in options]
@@ -148,7 +160,7 @@ class Utility(commands.Cog):
             await ctx.send(json_file['msg'])
             return
 
-        embedApod = discord.Embed(title=json_file['title'], description=json_file['explanation'])
+        embedApod = discord.Embed(title=json_file['title'], description=json_file['explanation'], url=url)
         embedApod.set_footer(text=json_file['date'])
         embedApod.set_image(url=json_file['url'])
         await ctx.send(embed=embedApod)

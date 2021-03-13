@@ -29,3 +29,23 @@ def scrape_arch_wiki(query):
     soup = BeautifulSoup(test1, "html.parser")
     description = "".join(soup.strings)
     return description
+
+def scrape_pypi(query):  # i know this is messy but who cares
+    url = "https://pypi.org/project/" + query
+    page = requests.get(url)
+    raw_html = page.content.decode('utf-8')
+    soup = BeautifulSoup(page.text, 'html.parser')
+    html_text = soup.get_text()
+    description = soup.find(class_="project-description").get_text().strip().partition('\n')[0]
+    version = soup.find(class_="release__version").get_text().strip()
+    name = soup.find(class_="package-header__name").get_text().strip()
+
+    for item in html_text.split('\n'):
+        if "License:" in item:
+            license = item.strip()[9:]
+        if "Author:" in item:
+            author = item.strip()[8:]
+
+    homepage = soup.find('a', class_="vertical-tabs__tab vertical-tabs__tab--with-icon vertical-tabs__tab--condensed").get('href')
+
+    return homepage, author, license, description, url, name
