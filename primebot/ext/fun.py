@@ -199,10 +199,9 @@ class Fun(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.user)  # cooldown because of rate limiting
     async def quote(self, ctx):
         """Get an inspirational quote"""
-        s = requests_cache.CachedSession()
         # don't cache this page or every quote will be the same
-        with s.cache_disabled():
-            response = s.get("https://zenquotes.io/api/random")
+        with requests_cache.disabled():
+            response = requests.get("https://zenquotes.io/api/random")
         json_data = json.loads(response.text)
         quote = json_data[0]['q'] + " -" + json_data[0]['a']
         embedQuote = discord.Embed(title="Inspirational Quote", description=quote, color=0x282828)
@@ -223,9 +222,8 @@ class Fun(commands.Cog):
     async def catfact(self, ctx):
         """Get a random catfact"""
         url = "https://catfact.ninja/facts"
-        s = requests_cache.CachedSession()
-        with s.cache_disabled():
-            response = s.get(url)
+        with requests_cache.disabled():
+            response = requests.get(url)
         data = json.loads(response.text)
         fact = data['data'][0]['fact']
         embed = discord.Embed(title="Cat Fact", description=fact)
@@ -237,9 +235,8 @@ class Fun(commands.Cog):
         """Get a random name"""
         url = "https://nekos.life/api/v2/name"
 
-        s = requests_cache.CachedSession()
-        with s.cache_disabled():
-            response = s.get(url)
+        with requests_cache.disabled():
+            response = requests.get(url)
         data = json.loads(response.text)
         name = data['name']
         embed = discord.Embed(title="Name", description=name)
