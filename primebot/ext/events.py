@@ -29,6 +29,23 @@ class Events(commands.Cog):
         if 'i want to die' in message.content.lower():
             await message.channel.send("Are you considering suicide? You are not alone. If you feel suicidal, please call the suicide prevention hotline at 800-273-8255.")
 
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        embed = discord.Embed(description=f"Joined guild {guild.name} [{guild.id}]")
+        embed.set_thumbnail(url=guild.icon_url_as(static_format="png"))
+        embed.add_field(
+            name="**Members**",  # Basic stats about the guild
+            value=f"**Total:** {len(guild.members)}\n" + f"**Admins:** {len([m for m in guild.members if m.guild_permissions.administrator])}\n" + f"**Owner: ** {guild.owner}\n", inline=False)
+        guildChannel = self.bot.get_channel(primebot.conf['guild_notifs'])
+        await guildChannel.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+        embed = discord.Embed(description=f"Removed from guild {guild.name} [{guild.id}]")
+        embed.set_thumbnail(url=guild.icon_url_as(static_format="png"))
+        guildChannel = self.bot.get_channel(primebot.conf['guild_notifs'])
+        await guildChannel.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Events(bot))
