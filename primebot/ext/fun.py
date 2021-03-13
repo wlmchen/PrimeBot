@@ -123,7 +123,7 @@ class Fun(commands.Cog):
         arg = data["list"][0]["word"]
         title = "Urban Dictionary: " + arg
         url = data["list"][0]["permalink"]
-        votes = "👍" + data["list"][0]["thumbs_up"] + "👎" + data['list'][0]['thumbs_down']
+        votes = "👍" + str(data["list"][0]["thumbs_up"]) + "👎" + str(data['list'][0]['thumbs_down'])
         if len(definition) > 2000:
             definition = definition[0:2000]
             title = title + " (Truncated)"
