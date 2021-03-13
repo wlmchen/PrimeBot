@@ -30,14 +30,16 @@ def scrape_arch_wiki(query):
     description = "".join(soup.strings)
     return description
 
+
 def scrape_pypi(query):  # i know this is messy but who cares
     url = "https://pypi.org/project/" + query
     page = requests.get(url)
-    raw_html = page.content.decode('utf-8')
     soup = BeautifulSoup(page.text, 'html.parser')
     html_text = soup.get_text()
-    description = soup.find(class_="project-description").get_text().strip().partition('\n')[0]
-    version = soup.find(class_="release__version").get_text().strip()
+    try:
+        description = soup.find(class_="project-description").get_text().strip().partition('\n')[0]
+    except AttributeError:
+        raise commands.CommandError('Package Not Found')
     name = soup.find(class_="package-header__name").get_text().strip()
 
     for item in html_text.split('\n'):
