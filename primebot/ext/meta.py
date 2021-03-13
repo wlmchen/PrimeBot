@@ -1,4 +1,5 @@
 import discord
+import primebot
 import itertools
 import pygit2
 from discord.ext import commands
@@ -134,7 +135,7 @@ class Meta(commands.Cog):
         """
         Shows bot invite
         """
-        embed = discord.Embed(title="Invite", description="Invite PrimeBot [here](https://discord.com/api/oauth2/authorize?client_id=788810436535386112&permissions=8198&scope=bot)")
+        embed = discord.Embed(title="Invite", description="Invite PrimeBot [here]({})".format(primebot.conf['invite']))
         await ctx.send(embed=embed)
 
     @commands.command()

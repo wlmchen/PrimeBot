@@ -2,6 +2,7 @@ token: ''
 exts:
   - admin
   - utility
+invite: ''
 error_channel: 
 log_channel: 
 nasa_api_key: '' # https://api.nasa.gov/
