@@ -15,7 +15,7 @@ async def get_prefix(bot, message):
         }
         primebot.db.prefixes.prefixes.insert_one(new)
     prefix = primebot.db.prefixes.prefixes.find_one({"guild_id": guild_id})['prefix']
-    return commands.when_mentioned_or(*prefix)(bot, message)  # allow ping as prefix
+    return commands.when_mentioned_or(prefix)(bot, message)  # allow ping as prefix
 
 
 class PrimeBot(commands.Bot):
