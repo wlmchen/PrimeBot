@@ -29,6 +29,9 @@ class Events(commands.Cog):
         if 'i want to die' in message.content.lower():
             await message.channel.send("Are you considering suicide? You are not alone. If you feel suicidal, please call the suicide prevention hotline at 800-273-8255.")
 
+        if message.content == '<@!788810436535386112>' or message.content == '<@788810436535386112>':
+            await message.channel.send("Prefix is {}".format(primebot.db.prefixes.prefixes.find_one({"guild_id": message.guild.id})['prefix']))
+
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         embed = discord.Embed(description=f"Joined guild {guild.name} [{guild.id}]")
