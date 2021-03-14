@@ -9,3 +9,4 @@ pyfiglet
 GitPython
 pygit2
 pymongo
+PyYAML

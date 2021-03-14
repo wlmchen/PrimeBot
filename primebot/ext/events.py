@@ -29,6 +29,9 @@ class Events(commands.Cog):
         if 'i want to die' in message.content.lower():
             await message.channel.send("Are you considering suicide? You are not alone. If you feel suicidal, please call the suicide prevention hotline at 800-273-8255.")
 
+        if message.content == '<@!788810436535386112>' or message.content == '<@788810436535386112>':
+            await message.channel.send("Prefix is {}".format(primebot.db.prefixes.prefixes.find_one({"guild_id": message.guild.id})['prefix']))
+
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         embed = discord.Embed(description=f"Joined guild {guild.name} [{guild.id}]")
@@ -38,6 +41,8 @@ class Events(commands.Cog):
             value=f"**Total:** {len(guild.members)}\n" + f"**Admins:** {len([m for m in guild.members if m.guild_permissions.administrator])}\n" + f"**Owner: ** {guild.owner}\n", inline=False)
         guildChannel = self.bot.get_channel(primebot.conf['log']['guild_notifs'])
         await guildChannel.send(embed=embed)
+        guild_id = guild.id
+        primebot.db.prefixes.prefixes.delete_one({'guild_id': guild_id})
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):

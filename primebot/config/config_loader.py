@@ -1,6 +1,7 @@
 import yaml
+from pymongo import MongoClient
 
-__all__ = ['conf']
+__all__ = ['conf', 'db']
 
 
 def load_config():
@@ -10,3 +11,4 @@ def load_config():
 
 
 conf = load_config()
+db = MongoClient(conf['mongo_db'])

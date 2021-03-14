@@ -126,7 +126,7 @@ class Dev(commands.Cog):
     @is_owner()
     async def restart(self, ctx):
         await ctx.send(":robot: Bot is restarting")
-        await ctx.bot.logout()
+        await self.bot.close()
         await self.bot.login(primebot.conf['token'], bot=True)
 
     @commands.command(hidden=True)
