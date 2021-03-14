@@ -13,17 +13,16 @@ class Events(commands.Cog):
         await self.bot.change_presence(activity=discord.Game(name=">help | {} servers".format(len(self.bot.guilds))))
 
     @commands.Cog.listener()
+    async def on_command(self, ctx):
+        logChannel = self.bot.get_channel(primebot.conf['log']['log_channel'])
+        await logChannel.send('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(ctx.message.author, ctx.message.content, ctx.message.guild.name, ctx.message.channel.name))
+        with open('log.txt', 'a') as log:
+                log.write('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(ctx.message.author, ctx.message.content, ctx.message.guild.name, ctx.message.channel.name))
+
+    @commands.Cog.listener()
     async def on_message(self, message):
         if message.author == self.bot.user:
             return
-        try:
-            if message.content[0] == '>' and message.content[1] != ' ' and message.content[1] != '>':
-                logChannel = self.bot.get_channel(primebot.conf['log']['log_channel'])
-                await logChannel.send('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(message.author, message.content, message.guild.name, message.channel.name))
-                with open('log.txt', 'a') as log:
-                    log.write('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(message.author, message.content, message.guild.name, message.channel.name))
-        except IndexError:
-            pass
         if 'happy birthday' in message.content.lower():
             await message.channel.send('Happy Birthday! 🎈🎉')
         if 'i want to die' in message.content.lower():
