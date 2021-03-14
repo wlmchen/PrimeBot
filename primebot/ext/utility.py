@@ -144,7 +144,7 @@ class Utility(commands.Cog):
 
     @commands.command()
     async def apod(self, ctx, date=None):
-        API_KEY = primebot.conf['nasa_api_key']
+        API_KEY = primebot.conf['api']['nasa_api_key']
 
         if date is None:
             url = "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY

@@ -16,7 +16,7 @@ class Error(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        errorChannel = self.bot.get_channel(primebot.conf['error_channel'])
+        errorChannel = self.bot.get_channel(primebot.conf['log']['error_channel'])
         original_error = error
         ignore_errors = (
             commands.CommandNotFound,
