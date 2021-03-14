@@ -13,12 +13,6 @@ class Events(commands.Cog):
         await self.bot.change_presence(activity=discord.Game(name=">help | {} servers".format(len(self.bot.guilds))))
 
     @commands.Cog.listener()
-    async def on_guild_remove(self, guild):
-        guild_id = str(guild.id)
-        db = primebot.db.prefixes.prefixes
-        db.delete_one({'guild_id': guild_id})
-
-    @commands.Cog.listener()
     async def on_message(self, message):
         if message.author == self.bot.user:
             return
@@ -44,6 +38,8 @@ class Events(commands.Cog):
             value=f"**Total:** {len(guild.members)}\n" + f"**Admins:** {len([m for m in guild.members if m.guild_permissions.administrator])}\n" + f"**Owner: ** {guild.owner}\n", inline=False)
         guildChannel = self.bot.get_channel(primebot.conf['log']['guild_notifs'])
         await guildChannel.send(embed=embed)
+        guild_id = guild.id
+        primebot.db.prefixes.prefixes.delete_one({'guild_id': guild_id})
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):

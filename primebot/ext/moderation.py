@@ -11,14 +11,12 @@ class Moderation(commands.Cog):
     @commands.command(aliases=['changeprefix'])
     @commands.has_permissions(administrator=True)
     async def prefix(self, ctx, prefix: str):
-        db = primebot.db.prefixes.prefixes
-        guild_id = str(ctx.guild.id)
-        #print(db.find_one({'guild_id': "794255644915007559"}))
-        #result = db.update_one({'guild_id': "794255644915007559"}, {"$set": {"prefix": "!"}})
-        cursor = db.find()
-        for document in cursor:
-            print(document)
-        #print(result.matched_count > 0)
+        guild_id = ctx.guild.id
+        result = primebot.db.prefixes.prefixes.update_one({'guild_id': guild_id}, {"$set": {"prefix": prefix}})
+        if result.matched_count > 0:
+            await ctx.send("prefix changed to {}".format(prefix))
+        else:
+            await ctx.send("failed")
 
     @commands.command()
     @commands.has_permissions(kick_members=True)

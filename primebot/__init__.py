@@ -3,22 +3,19 @@ import primebot
 import discord
 from discord.ext import commands
 
-db = primebot.db.prefixes
-prefixes = db.prefixes
 
 async def get_prefix(bot, message):
-    guild_id = str(message.guild.id)
+    guild_id = message.guild.id
     # if guild doesn't exist in db
-    #if prefixes.find_one({'guild_id': guild_id}) is None:
-    #    new = {
-    #            "guild_id": guild_id,
-    #            "guild_name": message.guild.name,
-    #            "prefix": primebot.conf['prefix']
-    #           }
-    #    prefixes.insert_one(new)
-    #prefix = prefixes.find_one({ "guild_id": guild_id })['prefix']
-    #return commands.when_mentioned_or(*prefix)(bot, message)  # allow ping as prefix
-    return(">")
+    if primebot.db.prefixes.prefixes.find_one({'guild_id': guild_id}) is None:
+        new = {
+            "guild_id": guild_id,
+            "guild_name": message.guild.name,
+            "prefix": primebot.conf['prefix']
+        }
+        primebot.db.prefixes.prefixes.insert_one(new)
+    prefix = primebot.db.prefixes.prefixes.find_one({"guild_id": guild_id})['prefix']
+    return commands.when_mentioned_or(*prefix)(bot, message)  # allow ping as prefix
 
 
 class PrimeBot(commands.Bot):
@@ -34,9 +31,10 @@ class PrimeBot(commands.Bot):
         for ext in primebot.conf['exts']:
             self.load_extension('primebot.ext.{}'.format(ext))
 
-        cursor = prefixes.find()
-        for document in cursor:
-            print(document)
+    async def close(self):
+        await super().close()
+        await self.close()
+        primebot.db.close()
 
     def run(self):
         super().run(primebot.conf['token'])
