@@ -159,7 +159,7 @@ class Utility(commands.Cog):
             await ctx.send(json_file['msg'])
             return
 
-        embedApod = discord.Embed(title=json_file['title'], description=json_file['explanation'], url=url)
+        embedApod = discord.Embed(title=json_file['title'], description=json_file['explanation'])
         embedApod.set_footer(text=json_file['date'])
         embedApod.set_image(url=json_file['url'])
         await ctx.send(embed=embedApod)
