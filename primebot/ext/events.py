@@ -30,7 +30,7 @@ class Events(commands.Cog):
             await message.channel.send("Are you considering suicide? You are not alone. If you feel suicidal, please call the suicide prevention hotline at 800-273-8255.")
 
         if message.content == '<@!788810436535386112>' or message.content == '<@788810436535386112>':
-            await message.channel.send("Prefix is {}".format(primebot.db.prefixes.prefixes.find_one({"guild_id": message.guild.id})['prefix']))
+            await message.channel.send("Prefix is {}".format(primebot.db.prefixes.find_one({"guild_id": message.guild.id})['prefix']))
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -42,7 +42,7 @@ class Events(commands.Cog):
         guildChannel = self.bot.get_channel(primebot.conf['log']['guild_notifs'])
         await guildChannel.send(embed=embed)
         guild_id = guild.id
-        primebot.db.prefixes.prefixes.delete_one({'guild_id': guild_id})
+        primebot.db.prefixes.delete_one({'guild_id': guild_id})
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):

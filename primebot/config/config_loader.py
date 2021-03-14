@@ -11,4 +11,4 @@ def load_config():
 
 
 conf = load_config()
-db = MongoClient(conf['mongo_db'])
+db = MongoClient(conf['mongo_db']).primebot
