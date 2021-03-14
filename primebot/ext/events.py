@@ -13,6 +13,12 @@ class Events(commands.Cog):
         await self.bot.change_presence(activity=discord.Game(name=">help | {} servers".format(len(self.bot.guilds))))
 
     @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+        guild_id = str(guild.id)
+        db = primebot.db.prefixes.prefixes
+        db.delete_one({'guild_id': guild_id})
+
+    @commands.Cog.listener()
     async def on_message(self, message):
         if message.author == self.bot.user:
             return
