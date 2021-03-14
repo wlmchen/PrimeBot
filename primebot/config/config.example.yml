@@ -2,8 +2,11 @@ token: ''
 exts:
   - admin
   - utility
+log:
+  error_channel: 
+  log_channel: 
 invite: ''
-error_channel: 
-log_channel: 
-nasa_api_key: '' # https://api.nasa.gov/
+api:
+  nasa_api_key: '' # https://api.nasa.gov/
 prefix: ''
+mongo_db: ''

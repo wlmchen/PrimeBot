@@ -8,3 +8,4 @@ py-cpuinfo
 pyfiglet
 GitPython
 pygit2
+pymongo
