@@ -12,7 +12,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def prefix(self, ctx, prefix: str):
         guild_id = ctx.guild.id
-        result = primebot.db.prefixes.prefixes.update_one({'guild_id': guild_id}, {"$set": {"prefix": prefix}})
+        result = primebot.db.prefixes.update_one({'guild_id': guild_id}, {"$set": {"prefix": prefix}})
         if result.matched_count > 0:
             await ctx.send("prefix changed to {}".format(prefix))
         else:

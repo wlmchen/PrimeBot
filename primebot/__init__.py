@@ -7,14 +7,14 @@ from discord.ext import commands
 async def get_prefix(bot, message):
     guild_id = message.guild.id
     # if guild doesn't exist in db
-    if primebot.db.prefixes.prefixes.find_one({'guild_id': guild_id}) is None:
+    if primebot.db.prefixes.find_one({'guild_id': guild_id}) is None:
         new = {
             "guild_id": guild_id,
             "guild_name": message.guild.name,
             "prefix": primebot.conf['prefix']
         }
-        primebot.db.prefixes.prefixes.insert_one(new)
-    prefix = primebot.db.prefixes.prefixes.find_one({"guild_id": guild_id})['prefix']
+        primebot.db.prefixes.insert_one(new)
+    prefix = primebot.db.prefixes.find_one({"guild_id": guild_id})['prefix']
     return commands.when_mentioned_or(prefix)(bot, message)  # allow ping as prefix
 
 
