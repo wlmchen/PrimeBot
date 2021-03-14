@@ -1,4 +1,5 @@
 import discord
+import primebot
 from discord.ext import commands
 from typing import Union
 
@@ -6,6 +7,16 @@ from typing import Union
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command(aliases=['changeprefix'])
+    @commands.has_permissions(administrator=True)
+    async def prefix(self, ctx, prefix: str):
+        guild_id = ctx.guild.id
+        result = primebot.db.prefixes.prefixes.update_one({'guild_id': guild_id}, {"$set": {"prefix": prefix}})
+        if result.matched_count > 0:
+            await ctx.send("prefix changed to {}".format(prefix))
+        else:
+            await ctx.send("failed")
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
