@@ -1,4 +1,5 @@
 from .config.config_loader import * # noqa
+from primebot.utils import errors
 import primebot
 import discord
 from discord.ext import commands
@@ -28,8 +29,16 @@ class PrimeBot(commands.Bot):
                          allowed_mentions=allowed_mentions
                          )
 
+        self.add_check(self.check_blacklist)
+
         for ext in primebot.conf['exts']:
             self.load_extension('primebot.ext.{}'.format(ext))
+
+    def check_blacklist(self, ctx):
+        if ctx.author.id in primebot.conf["blacklist"]:
+            raise errors.Blacklisted()
+        else:
+            return True
 
     async def close(self):
         await super().close()
