@@ -33,10 +33,10 @@ class Torrent(commands.Cog):
             url = 'https://torrent-api1.herokuapp.com/getTorrents?site=nyaa&query={}'.format(query)
             r = requests.get(url)
             json = r.json()
-            embed = discord.Embed(color=0xD63600)
+            embed = discord.Embed(color=0x0083FF)
             embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
             if not json['torrents']:
-                embed = discord.Embed(description=":x: Query not found", color=0x0083FF)
+                embed = discord.Embed(description=":x: Query not found", color=0xD63600)
                 await ctx.send(embed=embed)
                 return
             for torrent in json['torrents']:
@@ -51,10 +51,10 @@ class Torrent(commands.Cog):
             url = 'https://torrent-api1.herokuapp.com/getTorrents?site=Rargb&query={}'.format(query)
             r = requests.get(url)
             json = r.json()
-            embed = discord.Embed(color=0xD63600)
+            embed = discord.Embed(color=0x0083FF)
             embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
             if not json['torrents']:
-                embed = discord.Embed(description=":x: Query not found", color=0x0083FF)
+                embed = discord.Embed(description=":x: Query not found", color=0xD63600)
                 await ctx.send(embed=embed)
                 return
             for torrent in json['torrents']:
