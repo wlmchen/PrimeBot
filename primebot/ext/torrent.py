@@ -1,4 +1,5 @@
 import discord
+import datetime
 import requests
 from discord.ext import commands
 
@@ -15,10 +16,12 @@ class Torrent(commands.Cog):
             url = 'https://torrent-api1.herokuapp.com/getTorrents?site=1337x&query={}'.format(query)
             r = requests.get(url)
             json = r.json()
-            embed = discord.Embed(description=ctx.message.author.mention, color=0xD63600)
+            embed = discord.Embed(color=0xD63600)
             embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
             if not json['torrents']:
-                await ctx.send("Query not found")
+                embed = discord.Embed(description=":x: Query not found", color=0xFF0000)
+                await ctx.send(embed=embed)
+                return
             for torrent in json['torrents']:
                 desc = "**[magnet]({})** | **[1337]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['shortlink'], torrent['link'], torrent['seeds'], torrent['leeches'], torrent['size'])
                 embed.add_field(name=torrent['name'], value=desc, inline=False)
