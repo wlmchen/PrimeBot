@@ -10,7 +10,7 @@ class Torrent(commands.Cog):
 
 #    @commands.command()
 #    @commands.cooldown(1, 3, commands.BucketType.user)
-#    async def 1337(self, ctx, query):
+#    async def 1337(self, ctx, *, query):
 #        async with ctx.channel.typing():
 #            url = 'https://torrent-api1.herokuapp.com/getTorrents?site=1337x&query={}'.format(query)
 #            r = requests.get(url)
@@ -28,7 +28,7 @@ class Torrent(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
-    async def nyaa(self, ctx, query):
+    async def nyaa(self, ctx, *, query):
         async with ctx.channel.typing():
             url = 'https://torrent-api1.herokuapp.com/getTorrents?site=nyaa&query={}'.format(query)
             r = requests.get(url)
@@ -46,7 +46,7 @@ class Torrent(commands.Cog):
 
     @commands.command(aliases=['rargb'])
     @commands.cooldown(1, 3, commands.BucketType.user)
-    async def rarbg(self, ctx, query):
+    async def rarbg(self, ctx, *, query):
         async with ctx.channel.typing():
             url = 'https://torrent-api1.herokuapp.com/getTorrents?site=Rargb&query={}'.format(query)
             r = requests.get(url)
