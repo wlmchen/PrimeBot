@@ -21,7 +21,7 @@ class Reddit(commands.Cog):
         embed.set_image(url=json[0]['data']['children'][0]['data']['url_overridden_by_dest'])
         embed.set_footer(text="🔼 {} 🔽 {}".format(json[0]['data']['children'][0]['data']['score'], json[0]['data']['children'][0]['data']['upvote_ratio']))
         await ctx.send(embed=embed)
-        
+
 
 def setup(bot):
     bot.add_cog(Reddit(bot))

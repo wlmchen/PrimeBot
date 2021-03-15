@@ -17,7 +17,7 @@ class Events(commands.Cog):
         logChannel = self.bot.get_channel(primebot.conf['log']['log_channel'])
         await logChannel.send('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(ctx.message.author, ctx.message.content, ctx.message.guild.name, ctx.message.channel.name))
         with open('log.txt', 'a') as log:
-                log.write('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(ctx.message.author, ctx.message.content, ctx.message.guild.name, ctx.message.channel.name))
+            log.write('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(ctx.message.author, ctx.message.content, ctx.message.guild.name, ctx.message.channel.name))
 
     @commands.Cog.listener()
     async def on_message(self, message):
