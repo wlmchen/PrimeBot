@@ -58,6 +58,8 @@ class Torrent(commands.Cog):
                 await ctx.send(embed=embed)
                 return
             for torrent in json['torrents']:
+                if torrent['shortlink'] == "":
+                    desc = "**[magnet]({})** | **[rarbg]({})** | Seeds: {} | Leeches: {} | Size: {}".format("magnet not found", torrent['link'], torrent['seeds'], torrent['leeches'], torrent['size'])
                 desc = "**[magnet]({})** | **[rarbg]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['shortlink'], torrent['link'], torrent['seeds'], torrent['leeches'], torrent['size'])
                 embed.add_field(name=torrent['name'], value=desc, inline=False)
             await ctx.send(embed=embed)
