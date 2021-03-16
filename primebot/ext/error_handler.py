@@ -9,8 +9,14 @@ class Error(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def log_error(self, ctx, error, errorChannel):
+    async def log_error(self, ctx, error, errorChannel, tb):
         await errorChannel.send('Unhandled Message: {} \n Content: {} \n Error: {}\n'.format(ctx.message, ctx.message.content, error))
+        new = {
+            "message": ctx.message.content,
+            "error": str(error),
+            "traceback": str(tb)
+        }
+        primebot.db.errors.insert_one(new)
         with open('error.log', 'a') as f:
             f.write('Unhandled Message: {} \n Content: {} \n Error: {}\n'.format(ctx.message, ctx.message.content, error))
 
@@ -25,7 +31,9 @@ class Error(commands.Cog):
 
         if isinstance(error, ignore_errors):
             return
-
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The command is incomplete, missing one or more parameters!"))
+            return
         if isinstance(error, commands.errors.NSFWChannelRequired):
             embed = discord.Embed(color=discord.Color.red(), description=":x: This is not an nsfw channel")
             await ctx.send(embed=embed)
@@ -42,14 +50,12 @@ class Error(commands.Cog):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: " + str(error)))
         elif isinstance(error, commands.CheckFailure):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: You don't have the permission to execute this bot command!"))
-        elif isinstance(error, commands.CommandNotFound):
-            await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The bot command doesn't exist!"))
-        elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The command is incomplete, missing one or more parameters!"))
+        # elif isinstance(error, commands.CommandNotFound):
+        #     await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The bot command doesn't exist!"))
         elif isinstance(error, commands.BadArgument):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The command was entered incorrectly, one or more parameters are wrong or in the wrong place!"))
 
-        await self.log_error(ctx, error, errorChannel)
+        await self.log_error(ctx, error, errorChannel, tb)
 
 
 def setup(bot):

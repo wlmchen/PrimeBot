@@ -16,6 +16,12 @@ class Events(commands.Cog):
     async def on_command(self, ctx):
         logChannel = self.bot.get_channel(primebot.conf['log']['log_channel'])
         await logChannel.send('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(ctx.message.author, ctx.message.content, ctx.message.guild.name, ctx.message.channel.name))
+        new = {
+            "author": str(ctx.message.author),
+            "content": str(ctx.message.content),
+            "location": ctx.message.guild.name + "#" + ctx.message.channel.name
+        }
+        primebot.db.executed.insert_one(new)
         with open('log.txt', 'a') as log:
             log.write('Message Author: {}\nMessage Content: {}\nLocation: {} # {}\n\n'.format(ctx.message.author, ctx.message.content, ctx.message.guild.name, ctx.message.channel.name))
 
