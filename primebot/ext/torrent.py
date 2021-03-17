@@ -1,4 +1,5 @@
 import discord
+import datetime
 import requests
 from discord.ext import commands
 
@@ -42,6 +43,7 @@ class Torrent(commands.Cog):
             for torrent in json['torrents']:
                 desc = "**[magnet]({})** | **[nyaa]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['shortlink'], torrent['link'], torrent['seeds'], torrent['leeches'], torrent['size'])
                 embed.add_field(name=torrent['name'], value=desc, inline=False)
+            embed.timestamp = datetime.datetime.utcnow()
             await ctx.send(embed=embed)
 
     @commands.command(aliases=['rargb'])
@@ -62,6 +64,7 @@ class Torrent(commands.Cog):
                     desc = "**[magnet]({})** | **[rarbg]({})** | Seeds: {} | Leeches: {} | Size: {}".format("magnet not found", torrent['link'], torrent['seeds'], torrent['leeches'], torrent['size'])
                 desc = "**[magnet]({})** | **[rarbg]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['shortlink'], torrent['link'], torrent['seeds'], torrent['leeches'], torrent['size'])
                 embed.add_field(name=torrent['name'], value=desc, inline=False)
+            embed.timestamp = datetime.datetime.utcnow()
             await ctx.send(embed=embed)
 
 
