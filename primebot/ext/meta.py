@@ -90,20 +90,17 @@ class Meta(commands.Cog):
         """
         About the bot
         """
-        embed = discord.Embed(title='\u200b', description='Lastest Changes:\n' + self.get_last_commits())
-        embed.set_author(name='📓 About')
-        embed.add_field(name='👨‍💻 Author',
-                        value='[pryme-svg](https://github.com/pryme-svg) \n\u200b')
-        embed.add_field(name='🏗️ Framework',
-                        value=f'[discord.py v{self.discord_version()}]'
-                              '(https://github.com/Rapptz/discord.py) \n\u200b')
+        embed = discord.Embed(title='\u200b', description='Lastest Changes:\n' + self.get_last_commits() + '\n')
+        guild = self.bot.get_guild(794255644915007559)
+        owner = await guild.fetch_member(self.bot.owner_id)
+        embed.set_author(name=str(owner), icon_url=owner.avatar_url)
         embed.add_field(name='📁 Repo',
                         value='[Gitlab](https://gitlab.com/pryme-svg/primebot) [Github](https://github.com/pryme-svg/primebot)'
                               '\n\u200b')
         embed.add_field(name='🕒 Uptime',
                         value=await self.uptime()
                         )
-        embed.set_footer(text="Created by PrimeTime09#1847")
+        embed.timestamp = ctx.message.created_at
         await ctx.send(embed=embed)
 
     # SYSTEM
@@ -129,6 +126,14 @@ class Meta(commands.Cog):
     async def prime(self, ctx):
         embed = discord.Embed(title="Prime", description="Thanks for using my bot! Feel free to browse my [github](https://github.com/pryme-svg)\nOr check out my [gitlab](https://gitlab.com/pryme-svg)\nThis bot is open source, please star the repository! [gitlab](https://gitlab.com/pryme-svg/primebot/) [github](https://github.com/pryme-svg/primebot/)!")
         await ctx.send(embed=embed)
+
+    @commands.command(aliases=['src'])
+    async def source(self, ctx):
+        """Show Source Code"""
+        title = "View Source"
+        description = "https://github.com/pryme-svg/primebot"
+        # TODO: src for individual commands
+        await ctx.send(embed=discord.Embed(title=title, description=description))
 
     @commands.command(aliases=['inv'])
     async def invite(self, ctx):
