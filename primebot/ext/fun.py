@@ -1,4 +1,5 @@
 import discord
+from async_timeout import timeout
 from primebot.utils.scrapers import scrape_song_lyrics
 import asyncio
 import primebot
@@ -253,6 +254,32 @@ class Fun(commands.Cog):
         except KeyError:  # should be caught if no arg but why not
             pass
         await ctx.send(data['owo'])
+
+    @commands.command()
+    @commands.max_concurrency(1, commands.BucketType.channel)  # only one per channel
+    async def who(self, ctx):
+        """Guess who someone is from their avatar"""
+        user = random.choice(ctx.guild.members)
+        await ctx.send(
+            embed=discord.Embed().set_image(
+                url=user.avatar_url_as(static_format="png", size=128)
+            )
+        )
+        try:
+            async with timeout(10):
+                while True:
+                    try:
+                        message = await self.bot.wait_for(
+                            "message",
+                            timeout=10.0,
+                            check=lambda m: m.author.bot is False,
+                        )
+                        if (user.name.lower() in message.content.lower() or user.display_name.lower() in message.content.lower()):
+                            return await ctx.send(f"{message.author.mention} got it!")
+                    except asyncio.TimeoutError:
+                        continue
+        except (asyncio.TimeoutError, asyncio.CancelledError):
+            return await ctx.send(f"Time's up! It was {user}")
 
 
 def setup(bot):
