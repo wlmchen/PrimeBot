@@ -1,4 +1,5 @@
 import requests
+from primebot.utils.math import convert_size
 from discord.ext import commands
 from bs4 import BeautifulSoup
 import os
@@ -45,3 +46,31 @@ def scrape_pypi(query):  # i know this is messy but who cares
     name = json['info']['name'] + json['info']['version']
 
     return homepage, author, license, description, url, name
+
+
+def scrape_arch(package):
+    url = "https://archlinux.org/packages/search/json/?name={}".format(package)
+    raw = requests.get(url)
+    json = raw.json()
+    pkg = json['results'][0]
+
+    name = pkg['pkgname']
+    description = pkg['pkgdesc']
+    url = pkg['url']
+    repo = pkg['repo']
+    version = pkg['pkgver']
+    pkgrel = pkg['pkgrel']
+    arch = pkg['arch']
+    pkg_size = convert_size(pkg['compressed_size'])
+    installed_size = convert_size(pkg['installed_size'])
+    licenses = pkg['licenses']
+    build_date = pkg['build_date']
+    maintainer = pkg['maintainers'][0]
+    packager = pkg['packager']
+
+    provides = pkg['provides']
+    conflicts = pkg['conflicts']
+    replaces = pkg['replaces']
+    depends = pkg['depends']
+    optdepends = pkg['optdepends']
+    return name, description, url, repo, version, pkgrel, arch, pkg_size, installed_size, licenses, build_date, maintainer, packager, provides, conflicts, replaces, depends, optdepends
