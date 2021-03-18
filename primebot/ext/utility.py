@@ -159,9 +159,7 @@ class Utility(commands.Cog):
         embed.timestamp = ctx.message.created_at
         embed.set_image(url=url)
 
-
         await ctx.send(embed=embed)
-
 
     @commands.command(aliases=['aw'])
     async def archwiki(self, ctx, *, query):
