@@ -3,6 +3,8 @@ import datetime
 import requests_cache
 from primebot.utils.scrapers import scrape_arch_wiki
 from primebot.utils.scrapers import scrape_pypi
+from primebot.utils.scrapers import scrape_arch
+from primebot.utils.formatters import list_to_bullets
 from typing import Union
 import requests
 from bs4 import BeautifulSoup
@@ -100,6 +102,26 @@ class Utility(commands.Cog):
         embed.add_field(name="Homepage", value=homepage)
         embed.timestamp = datetime.datetime.utcnow()
         embed.set_thumbnail(url="https://raw.githubusercontent.com/github/explore/666de02829613e0244e9441b114edb85781e972c/topics/pip/pip.png")
+        await ctx.send(embed=embed)
+
+    @commands.command(aliases=['archpkg'])
+    async def arch(self, ctx, *, query):
+        """Search the Arch Linux Repository"""
+        try:
+            name, description, url, repo, version, pkgrel, arch, pkg_size, installed_size, licenses, build_date, maintainer, packager, provides, conflicts, replaces, depends, optdepends = scrape_arch(query)
+        except IndexError:
+            raise commands.CommandError("Package not Found")
+        name1 = "{} {}-{} ({})".format(name, version, pkgrel, arch)
+        embed = discord.Embed(title=name1, url=url, color=0x1793d1)
+        embed.add_field(name="Description", value=description)
+        embed.add_field(name="License{}".format('' if len(licenses) == 1 else 's'), value=list_to_bullets(licenses))
+        embed.add_field(name="Repository", value=repo)
+        embed.add_field(name="Sizes", value="**Package Size:** {}\n**Installed Size:** {}".format(pkg_size, installed_size))
+        embed.add_field(name="Build Date", value=build_date)
+        embed.add_field(name="Maintainer", value=maintainer)
+        embed.add_field(name="Packager", value=packager)
+        embed.add_field(name="\u200b", value="**Provides:** {}\n**Conflicts:** {}\n**Replaces:** {}\n**Depends:** {}\n**Optdepends:** {}".format(list_to_bullets(provides), list_to_bullets(conflicts), list_to_bullets(replaces), list_to_bullets(depends), list_to_bullets(optdepends)))
+        embed.set_thumbnail(url="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Archlinux-icon-crystal-64.svg/1024px-Archlinux-icon-crystal-64.svg.png")
         await ctx.send(embed=embed)
 
     @commands.command(pass_context=True)
