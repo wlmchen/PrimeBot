@@ -143,9 +143,25 @@ class Utility(commands.Cog):
         for x, option in enumerate(options):
             description += '\n {} {}'.format(reactions[x], option)
         embed = discord.Embed(title=question, description=''.join(description))
+        embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+        embed.timestamp = ctx.message.created_at
         react_message = await ctx.send(embed=embed)
         for reaction in reactions[:len(options)]:
             await react_message.add_reaction(reaction)
+
+    @commands.command()
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def big(self, ctx, emoji: discord.PartialEmoji):
+        """Enlarge an emoji"""
+        url = emoji.url
+        embed = discord.Embed(title="Big Emoji", description=emoji.name)
+        embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+        embed.timestamp = ctx.message.created_at
+        embed.set_image(url=url)
+
+
+        await ctx.send(embed=embed)
+
 
     @commands.command(aliases=['aw'])
     async def archwiki(self, ctx, *, query):
