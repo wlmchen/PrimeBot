@@ -1,4 +1,5 @@
 import discord
+import datetime
 import requests_cache
 from primebot.utils.scrapers import scrape_arch_wiki
 from primebot.utils.scrapers import scrape_pypi
@@ -88,13 +89,16 @@ class Utility(commands.Cog):
         await ctx.send(embed=embedLog)
 
     @commands.command(aliases=['pip'])
-    async def pypi(self, ctx, query):
-        """Retrieve information about a package in pypi"""
+    async def pypi(self, ctx, *, query):
+        """
+        Search PyPI for a python package
+        """
         homepage, author, license, description, url, name = scrape_pypi(query)
         embed = discord.Embed(title=name, url=url, description=description)
         embed.add_field(name="Author", value=author)
         embed.add_field(name="License", value=license)
         embed.add_field(name="Homepage", value=homepage)
+        embed.timestamp = datetime.datetime.utcnow()
         embed.set_thumbnail(url="https://raw.githubusercontent.com/github/explore/666de02829613e0244e9441b114edb85781e972c/topics/pip/pip.png")
         await ctx.send(embed=embed)
 

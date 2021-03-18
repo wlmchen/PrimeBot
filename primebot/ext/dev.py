@@ -122,11 +122,11 @@ class Dev(commands.Cog):
         msg = g.pull()
         await ctx.send('```\n' + msg + '\n```')
 
-    @commands.command(hidden=True)
+    @commands.command(hidden=True, aliases=['reboot'])
     @is_owner()
     async def restart(self, ctx):
         await ctx.send(":robot: Bot is restarting")
-        await self.bot.close()
+        await self.bot.closeman()
         await self.bot.login(primebot.conf['token'], bot=True)
 
     @commands.command(hidden=True)

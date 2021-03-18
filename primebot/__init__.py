@@ -40,7 +40,7 @@ class PrimeBot(commands.Bot):
         else:
             return True
 
-    async def close(self):
+    async def closeman(self):
         await super().close()
         await self.logout()
         primebot.db.close()
