@@ -73,8 +73,6 @@ class Fun(commands.Cog):
 
     @command_xkcd.command(name='id', ignore_extra=False, aliases=['n', '-n', 'number'])
     async def command_xkcd_id(self, context, comic_id):
-        comic_id = int(comic_id)
-
         """
         Shows the selected xkcd comic
         Retrieves the xkcd webcomic with the specified ID from xkcd.com
@@ -82,6 +80,7 @@ class Fun(commands.Cog):
         `<prefix>xkcd id` 100
         `<prefix>xkcd n` 1234
         """
+        comic_id = int(comic_id)
         comic = await self.xkcd_api_client.get(comic_id, raw_comic_image=False)
         embed_comic = self.embed_comic(comic)
         await context.send(embed=embed_comic)
