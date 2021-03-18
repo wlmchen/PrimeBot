@@ -1,4 +1,5 @@
 import discord
+import asyncio
 import primebot
 import itertools
 import pygit2
@@ -145,9 +146,18 @@ class Meta(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        latency = float(self.bot.latency) * 100
-        pingEmbed = discord.Embed(title="Ping!", description='🏓 Pong! {}ms'.format(latency))
-        await ctx.send(embed=pingEmbed)
+        """Gets the bot's latency"""
+        start = time.perf_counter()
+        message = await ctx.send(
+            embed=discord.Embed(title="🏓 Pong", description=f":electric_plug: **Websocket** {round(self.bot.latency * 1000, 3)}ms"))
+        end = time.perf_counter()
+        duration = (end - start) * 1000
+        em = message.embeds[0].copy()
+        em.description += (
+            f'\n<:discord:822019576606228500> **API** {duration:.3f}ms'
+        )
+        await asyncio.sleep(0.25)
+        await message.edit(embed=em)
 
 
 def setup(bot):
