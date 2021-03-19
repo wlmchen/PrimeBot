@@ -6,7 +6,11 @@ from discord.ext import commands
 
 
 async def get_prefix(bot, message):
-    guild_id = message.guild.id
+    try:
+        guild_id = message.guild.id
+    except AttributeError:  # errors if in dm
+        prefix = primebot.conf['prefix']
+        return commands.when_mentioned_or(prefix)(bot, message)
     # if guild doesn't exist in db
     if primebot.db.prefixes.find_one({'guild_id': guild_id}) is None:
         new = {
