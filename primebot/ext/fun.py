@@ -260,11 +260,9 @@ class Fun(commands.Cog):
     async def who(self, ctx):
         """Guess who someone is from their avatar"""
         user = random.choice(ctx.guild.members)
-        await ctx.send(
-            embed=discord.Embed().set_image(
-                url=user.avatar_url_as(static_format="png", size=128)
-            )
-        )
+        accepted_strings = ["{}giveup".format(primebot.db.prefixes.find_one({"guild_id": ctx.message.guild.id})['prefix'])]
+        embed = discord.Embed().set_image(url=user.avatar_url_as(static_format="png", size=128))
+        sent = await ctx.send(embed=embed)
         try:
             async with timeout(10):
                 while True:
@@ -276,6 +274,9 @@ class Fun(commands.Cog):
                         )
                         if (user.name.lower() in message.content.lower() or user.display_name.lower() in message.content.lower()):
                             return await ctx.send(f"{message.author.mention} got it!")
+                        if message.content in accepted_strings and message.author == ctx.message.author:
+                            embed.add_field(name="Gave Up!", value=user.mention)
+                            return await sent.edit(embed=embed)
                     except asyncio.TimeoutError:
                         continue
         except (asyncio.TimeoutError, asyncio.CancelledError):

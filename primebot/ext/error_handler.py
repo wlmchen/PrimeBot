@@ -31,6 +31,9 @@ class Error(commands.Cog):
 
         if isinstance(error, ignore_errors):
             return
+        if isinstance(error, commands.errors.MaxConcurrencyReached):
+            await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: " + str(error)))
+            return
         if isinstance(error, commands.errors.PartialEmojiConversionFailure):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: Could not convert to custom emoji"))
             return
