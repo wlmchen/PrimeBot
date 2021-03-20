@@ -262,6 +262,7 @@ class Fun(commands.Cog):
         user = random.choice(ctx.guild.members)
         accepted_strings = ["{}giveup".format(primebot.db.prefixes.find_one({"guild_id": ctx.message.guild.id})['prefix'])]
         embed = discord.Embed().set_image(url=user.avatar_url_as(static_format="png", size=128))
+        embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
         sent = await ctx.send(embed=embed)
         try:
             async with timeout(10):
@@ -276,6 +277,7 @@ class Fun(commands.Cog):
                             return await ctx.send(f"{message.author.mention} got it!")
                         if message.content in accepted_strings and message.author == ctx.message.author:
                             embed.add_field(name="Gave Up!", value=user.mention)
+                            embed.set_footer(text=user)
                             return await sent.edit(embed=embed)
                     except asyncio.TimeoutError:
                         continue
