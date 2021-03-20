@@ -92,15 +92,13 @@ class Meta(commands.Cog):
         About the bot
         """
         embed = discord.Embed(title='\u200b', description='Lastest Changes:\n' + self.get_last_commits() + '\n')
-        guild = self.bot.get_guild(794255644915007559)
-        owner = await guild.fetch_member(self.bot.owner_id)
-        embed.set_author(name=str(owner), icon_url=owner.avatar_url)
         embed.add_field(name='📁 Repo',
                         value='[Gitlab](https://gitlab.com/pryme-svg/primebot) [Github](https://github.com/pryme-svg/primebot)'
                               '\n\u200b')
         embed.add_field(name='🕒 Uptime',
                         value=await self.uptime()
                         )
+        embed.set_footer(text="Created by PrimeTime09#1847")
         embed.timestamp = ctx.message.created_at
         await ctx.send(embed=embed)
 

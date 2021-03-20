@@ -154,9 +154,10 @@ class Utility(commands.Cog):
     async def big(self, ctx, emoji: discord.PartialEmoji):
         """Enlarge an emoji"""
         url = emoji.url
-        embed = discord.Embed(title="Big Emoji", description=emoji.name)
+        embed = discord.Embed(title=emoji.name)
         embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
         embed.timestamp = ctx.message.created_at
+        embed.set_footer(text="Emoji ID: {}".format(emoji.id))
         embed.set_image(url=url)
 
         await ctx.send(embed=embed)
