@@ -41,9 +41,9 @@ def scrape_pypi(query):  # i know this is messy but who cares
     author = json['info']['author']
     homepage = json['info']['home_page']
     license = json['info']['license']
-    description = json['info']['description']
+    description = json['info']['summary']
     url = json['info']['package_url']
-    name = json['info']['name'] + json['info']['version']
+    name = json['info']['name'] + ' ' + json['info']['version']
 
     return homepage, author, license, description, url, name
 
