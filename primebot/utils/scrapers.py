@@ -48,6 +48,27 @@ def scrape_pypi(query):  # i know this is messy but who cares
     return homepage, author, license, description, url, name
 
 
+def scrape_crates(crate):
+    url = "https://crates.io/api/v1/crates/{}".format(crate)
+    raw = requests.get(url)
+    if raw.status_code == 404:
+        raise commands.CommandError("Crate not found")
+    json = raw.json()
+    crate = json['crate']
+    name = crate['name']
+    description = crate['description']
+    version = crate['max_version']
+    repo = crate['repository']
+    docs = crate['documentation']
+    downloads = crate['downloads']
+    created_at = crate['created_at']
+    owners = []
+    owner_json = requests.get("https://crates.io{}".format(crate['links']['owners'])).json()['users']
+    for owner in owner_json:
+        owners.append('[{}]({})'.format(owner['name'], owner['url']))
+    return name, description, version, repo, docs, downloads, created_at, owners
+
+
 def scrape_arch(package):
     url = "https://archlinux.org/packages/search/json/?name={}".format(package)
     raw = requests.get(url)
