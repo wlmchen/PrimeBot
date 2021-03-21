@@ -16,9 +16,18 @@ class PrimeBot(commands.Bot):
                          )
 
         self.add_check(self.check_blacklist)
+        self._cd = commands.CooldownMapping.from_cooldown(2, 3, commands.BucketType.user)
+        self.add_check(self.global_cooldown, call_once=True)
 
         for ext in primebot.conf['exts']:
             self.load_extension('primebot.ext.{}'.format(ext))
+
+    async def global_cooldown(self, ctx):
+        bucket = self._cd.get_bucket(ctx.message)
+        retry_after = bucket.update_rate_limit()
+        if retry_after and not await self.is_owner(ctx.author):
+            raise commands.CommandOnCooldown(bucket, retry_after)
+        return True
 
     async def get_prefix(bot, message):
         try:
