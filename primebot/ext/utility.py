@@ -75,7 +75,7 @@ class Utility(commands.Cog):
             mystr = head.stdout.decode('utf-8')
         mystr = "```diff\n" + mystr + "```"
         embedHead = discord.Embed(title="Git Head", description=mystr, url="https://github.com/pryme-svg/PrimeBot/commit/HEAD")
-        embedHead.add_field(name=".", value="[Git Repository](https://github.com/pryme-svg/primebot)")
+        embedHead.add_field(name="\u200b", value="[Git Repository](https://github.com/pryme-svg/primebot)")
         await ctx.send(embed=embedHead)
 
     @commands.command()
@@ -90,7 +90,7 @@ class Utility(commands.Cog):
             mystr = log.stdout.decode('utf-8')
             mystr = "```\n" + mystr + "```"
         embedLog = discord.Embed(title="Git Log(truncated)", description=mystr)
-        embedLog.add_field(name=".", value="[Git Repository](https://github.com/pryme-svg/primebot)")
+        embedLog.add_field(name="\u200b", value="[Git Repository](https://github.com/pryme-svg/primebot)")
         await ctx.send(embed=embedLog)
 
     @commands.command(aliases=['pip'])
