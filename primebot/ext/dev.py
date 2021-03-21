@@ -11,15 +11,40 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     @is_owner()
-    async def load(self, ctx, extension):
-        self.bot.load_extension(f'cogs.{extension}')
-        await ctx.send("{} has been loaded".format(extension))
+    async def load(self, *, module: str):
+        """Loads a module."""
+        try:
+            self.bot.load_extension(module)
+        except Exception as e:
+            await self.bot.say('\N{PISTOL}')
+            await self.bot.say('{}: {}'.format(type(e).__name__, e))
+        else:
+            await self.bot.say('\N{OK HAND SIGN}')
 
     @commands.command(hidden=True)
     @is_owner()
-    async def unload(self, ctx, extension):
-        self.bot.unload_extension(f'cogs.{extension}')
-        await ctx.send("{} has been unloaded".format(extension))
+    async def unload(self, *, module: str):
+        """Unloads a module."""
+        try:
+            self.bot.unload_extension(module)
+        except Exception as e:
+            await self.bot.say('\N{PISTOL}')
+            await self.bot.say('{}: {}'.format(type(e).__name__, e))
+        else:
+            await self.bot.say('\N{OK HAND SIGN}')
+
+    @commands.command(name='reload', hidden=True)
+    @is_owner()
+    async def _reload(self, *, module: str):
+        """Reloads a module."""
+        try:
+            self.bot.unload_extension(module)
+            self.bot.load_extension(module)
+        except Exception as e:
+            await self.bot.say('\N{PISTOL}')
+            await self.bot.say('{}: {}'.format(type(e).__name__, e))
+        else:
+            await self.bot.say('\N{OK HAND SIGN}')
 
     @commands.command(hidden=True)
     @is_owner()
