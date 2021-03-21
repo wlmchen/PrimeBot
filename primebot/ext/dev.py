@@ -11,27 +11,27 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     @is_owner()
-    async def load(self, *, module: str):
+    async def load(self, ctx, *, module: str):
         """Loads a module."""
         try:
             self.bot.load_extension(module)
         except Exception as e:
-            await self.bot.say('\N{PISTOL}')
-            await self.bot.say('{}: {}'.format(type(e).__name__, e))
+            await ctx.send('\N{PISTOL}')
+            await ctx.send('{}: {}'.format(type(e).__name__, e))
         else:
-            await self.bot.say('\N{OK HAND SIGN}')
+            await ctx.send('\N{OK HAND SIGN}')
 
     @commands.command(hidden=True)
     @is_owner()
-    async def unload(self, *, module: str):
+    async def unload(self, ctx, *, module: str):
         """Unloads a module."""
         try:
             self.bot.unload_extension(module)
         except Exception as e:
-            await self.bot.say('\N{PISTOL}')
-            await self.bot.say('{}: {}'.format(type(e).__name__, e))
+            await ctx.send('\N{PISTOL}')
+            await ctx.send('{}: {}'.format(type(e).__name__, e))
         else:
-            await self.bot.say('\N{OK HAND SIGN}')
+            await ctx.send('\N{OK HAND SIGN}')
 
     @commands.command(name='reload', hidden=True)
     @is_owner()
@@ -41,10 +41,10 @@ class Dev(commands.Cog):
             self.bot.unload_extension(module)
             self.bot.load_extension(module)
         except Exception as e:
-            await self.bot.say('\N{PISTOL}')
-            await self.bot.say('{}: {}'.format(type(e).__name__, e))
+            await ctx.send('\N{PISTOL}')
+            await ctx.send('{}: {}'.format(type(e).__name__, e))
         else:
-            await self.bot.say('\N{OK HAND SIGN}')
+            await ctx.send('\N{OK HAND SIGN}')
 
     @commands.command(hidden=True)
     @is_owner()
