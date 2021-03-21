@@ -1,10 +1,13 @@
 import discord
 import datetime
 import requests_cache
+
 from primebot.utils.scrapers import scrape_arch_wiki
 from primebot.utils.scrapers import scrape_pypi
 from primebot.utils.scrapers import scrape_arch
+from primebot.utils.scrapers import scrape_crates
 from primebot.utils.formatters import list_to_bullets
+
 from typing import Union
 import requests
 from bs4 import BeautifulSoup
@@ -102,6 +105,21 @@ class Utility(commands.Cog):
         embed.add_field(name="Homepage", value=homepage)
         embed.timestamp = datetime.datetime.utcnow()
         embed.set_thumbnail(url="https://raw.githubusercontent.com/github/explore/666de02829613e0244e9441b114edb85781e972c/topics/pip/pip.png")
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def crate(self, ctx, *, query):
+        """Search crates.io for a crate"""
+        name, desc, version, repo, docs, downloads, created_at, owners = scrape_crates(query)
+        url = "https://crates.io/crates/{}".format(name)
+        title = name + ' ' + version
+        embed = discord.Embed(title=title, url=url, description=desc)
+        embed.add_field(name="Author{}".format('' if len(owners) == 1 else's'), value=list_to_bullets(owners))
+        embed.add_field(name="Repository", value=repo)
+        embed.add_field(name="Documentation", value=docs, inline=False)
+        embed.add_field(name="Downloads", value=downloads)
+        embed.set_footer(text="Created at: {}".format(created_at))
+        embed.set_thumbnail(url="https://doc.rust-lang.org/cargo/images/Cargo-Logo-Small.png")
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['archpkg'])
