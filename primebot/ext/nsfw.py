@@ -40,3 +40,8 @@ class Nsfw(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Nsfw(bot))
+
+   @commands.command(hidden=True)
+   @commands.is_nsfw()
+   async def sex(self, ctx, user1, user2):
+    await ctx.send("{} had sex with {}".format(user1, user2))
