@@ -42,6 +42,8 @@ class Moderation(commands.Cog):
             user_obj, reason=f"{ctx.author} ({ctx.author.id}) - {reason}"
         )
         await ctx.send(f'User {user_obj.mention} has been banned')
+        # user = await discord.ext.commands.MemberConverter().convert(ctx, member)
+        # await user.send(reason)
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
