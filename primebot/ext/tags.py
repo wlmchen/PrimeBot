@@ -54,6 +54,14 @@ class Tags(commands.Cog):
         embed = discord.Embed(title="Tags", description=list_to_bullets(listt), color=0x32CD32)
         await ctx.send(embed=embed)
 
+    @command_tag.command(name='raw')
+    async def command_tag_raw(self, ctx, name):
+        if primebot.db.tags.find_one({'guild_id': ctx.guild.id, 'name': name}) is None:
+            return await ctx.send("Tag not found")
+        tag = primebot.db.tags.find_one({'guild_id': ctx.guild.id, 'name': name})
+        await ctx.send("```\n" + tag['content'] + "```")
+
+
 
 def setup(bot):
     bot.add_cog(Tags(bot))
