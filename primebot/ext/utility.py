@@ -241,7 +241,7 @@ class Utility(commands.Cog):
         json = requests.post(url).json()
         translated = json['translatedText']
         embed = discord.Embed(title="Translation", description=translated)
-        embed.set_author(name=ctx.member.name, icon_url=ctx.member.avatar_url)
+        embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
         embed.set_footer(text="{} => {}".format(sourcelanguage, targetlanguage))
         await ctx.send(embed=embed)
 
