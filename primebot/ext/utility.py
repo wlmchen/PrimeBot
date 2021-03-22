@@ -224,6 +224,28 @@ class Utility(commands.Cog):
         await ctx.send(embed=embedApod)
 
     @commands.command()
+    async def translate(self, ctx, sourcelanguage, targetlanguage, *, content):
+        """
+        Translate text
+
+        Usage:
+
+        <prefix>translate (source_language) (target_language) content
+
+        Available Languages: English(en), Spanish(es), Arabic(ar), Chinese(zh), French(fr), German(de), Hindi(hi), Irish(ga), Italian(it), Japanese(ja), Korean(ko), Portugese(pt), Russian(ru)
+        """
+        langs = ['en', 'es', 'ar', 'zh', 'fr', 'de', 'hi', 'ga', 'it', 'ja', 'ko', 'pt', 'ru']
+        if sourcelanguage not in langs or targetlanguage not in langs:
+            return await ctx.send("Invalid Language")
+        url = "https://libretranslate.com/translate?q={}&source={}&target={}".format(content, sourcelanguage, targetlanguage)
+        json = requests.post(url).json()
+        translated = json['translatedText']
+        embed = discord.Embed(title="Translation", description=translated)
+        embed.set_footer(text="{} => {}".format(sourcelanguage, targetlanguage))
+        await ctx.send(embed=embed)
+
+
+    @commands.command()
     async def distro(self, ctx, *, arg):
         if arg == "random":
             arg = (random.choice(list(open('primebot/assets/linux.list'))))

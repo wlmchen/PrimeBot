@@ -35,7 +35,7 @@ class Dev(commands.Cog):
 
     @commands.command(name='reload', hidden=True)
     @is_owner()
-    async def _reload(self, *, module: str):
+    async def _reload(self, ctx, *, module: str):
         """Reloads a module."""
         try:
             self.bot.unload_extension(module)
