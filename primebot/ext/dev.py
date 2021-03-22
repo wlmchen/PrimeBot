@@ -116,11 +116,12 @@ class Dev(commands.Cog):
             await ctx.guild.leave()
             return
         else:
-            guild = discord.utils.get(self.bot.guilds, name=guildid)
+            guildid = int(guildid)
+            guild = self.bot.get_guild(guildid)
             if guild is None:
                 raise commands.CommandError("I can't find that guild")
-            await self.bot.leave_guild(guild)
-        await ctx.send(':ok: I have left {guild.name} ({guild.id})')
+            await guild.leave()
+        await ctx.send(':ok: I have left {} ({})'.format(guild.name, guild.id))
 
     @commands.command(pass_context=True, hidden=True)
     @is_owner()
