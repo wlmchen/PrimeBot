@@ -25,6 +25,8 @@ class Tags(commands.Cog):
     async def command_tag_new(self, ctx, name, *, content):
         if primebot.db.tags.find_one({'guild_id': ctx.guild.id, 'name': name}) is not None:
             return await ctx.send("Tag already exists")
+        if len(content) >= 2048:
+            return await ctx.send("Tag is too long")
         if len(list(primebot.db.tags.find({'guild_id': ctx.guild.id}))) >= 100:
             return await ctx.send("Your server has too many tags")
         tag = {
@@ -36,14 +38,14 @@ class Tags(commands.Cog):
         await ctx.send("Tag Created")
 
     @commands.has_permissions(administrator=True)
-    @command_tag.command(name='delete')
+    @command_tag.command(name='delete', aliases=['remove'])
     async def command_tag_delete(self, ctx, name):
         if primebot.db.tags.find_one({'guild_id': ctx.guild.id, 'name': name}) is None:
             return await ctx.send("Tag not found")
         primebot.db.tags.delete_one({'guild_id': ctx.guild.id, 'name': name})
         await ctx.send("tag deleted")
 
-    @command_tag.command(name='list')
+    @command_tag.command(name='list', aliases=['l'])
     async def command_tag_list(self, ctx):
         listt = []
         lst = primebot.db.tags.find({'guild_id': ctx.guild.id})
