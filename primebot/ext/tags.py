@@ -61,6 +61,15 @@ class Tags(commands.Cog):
         tag = primebot.db.tags.find_one({'guild_id': ctx.guild.id, 'name': name})
         await ctx.send("```\n" + tag['content'] + "```")
 
+    @command_tag.command(name='edit')
+    @commands.has_permissions(administrator=True)
+    async def command_tag_edit(self, ctx, name, *, content):
+        query = {"name": str(name), "guild_id": ctx.guild.id}
+        new = {"$set": {"content": content}}
+
+        primebot.db.tags.update_one(query, new)
+
+        await ctx.send("Updated Tag")
 
 
 def setup(bot):
