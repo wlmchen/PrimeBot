@@ -37,6 +37,13 @@ class Nsfw(commands.Cog):
         embed.set_image(url=url)
         await ctx.send(embed=embed)
 
+    @commands.command(hidden=True)
+    @commands.is_nsfw()
+    async def sex(self, ctx, user):
+        user = await discord.ext.commands.MemberConverter().convert(ctx, user)
+        embed = discord.Embed(description="{} did the big sex with {}!".format(ctx.message.author.mention, user.mention))
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Nsfw(bot))
