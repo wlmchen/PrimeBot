@@ -284,6 +284,11 @@ class Fun(commands.Cog):
         except (asyncio.TimeoutError, asyncio.CancelledError):
             return await ctx.send(f"Time's up! It was {user}")
 
+    @commands.command(hidden=True)
+    async def neofetch(self, ctx):
+        e = "```\n" + "                   -`                    pryme-svg@computer\n                  .o+`                   --------------\n                 `ooo/                   OS: Arch Linux x86_64\n                `+oooo:                  Host: HP Pavilion Laptop 15-cs0xxx\n               `+oooooo:                 Kernel: 5.10.24-1-lts\n               -+oooooo+:                Uptime: 1 day, 2 hours, 5 mins\n             `/:-:++oooo+:               Packages: 1142 (pacman)\n            `/++++/+++++++:              Shell: bash 5.1.4\n           `/++++++++++++++:             Resolution: 1920x1080\n          `/+++ooooooooooooo/`           WM: bspwm\n         ./ooosssso++osssssso+`          Theme: Gruvbox [GTK2/3]\n        .oossssso-``/ossssss+`         Icons: Adwaita [GTK2/3]\n       -osssssso.      :ssssssso.        Terminal: st\n      :osssssss/        osssso+++.       Terminal Font: JoyPixels\n     /ossssssss/        +ssssooo/-       CPU: Intel i7-7500U (4) @ 3.500GHz\n   `/ossssso+/:-        -:/+osssso+-     GPU: Intel HD Graphics 620\n  `+sso+:-`                 `.-/+oso:    GPU: NVIDIA GeForce MX150\n `++:.                           `-/+/   Memory: 668iB / 11856MiB\n .`                                 `/\n" + "```"
+        await ctx.send(e)
+
 
 def setup(bot):
     bot.add_cog(Fun(bot))
