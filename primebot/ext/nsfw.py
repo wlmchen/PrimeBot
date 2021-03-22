@@ -36,7 +36,12 @@ class Nsfw(commands.Cog):
         embed = discord.Embed(title="Neko")
         embed.set_image(url=url)
         await ctx.send(embed=embed)
-
+        
+    @commands.command(hidden=True)
+    @commands.is_nsfw()
+    async def sex(self, ctx, user1, user2):
+        await ctx.send("{} did the big sex with {}!".format(user1, user2))
 
 def setup(bot):
     bot.add_cog(Nsfw(bot))
+    
