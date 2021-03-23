@@ -85,7 +85,7 @@ class Torrent(commands.Cog):
                 break
         embed = discord.Embed(color=0x8B008B)
         for torrent in torrents:
-            desc = "**[Bemaniso]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['link'], torrent['seeders'], torrent['leechers'], torrent['size'])
+            desc = "**[Bemaniso]({})** | Seeds: {} | Leeches: {} | Size: {} | Year {}".format(torrent['link'], torrent['seeders'], torrent['leechers'], torrent['size'], torrent['year'])
             embed.add_field(name=torrent['name'], value=desc, inline=False)
         await ctx.send(embed=embed)
 
