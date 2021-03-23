@@ -1,6 +1,6 @@
 import yaml
 from pymongo import MongoClient
-from primebot.utils import gazelle
+from primebot.utils import sows, ops
 
 __all__ = ['conf', 'db', 'sows', 'ops']
 
