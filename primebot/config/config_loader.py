@@ -1,7 +1,8 @@
 import yaml
 from pymongo import MongoClient
+from primebot.utils import gazelle
 
-__all__ = ['conf', 'db']
+__all__ = ['conf', 'db', 'sows']
 
 
 def load_config():
@@ -12,3 +13,4 @@ def load_config():
 
 conf = load_config()
 db = MongoClient(conf['mongo_db']).primebot
+sows = gazelle.WhatAPI(conf['sows']['username'], conf['sows']['password'])
