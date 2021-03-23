@@ -108,5 +108,6 @@ class Torrent(commands.Cog):
             desc = "**[Orpheus]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['link'], torrent['seeders'], torrent['leechers'], torrent['size'])
             embed.add_field(name=torrent['name'], value=desc, inline=False)
         await ctx.send(embed=embed)
+
 def setup(bot):
     bot.add_cog(Torrent(bot))
