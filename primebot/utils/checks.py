@@ -1,4 +1,5 @@
 from discord.ext import commands
+import primebot
 
 
 def is_owner():
@@ -10,4 +11,15 @@ def is_owner():
             )
         return True
 
+    return commands.check(predicate)
+
+
+def is_pt():
+    async def predicate(ctx):
+        if ctx.guild.id == primebot.conf['pt_guild']:
+            return True
+        elif ctx.bot.is_owner(ctx.author):
+            return True
+        else:
+            return False
     return commands.check(predicate)

@@ -4,6 +4,7 @@ import primebot
 import datetime
 import requests
 from discord.ext import commands
+from primebot.utils.checks import is_pt
 
 
 class Torrent(commands.Cog):
@@ -70,6 +71,7 @@ class Torrent(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command()
+    @is_pt()
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def sows(self, ctx, *, query):
         raw = primebot.sows.search_torrents(query)
@@ -77,18 +79,20 @@ class Torrent(commands.Cog):
         torrents = []
         index = 0
         for result in js['results']:
-            torrents.append({'name': result['groupName'], 'id': result['groupId'], 'size': primebot.utils.convert_size(result['maxSize']), 'seeders': result['totalSeeders'], 'leechers': result['totalLeechers'], 'year': result['groupYear']})
+            torrents.append({'name': result['groupName'], 'id': result['groupId'], 'size': primebot.utils.convert_size(result['maxSize']), 'seeders': result['totalSeeders'], 'leechers': result['totalLeechers'], 'year': result['groupYear'], 'artist': result['artist']})
             torrents[index]['link'] = "https://bemaniso.ws/torrents.php?id={}".format(str(torrents[index]['id']))
             index += 1
             if index >= 3:
                 break
         embed = discord.Embed(color=0x8B008B)
+        embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
         for torrent in torrents:
-            desc = "**[Bemaniso]({})** | Seeds: {} | Leeches: {} | Size: {} | Year: {}".format(torrent['link'], torrent['seeders'], torrent['leechers'], torrent['size'], torrent['year'])
+            desc = "**[Bemaniso]({})** | Seeds: {} | Leeches: {} | Size: {} | Artist: {} | Year: {}".format(torrent['link'], torrent['seeders'], torrent['leechers'], torrent['size'], torrent['artist'], torrent['year'])
             embed.add_field(name=torrent['name'], value=desc, inline=False)
         await ctx.send(embed=embed)
 
     @commands.command()
+    @is_pt()
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def ops(self, ctx, *, query):
         raw = primebot.ops.search_torrents(query)
@@ -96,14 +100,15 @@ class Torrent(commands.Cog):
         torrents = []
         index = 0
         for result in js['results']:
-            torrents.append({'name': result['groupName'], 'id': result['groupId'], 'size': primebot.utils.convert_size(result['maxSize']), 'seeders': result['totalSeeders'], 'leechers': result['totalLeechers']})
+            torrents.append({'name': result['groupName'], 'id': result['groupId'], 'size': primebot.utils.convert_size(result['maxSize']), 'seeders': result['totalSeeders'], 'leechers': result['totalLeechers'], 'artist': result['artist'], 'year': result['groupYear']})
             torrents[index]['link'] = "https://orpheus.network/torrents.php?id={}".format(str(torrents[index]['id']))
             index += 1
             if index >= 3:
                 break
         embed = discord.Embed(color=0x0000FF)
+        embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
         for torrent in torrents:
-            desc = "**[Orpheus]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['link'], torrent['seeders'], torrent['leechers'], torrent['size'])
+            desc = "**[Orpheus]({})** | Seeds: {} | Leeches: {} | Size: {} | Artist: {} | Year: {}".format(torrent['link'], torrent['seeders'], torrent['leechers'], torrent['size'], torrent['artist'], torrent['year'])
             embed.add_field(name=torrent['name'], value=desc, inline=False)
         await ctx.send(embed=embed)
 
