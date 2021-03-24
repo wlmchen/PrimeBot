@@ -11,7 +11,6 @@ def load_config():
     return raw
 
 
-
 conf = load_config()
 db = MongoClient(conf['mongo_db']).primebot
 sows = gazelle.WhatAPI(conf['sows']['username'], conf['sows']['password'], 'https://bemaniso.ws')
