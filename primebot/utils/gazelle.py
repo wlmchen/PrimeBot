@@ -1,5 +1,4 @@
 import re
-import os
 import json
 import time
 import mechanicalsoup
@@ -8,11 +7,11 @@ import html
 headers = {
     'Connection': 'keep-alive',
     'Cache-Control': 'max-age=0',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3)'\
-        'AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.79'\
-        'Safari/535.11',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9'\
-        ',*/*;q=0.8',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3)'
+    'AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.79'
+    'Safari/535.11',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9'
+    ',*/*;q=0.8',
     'Accept-Encoding': 'gzip,deflate,sdch',
     'Accept-Language': 'en-US,en;q=0.8',
     'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3'}
@@ -27,7 +26,7 @@ media_search_map = {
     'dat': 'DAT',
     'web': 'WEB',
     'blu-ray': 'Blu-ray'
-    }
+}
 lossless_media = set(media_search_map.keys())
 
 formats = {
@@ -36,18 +35,19 @@ formats = {
         'encoding': 'Lossless'
     },
     'V0': {
-        'format' : 'MP3',
-        'encoding' : 'V0 (VBR)'
+        'format': 'MP3',
+        'encoding': 'V0 (VBR)'
     },
     '320': {
-        'format' : 'MP3',
-        'encoding' : '320'
+        'format': 'MP3',
+        'encoding': '320'
     },
     'V2': {
-        'format' : 'MP3', 
-        'encoding' : 'V2 (VBR)'
+        'format': 'MP3',
+        'encoding': 'V2 (VBR)'
     },
 }
+
 
 def allowed_transcodes(torrent):
     """Some torrent types have transcoding restrictions."""
@@ -57,11 +57,14 @@ def allowed_transcodes(torrent):
     else:
         return formats.keys()
 
+
 class LoginException(Exception):
     pass
 
+
 class RequestException(Exception):
     pass
+
 
 class WhatAPI:
     def __init__(self, username=None, password=None, endpoint=None, totp=None):
@@ -79,7 +82,7 @@ class WhatAPI:
         self.passkey = None
         self.userid = None
         self.last_request = time.time()
-        self.rate_limit = 2.0 # seconds between requests
+        self.rate_limit = 2.0  # seconds between requests
         self._login()
 
     def _login(self):
@@ -115,9 +118,10 @@ class WhatAPI:
             params['auth'] = self.authkey
         params.update(kwargs)
         r = self.session.get(ajaxpage, params=params, allow_redirects=False)
+        q = unescape(r.content.decode('utf-8').replace('&quot;', "'"))
         self.last_request = time.time()
         try:
-            parsed = json.loads(r.content)
+            parsed = json.loads(q)
             if parsed['status'] != 'success':
                 raise RequestException
             return parsed['response']
@@ -134,7 +138,7 @@ class WhatAPI:
         r = self.session.get(ajaxpage, params=kwargs, allow_redirects=False)
         self.last_request = time.time()
         return r.content
-    
+
     def get_artist(self, id=None, format='MP3', best_seeded=True):
         res = self.request('artist', id=id)
         torrentgroups = res['torrentgroup']
@@ -179,7 +183,7 @@ class WhatAPI:
             for mp in media_params:
                 page = 1
                 done = False
-                pattern = re.compile('torrents.php\?id=(\d+)&amp;torrentid=(\d+)')
+                pattern = re.compile('torrents.php\?id=(\d+)&amp;torrentid=(\d+)') # noqa
                 while not done:
                     content = self.session.get(url + mp + "&page={0}".format(page)).text
                     for groupid, torrentid in pattern.findall(content):
@@ -193,7 +197,7 @@ class WhatAPI:
             for mp in media_params:
                 page = 1
                 done = False
-                pattern = re.compile('torrents.php\?id=(\d+)&amp;torrentid=(\d+)')
+                pattern = re.compile('torrents.php\?id=(\d+)&amp;torrentid=(\d+)') # noqa
                 while not done:
                     content = self.session.get(url + mp + "&page={0}".format(page)).text
                     for groupid, torrentid in pattern.findall(content):
@@ -204,7 +208,7 @@ class WhatAPI:
 
         if mode == 'seeding' or mode == 'all':
             url = '{0}/better.php?method=snatch&filter=seeding'.format(self.endpoint)
-            pattern = re.compile('torrents.php\?id=(\d+)&amp;torrentid=(\d+)#torrent\d+')
+            pattern = re.compile('torrents.php\?id=(\d+)&amp;torrentid=(\d+)#torrent\d+') # noqa
             content = self.session.get(url).text
             for groupid, torrentid in pattern.findall(content):
                 if skip is None or torrentid not in skip:
@@ -290,13 +294,14 @@ class WhatAPI:
         return None
 
     def get_torrent_info(self, id):
-        #return self.request('torrent', id=id)#['torrent']
+        # return self.request('torrent', id=id)#['torrent']
         thing = self.request('torrent', id=id)
         return json.dumps(thing)
 
     def search_torrents(self, searchstr):
         thing = self.request('browse', searchstr=searchstr, page=1)
         return json.dumps(thing)
+
 
 def unescape(text):
     return html.unescape(text)

@@ -74,19 +74,39 @@ class Torrent(commands.Cog):
     async def sows(self, ctx, *, query):
         raw = primebot.sows.search_torrents(query)
         js = json.loads(raw)
-        print(type(js))
         torrents = []
         index = 0
         for result in js['results']:
-            torrents.append({'name': result['groupName'], 'id': result['groupId'], 'size': primebot.utils.convert_size(result['maxSize']), 'seeders': result['totalSeeders'], 'leechers': result['totalLeechers']})
+            torrents.append({'name': result['groupName'], 'id': result['groupId'], 'size': primebot.utils.convert_size(result['maxSize']), 'seeders': result['totalSeeders'], 'leechers': result['totalLeechers'], 'year': result['groupYear']})
             torrents[index]['link'] = "https://bemaniso.ws/torrents.php?id={}".format(str(torrents[index]['id']))
             index += 1
             if index >= 3:
                 break
         embed = discord.Embed(color=0x8B008B)
         for torrent in torrents:
-            desc = "**[sows]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['link'], torrent['seeders'], torrent['leechers'], torrent['size'])
+            desc = "**[Bemaniso]({})** | Seeds: {} | Leeches: {} | Size: {} | Year: {}".format(torrent['link'], torrent['seeders'], torrent['leechers'], torrent['size'], torrent['year'])
             embed.add_field(name=torrent['name'], value=desc, inline=False)
         await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def ops(self, ctx, *, query):
+        raw = primebot.ops.search_torrents(query)
+        js = json.loads(raw)
+        torrents = []
+        index = 0
+        for result in js['results']:
+            torrents.append({'name': result['groupName'], 'id': result['groupId'], 'size': primebot.utils.convert_size(result['maxSize']), 'seeders': result['totalSeeders'], 'leechers': result['totalLeechers']})
+            torrents[index]['link'] = "https://orpheus.network/torrents.php?id={}".format(str(torrents[index]['id']))
+            index += 1
+            if index >= 3:
+                break
+        embed = discord.Embed(color=0x0000FF)
+        for torrent in torrents:
+            desc = "**[Orpheus]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['link'], torrent['seeders'], torrent['leechers'], torrent['size'])
+            embed.add_field(name=torrent['name'], value=desc, inline=False)
+        await ctx.send(embed=embed)
+
+
 def setup(bot):
     bot.add_cog(Torrent(bot))
