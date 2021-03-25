@@ -21,6 +21,7 @@ class Torrent(commands.Cog):
             json = r.json()
             embed = discord.Embed(color=0xD63600)
             embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+            embed.set_thumbnail(url="https://1337x.to/images/logo.svg")
             if not json['torrents']:
                 embed = discord.Embed(description=":x: Query not found", color=0xFF0000)
                 await ctx.send(embed=embed)
@@ -58,6 +59,7 @@ class Torrent(commands.Cog):
             json = r.json()
             embed = discord.Embed(color=0x0083FF)
             embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+            embed.set_thumbnail(url="https://rargb.to/static/img/logo_dark_nodomain2_optimized.png")
             if not json['torrents']:
                 embed = discord.Embed(description=":x: Query not found", color=0xD63600)
                 await ctx.send(embed=embed)

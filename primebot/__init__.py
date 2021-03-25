@@ -12,7 +12,7 @@ class PrimeBot(commands.Bot):
         intents = discord.Intents.all()  # enable all intents
         super().__init__(command_prefix=self.get_prefix,
                          intents=intents,
-                         allowed_mentions=allowed_mentions
+                         allowed_mentions=allowed_mentions,
                          )
 
         self.add_check(self.check_blacklist)

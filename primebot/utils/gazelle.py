@@ -126,6 +126,7 @@ class WhatAPI:
                 raise RequestException
             return parsed['response']
         except ValueError:
+            self._login()
             raise RequestException
 
     def request_html(self, action, **kwargs):
