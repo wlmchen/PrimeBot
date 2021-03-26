@@ -11,3 +11,5 @@ pygit2
 pymongo
 PyYAML
 mechanicalsoup
+tld
+dnspython
