@@ -255,9 +255,9 @@ class Fun(commands.Cog):
             pass
         await ctx.send(data['owo'])
 
-    @commands.command()
+    @commands.group(name='who', invoke_without_command=True)
     @commands.max_concurrency(1, commands.BucketType.channel)  # only one per channel
-    async def who(self, ctx):
+    async def command_who(self, ctx):
         """Guess who someone is from their avatar"""
         user = random.choice(ctx.guild.members)
         accepted_strings = ["{}giveup".format(primebot.db.prefixes.find_one({"guild_id": ctx.message.guild.id})['prefix'])]
@@ -274,7 +274,16 @@ class Fun(commands.Cog):
                             check=lambda m: m.author.bot is False,
                         )
                         if (user.name.lower() in message.content.lower() or user.display_name.lower() in message.content.lower()):
-                            return await ctx.send(f"{message.author.mention} got it!")
+                            await ctx.send(f"{message.author.mention} got it!")
+                            if primebot.db.who_game.find_one({"user_id": message.author.id, "guild_id": message.guild.id}) is None:
+                                e = {"user_id": message.author.id, "name": message.author.name, "guild_id": message.guild.id, "points": 1}
+                                primebot.db.who_game.insert_one(e)
+                            else:
+                                query = {"guild_id": message.guild.id, "user_id": message.author.id}
+                                oldpoints = primebot.db.who_game.find_one({"user_id": message.author.id})['points']
+                                new = {"$set": {"points": oldpoints + 1}}
+                                primebot.db.who_game.update_one(query, new)
+                            return
                         if message.content in accepted_strings and message.author == ctx.message.author:
                             embed.add_field(name="Gave Up!", value=user.mention)
                             embed.set_footer(text=user)
@@ -283,6 +292,18 @@ class Fun(commands.Cog):
                         continue
         except (asyncio.TimeoutError, asyncio.CancelledError):
             return await ctx.send(f"Time's up! It was {user}")
+
+    @command_who.command(name='leaderboard', aliases=['l'])
+    async def command_who_leaderboard(self, ctx):
+        query = {'guild_id': ctx.guild.id}
+        scores = list(primebot.db.who_game.find(query))
+        if scores:
+            description = ''
+            for count, score in enumerate(scores, 1):
+                user = await self.bot.fetch_user(score['user_id'])
+                description = description + "{}. {} - {}".format(count, user.mention, score['points'])
+            embed = discord.Embed(title="Leaderboard", description=description, color=0x282828)
+            await ctx.send(embed=embed)
 
     @commands.command(hidden=True)
     async def neofetch(self, ctx):
