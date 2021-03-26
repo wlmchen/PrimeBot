@@ -29,18 +29,18 @@ class Events(commands.Cog):
     async def on_message(self, message):
         if message.author == self.bot.user:
             return
-        # amp reddit links
+        # amp google links
         matches = primebot.utils.parsers.extract_urls(message.content)
         if matches:
             urls = []
             for match in matches:
                 if primebot.utils.parsers.is_amp(match):
                     urls.append(primebot.utils.parsers.amp_to_normal(match))
-                if urls:
-                    embed = discord.Embed(title="Non AMP Links")
-                    for url in urls:
-                        embed.add_field(name="\u200b", value=url)
-                    await message.channel.send(embed=embed)
+            if urls:
+                embed = discord.Embed(title="Non AMP Links")
+                for url in urls:
+                    embed.add_field(name="\u200b", value=url, inline=False)
+                await message.channel.send(embed=embed)
         if 'happy birthday' in message.content.lower():
             await message.channel.send('Happy Birthday! 🎈🎉')
         if 'i want to die' in message.content.lower():
