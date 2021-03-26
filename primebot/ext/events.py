@@ -30,7 +30,8 @@ class Events(commands.Cog):
         if message.author == self.bot.user:
             return
         # amp reddit links
-        if (matches := primebot.utils.parsers.extract_urls(message.content)):
+        matches = primebot.utils.parsers.extract_urls(message.content)
+        if matches:
             urls = []
             for match in matches:
                 if primebot.utils.parsers.is_amp(match):
