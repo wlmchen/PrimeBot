@@ -299,9 +299,10 @@ class Fun(commands.Cog):
         scores = list(primebot.db.who_game.find(query))
         if scores:
             description = ''
-            for count, score in enumerate(scores, 1):
+            sorts = sorted(scores, key=lambda k: k['points'], reverse=True)
+            for count, score in enumerate(sorts, 1):
                 user = await self.bot.fetch_user(score['user_id'])
-                description = description + "{}. {} - {}".format(count, user.mention, score['points'])
+                description = description + "{}. {} - {}\n".format(count, user.mention, score['points'])
             embed = discord.Embed(title="Leaderboard", description=description, color=0x282828)
             await ctx.send(embed=embed)
             return
