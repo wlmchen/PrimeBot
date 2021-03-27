@@ -304,6 +304,8 @@ class Fun(commands.Cog):
                 description = description + "{}. {} - {}".format(count, user.mention, score['points'])
             embed = discord.Embed(title="Leaderboard", description=description, color=0x282828)
             await ctx.send(embed=embed)
+            return
+        await ctx.send("No points found")
 
     @commands.command(hidden=True)
     async def neofetch(self, ctx):
