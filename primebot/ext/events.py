@@ -41,6 +41,19 @@ class Events(commands.Cog):
                 for url in urls:
                     embed.add_field(name="\u200b", value=url, inline=False)
                 await message.channel.send(embed=embed)
+        # google redirects
+        matches = primebot.utils.parsers.extract_urls(message.content)
+        if matches:
+            url = []
+            for match in matches:
+                if primebot.utils.parsers.is_google_redirect(match):
+                    urls.append(primebot.utils.parsers.follow_google_redirect(match))
+            if urls:
+                embed = discord.Embed(title="Un-Googlified Links")
+                embed.set_footer(text="Or even better, use DuckDuckGo")
+                for url in urls:
+                    embed.add_field(name="\u200b", value=url, inline=False)
+                await message.channel.send(embed=embed)
         if 'happy birthday' in message.content.lower():
             await message.channel.send('Happy Birthday! 🎈🎉')
         if 'i want to die' in message.content.lower():
