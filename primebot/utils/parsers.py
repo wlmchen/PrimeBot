@@ -41,6 +41,7 @@ def amp_to_normal(url):
     else:
         return None
 
+
 def is_google_redirect(url):
     """
     Check if the given URL is a Google redirect (https://www.google.com/url?q=...)
@@ -52,8 +53,7 @@ def is_google_redirect(url):
     parsed = urlparse(url)
     tld = get_tld(parsed.hostname, as_object=True, fix_protocol=True, fail_silently=True)
 
-    if tld and tld.domain == 'google' \
-            and parsed.path.startswith('/url'):
+    if tld and tld.domain == 'google' and parsed.path.startswith('/url'):
         return True
     return False
 

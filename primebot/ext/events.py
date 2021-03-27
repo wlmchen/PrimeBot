@@ -44,7 +44,7 @@ class Events(commands.Cog):
         # google redirects
         matches = primebot.utils.parsers.extract_urls(message.content)
         if matches:
-            url = []
+            urls = []
             for match in matches:
                 if primebot.utils.parsers.is_google_redirect(match):
                     urls.append(primebot.utils.parsers.follow_google_redirect(match))
