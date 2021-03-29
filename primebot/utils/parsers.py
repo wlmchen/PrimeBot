@@ -74,3 +74,24 @@ def follow_google_redirect(url):
             return q[0]
         return q
     return None
+
+
+def is_yt(url):
+    e = urlparse(url)
+    tld = get_tld(e.hostname, as_object=True, fix_protocol=True, fail_silently=True)
+    if tld and tld.domain == 'youtube' and e.path.startswith('/watch'):
+        return True
+    if str(tld) == 'be' and tld.domain == 'youtu' and e.path != '':
+        return True
+    return False
+
+
+def yt_to_invidious(url):
+    e = urlparse(url)
+    params = parse_qs(e.query)
+    tld = get_tld(e.hostname, as_object=True, fix_protocol=True, fail_silently=True)
+    if tld and tld.domain == 'youtube' and e.path.startswith('/watch'):
+        return "https://invidious.snopyta.org/watch?v={}".format(params.get('v')[0])
+    if str(tld) == 'be' and tld.domain == 'youtu' and e.path != '':
+        return 'https://invidious.snopyta.org/watch?v={}'.format(e.path[1:])
+    return None

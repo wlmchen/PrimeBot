@@ -3,6 +3,11 @@ import primebot
 from discord.ext import commands
 
 
+async def log_on_message(self, message):
+    messageChannel = self.bot.get_channel(primebot.conf['log']['events_channel'])
+    await messageChannel.send('Message Author: {}\nMessage Content: ```{}```\nLocation: {} # {}\n\n'.format(message.author, message.content, message.guild.name, message.channel.name))
+
+
 class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -41,6 +46,7 @@ class Events(commands.Cog):
                 for url in urls:
                     embed.add_field(name="\u200b", value=url, inline=False)
                 await message.channel.send(embed=embed)
+                await log_on_message(self, message)
         # google redirects
         matches = primebot.utils.parsers.extract_urls(message.content)
         if matches:
@@ -54,6 +60,21 @@ class Events(commands.Cog):
                 for url in urls:
                     embed.add_field(name="\u200b", value=url, inline=False)
                 await message.channel.send(embed=embed)
+                await log_on_message(self, message)
+
+        # youtube to indivious
+        # matches = primebot.utils.parsers.extract_urls(message.content)
+        # if matches:
+        #     urls = []
+        #     for match in matches:
+        #         if primebot.utils.parsers.is_yt(match):
+        #             urls.append(primebot.utils.parsers.yt_to_invidious(match))
+        #     if urls:
+        #         embed = discord.Embed(title="Invidious Links")
+        #         for url in urls:
+        #             embed.add_field(name="\u200b", value=url, inline=False)
+        #         await message.channel.send(embed=embed)
+        #         await log_on_message(self, message)
         if 'happy birthday' in message.content.lower():
             await message.channel.send('Happy Birthday! 🎈🎉')
         if 'i want to die' in message.content.lower():
