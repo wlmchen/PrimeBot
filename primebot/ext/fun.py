@@ -260,7 +260,7 @@ class Fun(commands.Cog):
     async def command_who(self, ctx):
         """Guess who someone is from their avatar"""
         user = random.choice(ctx.guild.members)
-        accepted_strings = ["{}giveup".format(primebot.db.prefixes.find_one({"guild_id": ctx.message.guild.id})['prefix'])]
+        accepted_strings = ["{}giveup".format(primebot.db.prefixes.find_one({"guild_id": ctx.message.guild.id})['prefix']), "{}gu".format(primebot.db.prefixes.find_one({"guild_id": ctx.message.guild.id})['prefix'])]
         embed = discord.Embed().set_image(url=user.avatar_url_as(static_format="png", size=128))
         embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
         sent = await ctx.send(embed=embed)
