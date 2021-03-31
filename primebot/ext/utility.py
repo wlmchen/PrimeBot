@@ -1,4 +1,6 @@
 import discord
+import math # noqa
+import time
 import datetime
 import requests_cache
 
@@ -243,6 +245,15 @@ class Utility(commands.Cog):
         embed = discord.Embed(title="Translation", description=translated)
         embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
         embed.set_footer(text="{} => {}".format(sourcelanguage, targetlanguage))
+        await ctx.send(embed=embed)
+
+    @commands.command(aliases=['math'])
+    async def _math(self, ctx, *, m):
+        start = time.time()
+        result = m
+        end = time.time()
+        embed = discord.Embed(title="Math result", description=result)
+        embed.set_footer(text="Done in {}".format(end-start))
         await ctx.send(embed=embed)
 
     @commands.command()
