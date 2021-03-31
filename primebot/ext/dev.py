@@ -131,6 +131,14 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     @is_owner()
+    async def reply(self, ctx, *, a=None):
+        if a is None:
+            await ctx.reply('replied')
+        else:
+            await ctx.send(a)
+
+    @commands.command(hidden=True)
+    @is_owner()
     async def nickname(self, ctx, *name):
         nickname = ' '.join(name)
         me = ctx.me
