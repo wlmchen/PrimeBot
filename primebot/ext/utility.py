@@ -3,6 +3,7 @@ import math # noqa
 import time
 import datetime
 import requests_cache
+from pyparsing import ParseException
 
 from primebot.utils.scrapers import scrape_arch_wiki
 from primebot.utils.scrapers import scrape_pypi
@@ -250,7 +251,10 @@ class Utility(commands.Cog):
     @commands.command(aliases=['math'])
     async def _math(self, ctx, *, m):
         start = time.time()
-        result = m
+        try:
+            result = str(primebot.utils.parsers.NumericStringParser().eval(m))
+        except ParseException:
+            raise commands.CommandError("Invalid Expression")
         end = time.time()
         embed = discord.Embed(title="Math result", description=result)
         embed.set_footer(text="Done in {}".format(end-start))

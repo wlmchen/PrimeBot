@@ -50,6 +50,8 @@ class Error(commands.Cog):
 
         tb = "".join(traceback.format_exception(type(original_error), original_error, original_error.__traceback__))
 
+        if len(tb) > 1980:
+            tb = tb[:1980]
         await errorChannel.send("Traceback\n```{}\n```".format(tb))
 
         if str(error) is not None:
