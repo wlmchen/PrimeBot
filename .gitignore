@@ -4,3 +4,4 @@ __pycache__/
 requests_cache.sqlite
 .vscode/
 config.yml
+env/
