@@ -26,10 +26,12 @@ class Error(commands.Cog):
         original_error = error
         ignore_errors = (
             commands.CommandNotFound,
-            commands.NotOwner,
         )
 
         if isinstance(error, ignore_errors):
+            return
+        if isinstance(error, commands.NotOwner):
+            await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: This command can only be used by developers"))
             return
         if isinstance(error, commands.errors.MaxConcurrencyReached):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: " + str(error)))

@@ -1,5 +1,4 @@
 import discord
-from primebot.utils.checks import is_owner
 from discord.ext import commands
 import primebot
 import git
@@ -10,7 +9,7 @@ class Dev(commands.Cog):
         self.bot = bot
 
     @commands.command(hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def load(self, ctx, *, module: str):
         """Loads a module."""
         try:
@@ -22,7 +21,7 @@ class Dev(commands.Cog):
             await ctx.send('\N{OK HAND SIGN}')
 
     @commands.command(hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def unload(self, ctx, *, module: str):
         """Unloads a module."""
         try:
@@ -34,7 +33,7 @@ class Dev(commands.Cog):
             await ctx.send('\N{OK HAND SIGN}')
 
     @commands.command(name='reload', hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def _reload(self, ctx, *, module: str):
         """Reloads a module."""
         try:
@@ -47,12 +46,12 @@ class Dev(commands.Cog):
             await ctx.send('\N{OK HAND SIGN}')
 
     @commands.command(hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def admintest(self, ctx):
         await ctx.send('You are the owner of this bot')
 
     @commands.command(hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def dm(self, ctx, member, *, message: str):
         converter = discord.ext.commands.MemberConverter()
         user = await converter.convert(ctx, member)
@@ -66,7 +65,7 @@ class Dev(commands.Cog):
             await ctx.send("This user might be having DMs blocked or it's a bot account...")
 
     @commands.command(hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def check_cogs(self, ctx, cog_name):
         try:
             self.bot.load_extension(f"cogs.{cog_name}")
@@ -79,7 +78,7 @@ class Dev(commands.Cog):
             self.bot.unload_extension(f"cogs.{cog_name}")
 
     @commands.command(hidden=True, aliases=['game'])
-    @is_owner()
+    @commands.is_owner()
     async def changegame(self, ctx, gameType: str, *, gameName: str):
         gameType = gameType.lower()
         if gameType == 'playing':
@@ -96,7 +95,7 @@ class Dev(commands.Cog):
         await ctx.send(f'**:ok:** Changed the game to: {gameType} **{gameName}**')
 
     @commands.command(hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def changestatus(self, ctx, status: str):
         status = status.lower()
         if status == 'idle':
@@ -110,7 +109,7 @@ class Dev(commands.Cog):
         await ctx.send(f'**:ok:** Changed the status to: **{discordStatus}**')
 
     @commands.command(hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def leaveserver(self, ctx, guildid):
         if guildid == 'this':
             await ctx.guild.leave()
@@ -124,13 +123,13 @@ class Dev(commands.Cog):
         await ctx.send(':ok: I have left {} ({})'.format(guild.name, guild.id))
 
     @commands.command(pass_context=True, hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def echo(self, ctx, *, a):
         await ctx.send(a)
         await ctx.message.delete()
 
     @commands.command(hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def reply(self, ctx, *, a=None):
         if a is None:
             await ctx.reply('replied')
@@ -138,7 +137,7 @@ class Dev(commands.Cog):
             await ctx.send(a)
 
     @commands.command(hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def nickname(self, ctx, *name):
         nickname = ' '.join(name)
         me = ctx.me
@@ -150,21 +149,21 @@ class Dev(commands.Cog):
         await ctx.send(msg)
 
     @commands.command(hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def pull(self, ctx):
         g = git.cmd.Git('.')
         msg = g.pull()
         await ctx.send('```\n' + msg + '\n```')
 
     @commands.command(hidden=True, aliases=['reboot'])
-    @is_owner()
+    @commands.is_owner()
     async def restart(self, ctx):
         await ctx.send(":robot: Bot is restarting")
         await self.bot.closeman()
         await self.bot.login(primebot.conf['token'], bot=True)
 
     @commands.command(hidden=True)
-    @is_owner()
+    @commands.is_owner()
     async def serverlist(self, ctx):
         list = []
         for guild in self.bot.guilds:
