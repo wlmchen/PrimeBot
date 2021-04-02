@@ -260,6 +260,41 @@ class Utility(commands.Cog):
         embed.set_footer(text="Done in {}".format(end-start))
         await ctx.send(embed=embed)
 
+    @commands.command(aliases=['gh'])
+    async def github(self, ctx, *, repo):
+        """Get Information about a GitHub repository"""
+        json = requests.get('https://api.github.com/repos/{}'.format(repo)).json()
+        try:
+            if json['message'] == "Not Found":
+                raise commands.CommandError("Repo not found")
+        except KeyError:
+            pass
+        if json['description'] is None:
+            description = "No Description Provided"
+        else:
+            description = json['description']
+        if json['license'] is None:
+            license = "copyright"
+        else:
+            license = json['license']['name']
+        embed = discord.Embed(title=json['name'], description=description, url=json['html_url'])
+        embed.set_thumbnail(url=json['owner']['avatar_url'])
+        embed.add_field(name='Author', value=json['owner']['login'])
+        if license == "Other":
+            license_url = 'other'
+        else:
+            license_url = "https://choosealicense.com/licenses/{}".format(json['license']['spdx_id'])
+        embed.add_field(name="License", value="[{}]({})".format(license, license_url))
+        embed.set_footer(text="Repo created at: {}".format(json['created_at']))
+        if json['language'] is not None:
+            try:
+                emoji = primebot.conf['emojis'][json['language'].lower()]
+            except KeyError:
+                emoji = ''
+            embed.add_field(name="Language", value="{} {}".format(emoji, json['language']))
+
+        await ctx.send(embed=embed)
+
     @commands.command()
     async def distro(self, ctx, *, arg):
         if arg == "random":
