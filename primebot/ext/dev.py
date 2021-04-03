@@ -10,6 +10,16 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.is_owner()
+    async def login(self, ctx, service):
+        if service == 'sows':
+            primebot.sows._login()
+            await ctx.send("Logged in")
+        if service == "ops":
+            primebot.ops._login()
+            await ctx.send("Logged in")
+
+    @commands.command(hidden=True)
+    @commands.is_owner()
     async def load(self, ctx, *, module: str):
         """Loads a module."""
         try:
