@@ -257,7 +257,7 @@ class Utility(commands.Cog):
             raise commands.CommandError("Invalid Expression")
         end = time.time()
         embed = discord.Embed(title="Math result", description=result)
-        embed.set_footer(text="Done in {}".format(end-start))
+        embed.set_footer(text="Done in {}".format(end - start))
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['gh'])
