@@ -93,7 +93,7 @@ class Moderation(commands.Cog):
         if primebot.db.log_channels.find_one({'guild_id': ctx.guild.id}) is not None:
             embed = discord.Embed(description="Event: ban\nModerator: {}\nReason: {}\nUser: {}".format(ctx.author.mention, reason, user_obj.mention))
             await self.bot.get_channel(int(primebot.db.log_channels.find_one({'guild_id': ctx.guild.id})['channel_id'])).send(embed=embed)
-        await ctx.guild.ban(user_obj, reason=f"{ctx.author} ({ctx.author.id}) - {reason}")
+        await ctx.guild.ban(user_obj, reason=f"{ctx.author} ({ctx.author.id}) - {reason}", delete_message_days=0)
         await ctx.send(f'User {user_obj.mention} has been banned')
         # user = await discord.ext.commands.MemberConverter().convert(ctx, member)
         # await user.send(reason)
