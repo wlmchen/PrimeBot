@@ -59,7 +59,6 @@ class Moderation(commands.Cog):
             else:
                 await ctx.send("failed")
 
-
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member, *, reason=None):
@@ -69,7 +68,7 @@ class Moderation(commands.Cog):
             await ctx.send("You cannot kick yourself {}".format(ctx.message.author.mention))
             return
         if primebot.db.log_channels.find_one({'guild_id': ctx.guild.id}) is not None:
-            embed = discord.Embed(description="Event: kick\nModerator: {}\nReason: {}\nUser: {}".format(ctx.author.mention, reason, user_obj.mention))
+            embed = discord.Embed(description="Event: kick\nModerator: {}\nReason: {}\nUser: {}".format(ctx.author.mention, reason, member.mention))
             await self.bot.get_channel(int(primebot.db.log_channels.find_one({'guild_id': ctx.guild.id})['channel_id'])).send(embed=embed)
 
         await member.kick(reason='Kicked by: {}, Reason: {}'.format(ctx.message.author, reason))
