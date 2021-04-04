@@ -49,7 +49,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def log_channel(self, ctx, channel: int):
         guild_id = ctx.guild.id
-        if await self.bot.get_channel(channel) is None:
+        if self.bot.get_channel(channel) is None:
             raise commands.CommandError("Invalid Channel! ☹️")
         if primebot.db.log_channels.find_one({'guild_id': guild_id}) is None:
             new = {
@@ -105,6 +105,9 @@ class Moderation(commands.Cog):
             member = member[1:]
         if '#' not in member:
             user = await self.bot.fetch_user(member)
+            if primebot.db.log_channels.find_one({'guild_id': ctx.guild.id}) is not None:
+                embed = discord.Embed(description="Event: unban\nModerator: {}\nUser: {}".format(ctx.author.mention, user.mention))
+                await self.bot.get_channel(int(primebot.db.log_channels.find_one({'guild_id': ctx.guild.id})['channel_id'])).send(embed=embed)
             await ctx.guild.unban(user)
             await ctx.send(f'Unbanned {user.mention}')
             return
