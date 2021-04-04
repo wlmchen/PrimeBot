@@ -26,9 +26,9 @@ class Moderation(commands.Cog):
         Use {reason} as a placeholder
         """
         guild_id = ctx.guild.id
-        if msg is None and primebot.db.ban_messages.find_one({'guild_id': guild_id}) is None:
+        if msg is None and primebot.db.ban_messages.find_one({'guild_id': guild_id})['message'] is None:
             return await ctx.send("No message set")
-        else:
+        elif msg is None:
             await ctx.send(primebot.db.ban_messages.find_one({'guild_id': guild_id})['message'])
             return
         if primebot.db.ban_messages.find_one({'guild_id': guild_id}) is None:
