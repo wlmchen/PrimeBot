@@ -30,6 +30,7 @@ class Moderation(commands.Cog):
             return await ctx.send("No message set")
         else:
             await ctx.send(primebot.db.ban_messages.find_one({'guild_id': guild_id})['message'])
+            return
         if primebot.db.ban_messages.find_one({'guild_id': guild_id}) is None:
             new = {
                 "guild_id": guild_id,
