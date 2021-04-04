@@ -132,9 +132,7 @@ class NumericStringParser(object):
         """
         point = Literal(".")
         e = CaselessLiteral("E")
-        fnumber = Combine(Word("+-" + nums, nums) +
-                          Optional(point + Optional(Word(nums))) +
-                          Optional(e + Word("+-" + nums, nums)))
+        fnumber = Combine(Word("+-" + nums, nums) + Optional(point + Optional(Word(nums))) + Optional(e + Word("+-" + nums, nums)))
         ident = Word(alphas, alphas + nums + "_$")
         plus = Literal("+")
         minus = Literal("-")
@@ -147,10 +145,7 @@ class NumericStringParser(object):
         expop = Literal("^")
         pi = CaselessLiteral("PI")
         expr = Forward()
-        atom = ((Optional(oneOf("- +")) +
-                 (ident + lpar + expr + rpar | pi | e | fnumber).setParseAction(self.pushFirst))
-                | Optional(oneOf("- +")) + Group(lpar + expr + rpar)
-                ).setParseAction(self.pushUMinus)
+        atom = ((Optional(oneOf("- +")) + (ident + lpar + expr + rpar | pi | e | fnumber).setParseAction(self.pushFirst)) | Optional(oneOf("- +")) + Group(lpar + expr + rpar)).setParseAction(self.pushUMinus)
         # by defining exponentiation as "atom [ ^ factor ]..." instead of
         # "atom [ ^ atom ]...", we get right-to-left exponents, instead of left-to-right
         # that is, 2^3^2 = 2^(3^2), not (2^3)^2.

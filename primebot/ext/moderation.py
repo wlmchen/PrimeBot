@@ -20,12 +20,16 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(administrator=True)
-    async def ban_message(self, ctx, *, msg: str):
+    async def ban_message(self, ctx, *, msg: str = None):
         """
         Set the ban message of the server
         Use {reason} as a placeholder
         """
         guild_id = ctx.guild.id
+        if msg is None and primebot.db.ban_messages.find_one({'guild_id': guild_id}) is None:
+            return await ctx.send("No message set")
+        else:
+            await ctx.send(primebot.db.ban_messages.find_one({'guild_id': guild_id})['message'])
         if primebot.db.ban_messages.find_one({'guild_id': guild_id}) is None:
             new = {
                 "guild_id": guild_id,
