@@ -44,6 +44,8 @@ class Moderation(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def log_channel(self, ctx, channel: int):
         guild_id = ctx.guild.id
+        if await self.bot.get_channel(channel) is None:
+            raise commands.CommandError("Invalid Channel! ☹️")
         if primebot.db.log_channels.find_one({'guild_id': guild_id}) is None:
             new = {
                 "guild_id": guild_id,
