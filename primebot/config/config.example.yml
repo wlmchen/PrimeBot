@@ -1,12 +1,29 @@
 token: ''
+blacklist: [] # ints
 exts:
-  - admin
-  - utility
+  - list
+emojis:
+  discord: ''
+  python: ''
+  c: ''
+  c++: ''
+  javascript: ''
+  typescript: ''
+  rust: ''
 log:
-  error_channel: 
-  log_channel: 
+  error_channel:
+  guild_notifs:
+  log_channel:
 invite: ''
 api:
-  nasa_api_key: '' # https://api.nasa.gov/
+  nasa_api_key: ''
+  genius_api_key: ''
+pt_guild:
+sows:
+  username: ''
+  password: ''
+ops:
+  username: ''
+  password: ''
 prefix: ''
 mongo_db: ''

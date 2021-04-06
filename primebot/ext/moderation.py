@@ -89,7 +89,7 @@ class Moderation(commands.Cog):
             await ctx.send("You cannot ban yourself {}".format(ctx.message.author.mention))
             return
         if primebot.db.ban_messages.find_one({'guild_id': ctx.guild.id}) is not None:
-            await member.send(primebot.db.ban_messages.find_one({'guild_id': ctx.guild.id})['message'].format(reason=reason))
+            await user_obj.send(primebot.db.ban_messages.find_one({'guild_id': ctx.guild.id})['message'].format(reason=reason))
         if primebot.db.log_channels.find_one({'guild_id': ctx.guild.id}) is not None:
             embed = discord.Embed(description="Event: ban\nModerator: {}\nReason: {}\nUser: {}".format(ctx.author.mention, reason, user_obj.mention))
             await self.bot.get_channel(int(primebot.db.log_channels.find_one({'guild_id': ctx.guild.id})['channel_id'])).send(embed=embed)
