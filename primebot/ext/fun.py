@@ -17,7 +17,7 @@ class Fun(commands.Cog):
         self.xkcd_api_client = xkcd_wrapper.AsyncClient()
         self.bot = bot
 
-    @commands.command(aliases=['8ball'])
+    @commands.command(name="8ball")
     async def _8ball(self, ctx, *, question):
         """
         Ask an 8ball

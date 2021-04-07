@@ -248,7 +248,7 @@ class Utility(commands.Cog):
         embed.set_footer(text="{} => {}".format(sourcelanguage, targetlanguage))
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=['math'])
+    @commands.command(name="math")
     async def _math(self, ctx, *, m):
         start = time.time()
         try:
