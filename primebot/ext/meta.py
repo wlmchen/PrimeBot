@@ -36,7 +36,7 @@ class EmbeddedHelpCommand(commands.HelpCommand):
             return c.cog_name or "\u200bUncategorised"
 
         bot = self.context.bot
-        embed = discord.Embed(title=f"{bot.user.name} Help")
+        embed = discord.Embed(title=f"{bot.user.name} Help", color=discord.Color.blurple())
         description = (
             f"Use `{self.clean_prefix}help <command/category>` for more help\n\n"
         )
@@ -60,14 +60,14 @@ class EmbeddedHelpCommand(commands.HelpCommand):
         embed.description = description
 
     async def send_cog_help(self, cog):
-        embed = discord.Embed(title=f"{cog.qualified_name} Category")
+        embed = discord.Embed(title=f"{cog.qualified_name} Category", color=discord.Color.blurple())
         description = f'{cog.description or ""}\n\n'
         entries = await self.filter_commands(cog.get_commands(), sort=True)
         self.cog_group_common_fmt(embed, description, entries)
         await self.context.send(embed=embed)
 
     async def send_group_help(self, group):
-        embed = discord.Embed(title=self.get_command_signature(group))
+        embed = discord.Embed(title=self.get_command_signature(group), color=discord.Color.blurple())
         description = f'{group.help or "No description provided"}\n\n'
         entries = await self.filter_commands(group.commands, sort=True)
         self.cog_group_common_fmt(embed, description, entries)
@@ -76,7 +76,7 @@ class EmbeddedHelpCommand(commands.HelpCommand):
         await self.context.send(embed=embed)
 
     async def send_command_help(self, command):
-        embed = discord.Embed(title=self.get_command_signature(command))
+        embed = discord.Embed(title=self.get_command_signature(command), color=discord.Color.blurple())
         description = f'{command.help or "No description provided"}\n\n'
         embed.description = description
         await self.context.send(embed=embed)
@@ -94,7 +94,7 @@ class EmbeddedHelpCommand(commands.HelpCommand):
     async def send_error_message(self, error):
         if isinstance(error, list):
             suggestions = "\n- ".join(error)
-            embed = discord.Embed(title="Did you mean...")
+            embed = discord.Embed(title="Did you mean...", color=discord.Color.blurple())
             embed.description = f"- {suggestions}"
             return await self.context.send(embed=embed)
         elif isinstance(error, str):
