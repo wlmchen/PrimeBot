@@ -1,15 +1,43 @@
 import discord
+import subprocess
+import io
+import textwrap
+import traceback
+from contextlib import redirect_stdout
 from discord.ext import commands
 import primebot
 import git
+import asyncio
 
 
 class Dev(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self._last_result = None
+
+    async def cog_check(self, ctx):
+        return await self.bot.is_owner(ctx.author)
+
+    def cleanup_code(self, content):
+        """Automatically removes code blocks from the code."""
+        # remove ```py\n```
+        if content.startswith('```') and content.endswith('```'):
+            return '\n'.join(content.split('\n')[1:-1])
+
+        # remove `foo`
+        return content.strip('` \n')
+
+    async def run_process(self, command):
+        try:
+            process = await asyncio.create_subprocess_shell(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            result = await process.communicate()
+        except NotImplementedError:
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            result = await self.bot.loop.run_in_executor(None, process.communicate)
+
+        return [output.decode() for output in result]
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def login(self, ctx, service):
         if service == 'sows':
             primebot.sows._login()
@@ -19,7 +47,6 @@ class Dev(commands.Cog):
             await ctx.send("Logged in")
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def load(self, ctx, *, module: str):
         """Loads a module."""
         try:
@@ -31,7 +58,6 @@ class Dev(commands.Cog):
             await ctx.send('\N{OK HAND SIGN}')
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def unload(self, ctx, *, module: str):
         """Unloads a module."""
         try:
@@ -43,7 +69,6 @@ class Dev(commands.Cog):
             await ctx.send('\N{OK HAND SIGN}')
 
     @commands.command(name='reload', hidden=True)
-    @commands.is_owner()
     async def _reload(self, ctx, *, module: str):
         """Reloads a module."""
         try:
@@ -56,12 +81,70 @@ class Dev(commands.Cog):
             await ctx.send('\N{OK HAND SIGN}')
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def admintest(self, ctx):
         await ctx.send('You are the owner of this bot')
 
+    @commands.command(pass_context=True, hidden=True, name='eval')
+    async def _eval(self, ctx, *, body: str):
+        """Evaluates a code"""
+
+        env = {
+            'bot': self.bot,
+            'ctx': ctx,
+            'channel': ctx.channel,
+            'author': ctx.author,
+            'guild': ctx.guild,
+            'message': ctx.message,
+            '_': self._last_result
+        }
+
+        env.update(globals())
+
+        body = self.cleanup_code(body)
+        stdout = io.StringIO()
+
+        to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
+
+        try:
+            exec(to_compile, env)
+        except Exception as e:
+            return await ctx.send(f'```py\n{e.__class__.__name__}: {e}\n```')
+
+        func = env['func']
+        try:
+            with redirect_stdout(stdout):
+                ret = await func()
+        except Exception as e: # noqa
+            value = stdout.getvalue()
+            await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
+        else:
+            value = stdout.getvalue()
+            try:
+                await ctx.message.add_reaction('\u2705')
+            except Exception:
+                pass
+
+            if ret is None:
+                if value:
+                    await ctx.send(f'```py\n{value}\n```')
+            else:
+                self._last_result = ret
+                await ctx.send(f'```py\n{value}{ret}\n```')
+
+    @commands.command(hidden=True, aliases=['shell'])
+    async def sh(self, ctx, *, command):
+        """Runs a shell command."""
+        async with ctx.typing():
+            stdout, stderr = await self.run_process(command)
+
+        if stderr:
+            text = f'stdout:\n{stdout}\nstderr:\n{stderr}'
+        else:
+            text = stdout
+
+        await ctx.send(f"```\n{text}```")
+
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def dm(self, ctx, member, *, message: str):
         converter = discord.ext.commands.MemberConverter()
         user = await converter.convert(ctx, member)
@@ -75,7 +158,6 @@ class Dev(commands.Cog):
             await ctx.send("This user might be having DMs blocked or it's a bot account...")
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def check_cogs(self, ctx, cog_name):
         try:
             self.bot.load_extension(f"cogs.{cog_name}")
@@ -88,7 +170,6 @@ class Dev(commands.Cog):
             self.bot.unload_extension(f"cogs.{cog_name}")
 
     @commands.command(hidden=True, aliases=['game'])
-    @commands.is_owner()
     async def changegame(self, ctx, gameType: str, *, gameName: str):
         gameType = gameType.lower()
         if gameType == 'playing':
@@ -105,7 +186,6 @@ class Dev(commands.Cog):
         await ctx.send(f'**:ok:** Changed the game to: {gameType} **{gameName}**')
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def changestatus(self, ctx, status: str):
         status = status.lower()
         if status == 'idle':
@@ -119,7 +199,6 @@ class Dev(commands.Cog):
         await ctx.send(f'**:ok:** Changed the status to: **{discordStatus}**')
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def leaveserver(self, ctx, guildid):
         if guildid == 'this':
             await ctx.guild.leave()
@@ -133,13 +212,11 @@ class Dev(commands.Cog):
         await ctx.send(':ok: I have left {} ({})'.format(guild.name, guild.id))
 
     @commands.command(pass_context=True, hidden=True)
-    @commands.is_owner()
     async def echo(self, ctx, *, a):
         await ctx.send(a)
         await ctx.message.delete()
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def reply(self, ctx, *, a=None):
         if a is None:
             await ctx.reply('replied')
@@ -147,7 +224,6 @@ class Dev(commands.Cog):
             await ctx.send(a)
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def nickname(self, ctx, *name):
         nickname = ' '.join(name)
         me = ctx.me
@@ -159,21 +235,18 @@ class Dev(commands.Cog):
         await ctx.send(msg)
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def pull(self, ctx):
         g = git.cmd.Git('.')
         msg = g.pull()
         await ctx.send('```\n' + msg + '\n```')
 
     @commands.command(hidden=True, aliases=['reboot'])
-    @commands.is_owner()
     async def restart(self, ctx):
         await ctx.send(":robot: Bot is restarting")
         await self.bot.closeman()
         await self.bot.login(primebot.conf['token'], bot=True)
 
     @commands.command(hidden=True)
-    @commands.is_owner()
     async def serverlist(self, ctx):
         list = []
         for guild in self.bot.guilds:
