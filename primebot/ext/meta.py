@@ -1,4 +1,5 @@
 import discord
+from difflib import get_close_matches
 import asyncio
 import primebot
 import itertools
@@ -11,15 +12,114 @@ import time
 import psutil
 
 
+class EmbeddedHelpCommand(commands.HelpCommand):
+    def __init__(self):
+        super().__init__(
+            command_attrs={"help": "Shows help for the bot, a category, or a command."}
+        )
+        self.subcommand_not_found = self.command_not_found
+
+    def get_command_signature(self, command):
+        parent = command.full_parent_name
+        if len(command.aliases) > 0:
+            aliases = "|".join(command.aliases)
+            fmt = f"{command.name}|{aliases}"
+            if parent:
+                fmt = f"{parent} {fmt}"
+            alias = fmt
+        else:
+            alias = command.name if not parent else f"{parent} {command.name}"
+        return f"{self.clean_prefix}{alias} {command.signature}"
+
+    async def send_bot_help(self, mapping):
+        def key(c):
+            return c.cog_name or "\u200bUncategorised"
+
+        bot = self.context.bot
+        embed = discord.Embed(title=f"{bot.user.name} Help")
+        description = (
+            f"Use `{self.clean_prefix}help <command/category>` for more help\n\n"
+        )
+        entries = await self.filter_commands(bot.commands, sort=True, key=key)
+        for cog, cmds in itertools.groupby(entries, key=key):
+            cmds = sorted(cmds, key=lambda c: c.name)
+            description += f'**{cog}**\n{" • ".join([c.name for c in cmds])}\n'
+        embed.description = description
+        await self.context.send(embed=embed)
+
+    @staticmethod
+    def cog_group_common_fmt(embed, description, entries):
+        description += "\n".join(
+            [
+                f'{"⇶" if isinstance(c, commands.Group) else "-"} **{c.name}** -'
+                f' {c.short_doc or "No description"}'
+                for c in entries
+            ]
+        )
+        embed.set_footer(text="⇶ indicates subcommands")
+        embed.description = description
+
+    async def send_cog_help(self, cog):
+        embed = discord.Embed(title=f"{cog.qualified_name} Category")
+        description = f'{cog.description or ""}\n\n'
+        entries = await self.filter_commands(cog.get_commands(), sort=True)
+        self.cog_group_common_fmt(embed, description, entries)
+        await self.context.send(embed=embed)
+
+    async def send_group_help(self, group):
+        embed = discord.Embed(title=self.get_command_signature(group))
+        description = f'{group.help or "No description provided"}\n\n'
+        entries = await self.filter_commands(group.commands, sort=True)
+        self.cog_group_common_fmt(embed, description, entries)
+        footer = embed.footer.text
+        embed.set_footer(text=footer)
+        await self.context.send(embed=embed)
+
+    async def send_command_help(self, command):
+        embed = discord.Embed(title=self.get_command_signature(command))
+        description = f'{command.help or "No description provided"}\n\n'
+        embed.description = description
+        await self.context.send(embed=embed)
+
+    def command_not_found(self, *args):
+        invalid_input_string = " ".join(map(str, args))
+        offered_commands = (
+            cmd.qualified_name for cmd in self.context.bot.walk_commands()
+        )
+        return (
+            get_close_matches(invalid_input_string, offered_commands)
+            or invalid_input_string
+        )
+
+    async def send_error_message(self, error):
+        if isinstance(error, list):
+            suggestions = "\n- ".join(error)
+            embed = discord.Embed(title="Did you mean...")
+            embed.description = f"- {suggestions}"
+            return await self.context.send(embed=embed)
+        elif isinstance(error, str):
+            return await self.context.send(
+                f"No command named '{error}', and no similarly named commands found"
+            )
+        else:
+            await super().send_error_message(error)
+
+
 class Meta(commands.Cog):
     """
     Commands that show information about the bot
     """
 
     def __init__(self, bot):
+        self._original_help_command = bot.help_command
+        bot.help_command = EmbeddedHelpCommand()
+        bot.help_command.cog = self
         self.bot = bot
         self.start_time = datetime.datetime.fromtimestamp(time.time())
         self.system_embed = self.create_system_embed()
+
+    def cog_unload(self):
+        self.bot.help_command = self._original_help_command
 
 #     @commands.command()
 #     async def help(self, ctx):
