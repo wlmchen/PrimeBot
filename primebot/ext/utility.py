@@ -5,6 +5,8 @@ import datetime
 import requests_cache
 from pyparsing import ParseException
 
+from primebot.utils.paginator import Menu
+
 from primebot.utils.scrapers import scrape_arch_wiki
 from primebot.utils.scrapers import scrape_pypi
 from primebot.utils.scrapers import scrape_arch
@@ -169,6 +171,30 @@ class Utility(commands.Cog):
         react_message = await ctx.send(embed=embed)
         for reaction in reactions[:len(options)]:
             await react_message.add_reaction(reaction)
+
+    @commands.command()
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def country(self, ctx, *, country):
+        json = requests.get("https://restcountries.eu/rest/v2/name/{}".format(country)).json()
+        embeds = []
+        for country in json:
+            embed = discord.Embed(title=country['name'], color=discord.Color.blurple())
+            embed.set_thumbnail(url="https://www.countryflags.io/{}/flat/64.png".format(country['alpha2Code']))
+            embed.add_field(name="Population", value=country['population'])
+            embed.add_field(name="Capital", value=country['capital'])
+            embed.add_field(name="Currency", value=f"{country['currencies'][0]['name']} ({country['currencies'][0]['symbol']})")
+            embed.add_field(name="Located in", value=country['subregion'])
+            embed.add_field(name="Demonym", value=country['demonym'])
+            embed.add_field(name="Native Name", value=country['nativeName'])
+            embed.add_field(name="Area", value="{:,} km\u00b2 ({:,} mi\u00b2)".format(country['area'], country['area'] * 0.62137))
+            embed.set_author(name="Country Information - {}".format(country['name']))
+            embed.timestamp = ctx.message.created_at
+
+            embeds.append(embed)
+
+        pages = primebot.utils.paginator.EmbedsSource(embeds)
+        menu = Menu(pages)
+        await menu.start(ctx)
 
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
