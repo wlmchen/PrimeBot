@@ -1,6 +1,5 @@
 import discord
 from async_timeout import timeout
-from primebot.utils.scrapers import scrape_song_lyrics
 import asyncio
 import primebot
 import requests
@@ -118,82 +117,21 @@ class Fun(commands.Cog):
         if not data["list"]:
             await ctx.send("Word not Found!")
             return
-
-        definition = data["list"][0]["definition"]
-        arg = data["list"][0]["word"]
-        title = "Urban Dictionary: " + arg
-        url = data["list"][0]["permalink"]
-        votes = "👍" + str(data["list"][0]["thumbs_up"]) + "👎" + str(data['list'][0]['thumbs_down'])
-        if len(definition) > 2000:
-            definition = definition[0:2000]
-            title = title + " (Truncated)"
-        embed = discord.Embed(title=title, description=definition, url=url)
-        embed.set_footer(text=votes)
-
-        await ctx.send(embed=embed)
-
-    @commands.command()
-    @commands.cooldown(1, 3, commands.BucketType.user)
-    async def lyrics(self, ctx, *query):
-        """Get song lyrics"""
-        raw = requests.get("https://api.genius.com/search?q={}&access_token={}".format(query, primebot.conf['genius_api_key']))
-        raw = raw.json()
-        titles = []
-        i = 0
-        j = 1
-        s = ""
-        reactions = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣']
-        if not raw['response']['hits']:
-            raise commands.CommandError("Song not Found")
-        try:
-            if raw['error'] == "invalid_token":
-                raise commands.CommandError("Invalid Genius API Key")
-        except KeyError:
-            pass
-        while i < 9:
-            titles.append(raw['response']['hits'][i]['result']['full_title'])
-            i += 1
-        for title in titles:
-            s += str(j) + " " + title + "\n"
-            j += 1
-        react_message = await ctx.send(s)
-        for reaction in reactions[:len(titles)]:
-            await react_message.add_reaction(reaction)
-
-        # iterate over reactions
-        try:
-            def check(rctn, user):
-                return user.id == ctx.author.id and str(rctn) in reactions
-
-            rctn, user = await self.bot.wait_for("reaction_add", check=check, timeout=30)
-
-            cache_msg = discord.utils.get(self.bot.cached_messages, id=react_message.id)
-            for reaction in cache_msg.reactions:
-                users = await reaction.users().flatten()
-                for user in users:
-                    if user == ctx.message.author:
-                        selected_music = str(reaction)
-        except asyncio.TimeoutError:
-            pass
-
-        # replace emoji with int
-        reaction = str(selected_music)
-        reaction = reaction.replace('1⃣', '1')
-        reaction = reaction.replace('2⃣', '2')
-        reaction = reaction.replace('3⃣', '3')
-        reaction = reaction.replace('4⃣', '4')
-        reaction = reaction.replace('5⃣', '5')
-        reaction = reaction.replace('6⃣', '6')
-        reaction = reaction.replace('7⃣', '7')
-        reaction = reaction.replace('8⃣', '8')
-        reaction = reaction.replace('9⃣', '9')
-
-        lyric_url = raw['response']['hits'][int(str(reaction))]['result']['url']
-        song_title = raw['response']['hits'][int(str(reaction))]['result']['full_title']
-
-        lyrics = scrape_song_lyrics(lyric_url)
-        emb = discord.Embed(title=f"{song_title}", description=f"{lyrics}", color=0xa3a3ff, url=lyric_url)
-        await ctx.send(embed=emb)
+        embeds = []
+        for word in data['list']:
+            definition = word["definition"]
+            arg = word["word"]
+            title = "Urban Dictionary: " + arg
+            url = word["permalink"]
+            votes = "👍 " + str(word["thumbs_up"]) + "👎 " + str(word['thumbs_down'])
+            definition = definition[0:2048]
+            embed = discord.Embed(title=title, description=definition, url=url, color=discord.Color.blurple())
+            embed.add_field(name="Example", value=word['example'][:1024], inline=False)
+            embed.set_footer(text=votes)
+            embeds.append(embed)
+        pages = primebot.utils.paginator.EmbedsSource(embeds)
+        menu = primebot.utils.paginator.Menu(pages)
+        await menu.start(ctx)
 
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)  # cooldown because of rate limiting
