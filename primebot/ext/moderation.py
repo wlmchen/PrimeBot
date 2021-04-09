@@ -47,18 +47,27 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(administrator=True)
-    async def log_channel(self, ctx, channel: int):
+    async def log_channel(self, ctx, channel: Union[discord.TextChannel, int]):
         guild_id = ctx.guild.id
-        if self.bot.get_channel(channel) is None:
+        if type(channel) == int and self.bot.get_channel(channel) is None:
             raise commands.CommandError("Invalid Channel! ☹️")
         if primebot.db.log_channels.find_one({'guild_id': guild_id}) is None:
-            new = {
-                "guild_id": guild_id,
-                "channel_id": channel
-            }
+            if type(channel) == int:
+                new = {
+                    "guild_id": guild_id,
+                    "channel_id": channel
+                }
+            else:
+                new = {
+                    "guild_id": guild_id,
+                    "channel_id": channel.id
+                }
             primebot.db.log_channels.insert_one(new)
         else:
-            result = primebot.db.log_channels.update_one({'guild_id': guild_id}, {"$set": {'channel_id': channel}})
+            if type(channel) == int:
+                result = primebot.db.log_channels.update_one({'guild_id': guild_id}, {"$set": {'channel_id': channel}})
+            else:
+                result = primebot.db.log_channels.update_one({'guild_id': guild_id}, {"$set": {'channel_id': channel.id}})
             if result.matched_count > 0:
                 await ctx.send("log channel changed to to {}".format(channel))
             else:
