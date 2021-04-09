@@ -1,16 +1,15 @@
 from __future__ import division
-from urllib.parse import urlparse, parse_qs
 from pyparsing import (Literal, CaselessLiteral, Word, Combine, Group, Optional, ZeroOrMore, Forward, nums, alphas, oneOf)
 import math
 import operator
+
+from urllib.parse import urlparse, parse_qs
 import requests
 import re
 from tld import get_tld
 
-
 def cmp(a, b):
     return (a > b) - (a < b)
-
 
 URL_REGEX = r"""(?i)\b((?:https?:(?:/{1,3}|[a-z0-9%])|[a-z0-9.\-]+[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)/)(?:[^\s()<>{}\[\]]+|\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\))+(?:\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’])|(?:(?<!@)[a-z0-9]+(?:[.\-][a-z0-9]+)*[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)\b/?(?!@)))"""
 
@@ -132,7 +131,9 @@ class NumericStringParser(object):
         """
         point = Literal(".")
         e = CaselessLiteral("E")
-        fnumber = Combine(Word("+-" + nums, nums) + Optional(point + Optional(Word(nums))) + Optional(e + Word("+-" + nums, nums)))
+        fnumber = Combine(Word("+-" + nums, nums) +
+                          Optional(point + Optional(Word(nums))) +
+                          Optional(e + Word("+-" + nums, nums)))
         ident = Word(alphas, alphas + nums + "_$")
         plus = Literal("+")
         minus = Literal("-")
@@ -145,7 +146,10 @@ class NumericStringParser(object):
         expop = Literal("^")
         pi = CaselessLiteral("PI")
         expr = Forward()
-        atom = ((Optional(oneOf("- +")) + (ident + lpar + expr + rpar | pi | e | fnumber).setParseAction(self.pushFirst)) | Optional(oneOf("- +")) + Group(lpar + expr + rpar)).setParseAction(self.pushUMinus)
+        atom = ((Optional(oneOf("- +")) +
+                 (ident + lpar + expr + rpar | pi | e | fnumber).setParseAction(self.pushFirst))
+                | Optional(oneOf("- +")) + Group(lpar + expr + rpar)
+                ).setParseAction(self.pushUMinus)
         # by defining exponentiation as "atom [ ^ factor ]..." instead of
         # "atom [ ^ atom ]...", we get right-to-left exponents, instead of left-to-right
         # that is, 2^3^2 = 2^(3^2), not (2^3)^2.
@@ -197,5 +201,6 @@ class NumericStringParser(object):
 
     def eval(self, num_string, parseAll=True):
         self.exprStack = []
+        results = self.bnf.parseString(num_string, parseAll)
         val = self.evaluateStack(self.exprStack[:])
         return val
