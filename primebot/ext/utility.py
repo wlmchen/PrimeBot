@@ -176,6 +176,11 @@ class Utility(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def country(self, ctx, *, country):
         json = requests.get("https://restcountries.eu/rest/v2/name/{}".format(country)).json()
+        try:
+            if json['status'] == 404:
+                raise commands.CommandError(json['message'])
+        except TypeError:
+            pass
         embeds = []
         for country in json:
             embed = discord.Embed(title=country['name'], color=discord.Color.blurple())
@@ -186,7 +191,8 @@ class Utility(commands.Cog):
             embed.add_field(name="Located in", value=country['subregion'])
             embed.add_field(name="Demonym", value=country['demonym'])
             embed.add_field(name="Native Name", value=country['nativeName'])
-            embed.add_field(name="Area", value="{:,} km\u00b2 ({:,} mi\u00b2)".format(country['area'], country['area'] * 0.62137))
+            if country['area'] is not None:
+                embed.add_field(name="Area", value="{:,} km\u00b2 ({:,} mi\u00b2)".format(country['area'], country['area'] * 0.62137))
             embed.set_author(name="Country Information - {}".format(country['name']))
             embed.timestamp = ctx.message.created_at
 
