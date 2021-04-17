@@ -38,7 +38,7 @@ class Tags(commands.Cog):
         await ctx.send("Tag Created")
 
     @commands.has_permissions(administrator=True)
-    @command_tag.command(name='delete', aliases=['remove'])
+    @command_tag.command(name='delete', aliases=['remove', 'del'])
     async def command_tag_delete(self, ctx, name):
         if primebot.db.tags.find_one({'guild_id': ctx.guild.id, 'name': name}) is None:
             return await ctx.send("Tag not found")

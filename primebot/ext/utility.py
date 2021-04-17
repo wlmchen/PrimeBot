@@ -1,4 +1,6 @@
 import discord
+import unicodedata
+import asyncio
 import math # noqa
 import time
 import datetime
@@ -7,7 +9,6 @@ from pyparsing import ParseException
 
 from primebot.utils.paginator import Menu
 
-from primebot.utils.scrapers import scrape_arch_wiki
 from primebot.utils.scrapers import scrape_pypi
 from primebot.utils.scrapers import scrape_arch
 from primebot.utils.scrapers import scrape_crates
@@ -217,7 +218,76 @@ class Utility(commands.Cog):
 
     @commands.command(aliases=['aw'])
     async def archwiki(self, ctx, *, query):
-        description = scrape_arch_wiki(query)
+
+        url = "https://wiki.archlinux.org/index.php?search={}".format(query)
+
+        html = requests.get(url)
+        redirected = False
+        for e in html.history:
+            if e.status_code == 302:
+                redirected = True
+        html_string = html.content
+        if redirected is not True:
+            links = []
+            titles = []
+            description = ''
+            reactions = []
+            i = 1
+            a = 0
+            e = BeautifulSoup(html.text, 'html.parser')
+
+            def check(reaction, user):
+                return user == ctx.message.author
+
+            for result in e.find_all('li', class_="mw-search-result"):
+                links.append('https://wiki.archlinux.org' + result.find('a')['href'])
+                titles.append(result.find('a')['title'])
+            # max of 9 results
+            links = links[:9]
+
+            for link,title in zip(links, titles):
+                description += str(i) + '. ' + '[{}]({})'.format(title, link) + '\n'
+                i += 1
+            embed = discord.Embed(title="Results: " + query, description=description, color=0x1793d1)
+            message = await ctx.send(embed=embed)
+            emojis = ["{}\N{COMBINING ENCLOSING KEYCAP}".format(num) for num in range(len(links)+1)][1:]
+            for reaction in emojis:
+                await message.add_reaction(reaction)
+            try:
+                reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check)
+            except asyncio.TimeoutError:
+                message.clear_reactions()
+                return
+            reaction = str(reaction)
+            reaction = reaction.replace('1⃣', '1')
+            reaction = reaction.replace('2⃣', '2')
+            reaction = reaction.replace('3⃣', '3')
+            reaction = reaction.replace('4⃣', '4')
+            reaction = reaction.replace('5⃣', '5')
+            reaction = reaction.replace('6⃣', '6')
+            reaction = reaction.replace('7⃣', '7')
+            reaction = reaction.replace('8⃣', '8')
+            reaction = reaction.replace('9⃣', '9')
+            reaction = int(reaction)
+            urlo = links[reaction-1]
+            title = titles[reaction-1]
+        if 'urlo' in locals():
+            html_string = requests.get(urlo).text
+        else:
+            html_string = html_string.decode('utf-8')
+        try:
+            test1 = html_string[html_string.index("</ul></div>"):html_string.index("Contents")]
+        except ValueError:
+            raise commands.CommandError("Page not found!")
+            return
+        soup = BeautifulSoup(test1, "html.parser")
+        description = "".join(soup.strings)
+        if 'urlo' in locals():
+            embedAw = discord.Embed(title="Arch Wiki: " + title, description=description, url=url, color=0x1793d1)
+            await message.clear_reactions()
+            await message.edit(embed=embedAw)
+            return
+
         url = "https://wiki.archlinux.org/index.php?search={}".format(query)
         embedAw = discord.Embed(title="Arch Wiki: " + query, description=description, url=url, color=0x1793d1)
         await ctx.send(embed=embedAw)
