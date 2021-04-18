@@ -323,7 +323,7 @@ class Utility(commands.Cog):
             url = "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY + "&date=" + date
             r = await self.bot.cached_session.get(url)
 
-        json_file = r.json()
+        json_file = await r.json()
         if 'code' in json_file:
             await ctx.send(json_file['msg'])
             return
