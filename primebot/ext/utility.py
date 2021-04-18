@@ -261,7 +261,7 @@ class Utility(commands.Cog):
             try:
                 reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check)
             except asyncio.TimeoutError:
-                message.clear_reactions()
+                await message.clear_reactions()
                 return
             reaction = str(reaction)
             reaction = reaction.replace('1⃣', '1')
