@@ -13,6 +13,23 @@ class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
+
+    async def amp_to_normal(self, url):
+        """
+        Check if the given URL is an AMP url. If it is, send a request to find the normal URL
+        :param url: The URL to check
+        :type url: string
+        :returns: Returns the non-AMP version of the given URL if it's an AMP URL. Otherwise, it returns None
+        :rtype: str or None
+        """
+        if primebot.utils.parsers.is_amp(url):
+            r = await self.bot.cached_session.get(url)
+            return r.url
+        else:
+            return None
+
+
     @commands.Cog.listener()
     async def on_ready(self):
         print('Logged in as ---->', self.bot.user, 'ID:', self.bot.user.id)
@@ -41,7 +58,7 @@ class Events(commands.Cog):
             urls = []
             for match in matches:
                 if primebot.utils.parsers.is_amp(match):
-                    urls.append(primebot.utils.parsers.amp_to_normal(match))
+                    urls.append(await self.amp_to_normal(match))
             if urls:
                 embed = discord.Embed(title="Non AMP Links")
                 for url in urls:

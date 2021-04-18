@@ -5,11 +5,10 @@ import time
 import datetime
 from pyparsing import ParseException
 
+from primebot.utils.math import convert_size
+
 from primebot.utils.paginator import Menu
 
-from primebot.utils.scrapers import scrape_pypi
-from primebot.utils.scrapers import scrape_arch
-from primebot.utils.scrapers import scrape_crates
 from primebot.utils.formatters import list_to_bullets
 
 from typing import Union
@@ -24,6 +23,70 @@ class Utility(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    async def scrape_pypi(self, query):  # i know this is messy but who cares
+        url = "https://pypi.org/pypi/{}/json".format(query)
+        page = await self.bot.session.get(url)
+        if page.status == 404:
+            raise commands.CommandError("Package not found")
+        json = await page.json()
+        author = json['info']['author']
+        homepage = json['info']['home_page']
+        license = json['info']['license']
+        description = json['info']['summary']
+        url = json['info']['package_url']
+        name = json['info']['name'] + ' ' + json['info']['version']
+
+        return homepage, author, license, description, url, name
+
+    async def scrape_crates(self, crate):
+        url = "https://crates.io/api/v1/crates/{}".format(crate)
+        raw = await self.bot.cached_session.get(url)
+        if raw.status == 404:
+            raise commands.CommandError("Crate not found")
+        json = await raw.json()
+        crate = json['crate']
+        name = crate['name']
+        description = crate['description']
+        version = crate['max_version']
+        repo = crate['repository']
+        docs = crate['documentation']
+        downloads = crate['downloads']
+        created_at = crate['created_at']
+        owners = []
+        owner_json = await self.bot.cached_session.get("https://crates.io{}".format(crate['links']['owners']))
+        owner_json = await owner_json.json()
+        owner_json = owner_json['users']
+        for owner in owner_json:
+            owners.append('[{}]({})'.format(owner['name'], owner['url']))
+        return name, description, version, repo, docs, downloads, created_at, owners
+
+    async def scrape_arch(self, package):
+        url = "https://archlinux.org/packages/search/json/?name={}".format(package)
+        raw = await self.bot.cached_session.get(url)
+        json = await raw.json()
+        pkg = json['results'][0]
+
+        name = pkg['pkgname']
+        description = pkg['pkgdesc']
+        url = pkg['url']
+        repo = pkg['repo']
+        version = pkg['pkgver']
+        pkgrel = pkg['pkgrel']
+        arch = pkg['arch']
+        pkg_size = convert_size(pkg['compressed_size'])
+        installed_size = convert_size(pkg['installed_size'])
+        licenses = pkg['licenses']
+        build_date = pkg['build_date']
+        maintainer = pkg['maintainers'][0]
+        packager = pkg['packager']
+
+        provides = pkg['provides']
+        conflicts = pkg['conflicts']
+        replaces = pkg['replaces']
+        depends = pkg['depends']
+        optdepends = pkg['optdepends']
+        return name, description, url, repo, version, pkgrel, arch, pkg_size, installed_size, licenses, build_date, maintainer, packager, provides, conflicts, replaces, depends, optdepends
 
     @staticmethod
     def _getRoles(roles):
@@ -104,7 +167,7 @@ class Utility(commands.Cog):
         """
         Search PyPI for a python package
         """
-        homepage, author, license, description, url, name = scrape_pypi(query)
+        homepage, author, license, description, url, name = await self.scrape_pypi(query)
         embed = discord.Embed(title=name, url=url, description=description)
         embed.add_field(name="Author", value=author)
         embed.add_field(name="License", value=license)
@@ -116,7 +179,7 @@ class Utility(commands.Cog):
     @commands.command()
     async def crate(self, ctx, *, query):
         """Search crates.io for a crate"""
-        name, desc, version, repo, docs, downloads, created_at, owners = scrape_crates(query)
+        name, desc, version, repo, docs, downloads, created_at, owners = await self.scrape_crates(query)
         url = "https://crates.io/crates/{}".format(name)
         title = name + ' ' + version
         embed = discord.Embed(title=title, url=url, description=desc)
@@ -132,7 +195,7 @@ class Utility(commands.Cog):
     async def arch(self, ctx, *, query):
         """Search the Arch Linux Repository"""
         try:
-            name, description, url, repo, version, pkgrel, arch, pkg_size, installed_size, licenses, build_date, maintainer, packager, provides, conflicts, replaces, depends, optdepends = scrape_arch(query)
+            name, description, url, repo, version, pkgrel, arch, pkg_size, installed_size, licenses, build_date, maintainer, packager, provides, conflicts, replaces, depends, optdepends = await self.scrape_arch(query)
         except IndexError:
             raise commands.CommandError("Package not Found")
         name1 = "{} {}-{} ({})".format(name, version, pkgrel, arch)

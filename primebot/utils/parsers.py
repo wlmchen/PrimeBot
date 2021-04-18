@@ -36,19 +36,6 @@ def is_amp(url):
     return False
 
 
-def amp_to_normal(url):
-    """
-    Check if the given URL is an AMP url. If it is, send a request to find the normal URL
-    :param url: The URL to check
-    :type url: string
-    :returns: Returns the non-AMP version of the given URL if it's an AMP URL. Otherwise, it returns None
-    :rtype: str or None
-    """
-    if is_amp(url):
-        r = primebot.cached_session.get(url)
-        return r.url
-    else:
-        return None
 
 
 def is_google_redirect(url):
