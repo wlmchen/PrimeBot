@@ -3,6 +3,8 @@ from pyparsing import (Literal, CaselessLiteral, Word, Combine, Group, Optional,
 import math
 import operator
 
+import primebot
+
 from urllib.parse import urlparse, parse_qs
 import re
 from tld import get_tld
@@ -43,7 +45,7 @@ def amp_to_normal(url):
     :rtype: str or None
     """
     if is_amp(url):
-        r = self.cached_session.get(url)
+        r = primebot.cached_session.get(url)
         return r.url
     else:
         return None
