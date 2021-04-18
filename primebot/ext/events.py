@@ -9,6 +9,7 @@ async def log_on_message(self, message):
 
 
 class Events(commands.Cog):
+    """Handle various bot events"""
     def __init__(self, bot):
         self.bot = bot
 

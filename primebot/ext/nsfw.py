@@ -6,6 +6,7 @@ from discord.ext import commands
 
 
 class Nsfw(commands.Cog):
+    """NSFW commands 🔞"""
     def __init__(self, bot):
         self.bot = bot
 
@@ -35,13 +36,6 @@ class Nsfw(commands.Cog):
         url = data['url']
         embed = discord.Embed(title="Neko")
         embed.set_image(url=url)
-        await ctx.send(embed=embed)
-
-    @commands.command(hidden=True)
-    @commands.is_nsfw()
-    async def sex(self, ctx, user):
-        user = await discord.ext.commands.MemberConverter().convert(ctx, user)
-        embed = discord.Embed(description="{} did the big sex with {}!".format(ctx.message.author.mention, user.mention))
         await ctx.send(embed=embed)
 
 

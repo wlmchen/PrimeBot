@@ -6,12 +6,13 @@ import primebot
 
 
 class Tags(commands.Cog):
-
+    """tags"""
     def __init__(self, bot):
         self.bot = bot
 
     @commands.group(name='tag', invoke_without_command=True)
     async def command_tag(self, ctx, tag=None):
+        """Get tag content"""
         if tag is None:
             await ctx.send_help('tag')
             return
@@ -23,6 +24,7 @@ class Tags(commands.Cog):
 
     @command_tag.command(name='new')
     async def command_tag_new(self, ctx, name, *, content):
+        """Create a new tag"""
         if primebot.db.tags.find_one({'guild_id': ctx.guild.id, 'name': name}) is not None:
             return await ctx.send("Tag already exists")
         if len(content) >= 2048:
@@ -40,6 +42,7 @@ class Tags(commands.Cog):
     @commands.has_permissions(administrator=True)
     @command_tag.command(name='delete', aliases=['remove', 'del'])
     async def command_tag_delete(self, ctx, name):
+        """Delete a tag"""
         if primebot.db.tags.find_one({'guild_id': ctx.guild.id, 'name': name}) is None:
             return await ctx.send("Tag not found")
         primebot.db.tags.delete_one({'guild_id': ctx.guild.id, 'name': name})
@@ -47,6 +50,7 @@ class Tags(commands.Cog):
 
     @command_tag.command(name='list', aliases=['l'])
     async def command_tag_list(self, ctx):
+        """Get a list of all tags"""
         listt = []
         lst = primebot.db.tags.find({'guild_id': ctx.guild.id})
         for doc in lst:
@@ -56,6 +60,7 @@ class Tags(commands.Cog):
 
     @command_tag.command(name='raw')
     async def command_tag_raw(self, ctx, name):
+        """Get raw of a tag"""
         if primebot.db.tags.find_one({'guild_id': ctx.guild.id, 'name': name}) is None:
             return await ctx.send("Tag not found")
         tag = primebot.db.tags.find_one({'guild_id': ctx.guild.id, 'name': name})
@@ -64,6 +69,7 @@ class Tags(commands.Cog):
     @command_tag.command(name='edit')
     @commands.has_permissions(administrator=True)
     async def command_tag_edit(self, ctx, name, *, content):
+        """Edit a tag"""
         query = {"name": str(name), "guild_id": ctx.guild.id}
         new = {"$set": {"content": content}}
 

@@ -11,6 +11,7 @@ import asyncio
 
 
 class Dev(commands.Cog):
+    """Dev commands"""
     def __init__(self, bot):
         self.bot = bot
         self._last_result = None
@@ -39,6 +40,7 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     async def login(self, ctx, service):
+        """Relogin to Services after Timeout"""
         if service == 'sows':
             primebot.sows._login()
             await ctx.send("Logged in")
@@ -82,6 +84,7 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     async def admintest(self, ctx):
+        """Test if you are the owner"""
         await ctx.send('You are the owner of this bot')
 
     @commands.command(pass_context=True, hidden=True, name='eval')
@@ -146,6 +149,7 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     async def dm(self, ctx, member, *, message: str):
+        """DM a user"""
         converter = discord.ext.commands.MemberConverter()
         user = await converter.convert(ctx, member)
         if not user:
@@ -159,6 +163,7 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     async def check_cogs(self, ctx, cog_name):
+        """Check if a cog is loaded"""
         try:
             self.bot.load_extension(f"cogs.{cog_name}")
         except commands.ExtensionAlreadyLoaded:
@@ -171,6 +176,7 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True, aliases=['game'])
     async def changegame(self, ctx, gameType: str, *, gameName: str):
+        """Change the precense of the bot"""
         gameType = gameType.lower()
         if gameType == 'playing':
             await self.bot.change_presence(activity=discord.Game(name=gameName))
@@ -187,6 +193,7 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     async def changestatus(self, ctx, status: str):
+        """Change the status of the bot"""
         status = status.lower()
         if status == 'idle':
             discordStatus = discord.Status.idle
@@ -200,6 +207,7 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     async def leaveserver(self, ctx, guildid):
+        """Leave a server"""
         if guildid == 'this':
             await ctx.guild.leave()
             return
@@ -213,11 +221,13 @@ class Dev(commands.Cog):
 
     @commands.command(pass_context=True, hidden=True)
     async def echo(self, ctx, *, a):
+        """Echo something into the channel"""
         await ctx.send(a)
         await ctx.message.delete()
 
     @commands.command(hidden=True)
     async def reply(self, ctx, *, a=None):
+        """Reply to a message"""
         if a is None:
             await ctx.reply('replied')
         else:
@@ -225,6 +235,7 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     async def nickname(self, ctx, *name):
+        """Set the nickname of the bot"""
         nickname = ' '.join(name)
         me = ctx.me
         await me.edit(nick=nickname)
@@ -236,18 +247,21 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     async def pull(self, ctx):
+        """Pull from upstream git repo"""
         g = git.cmd.Git('.')
         msg = g.pull()
         await ctx.send('```\n' + msg + '\n```')
 
     @commands.command(hidden=True, aliases=['reboot'])
     async def restart(self, ctx):
+        """Restart the bot"""
         await ctx.send(":robot: Bot is restarting")
         await self.bot.closeman()
         await self.bot.login(primebot.conf['token'], bot=True)
 
     @commands.command(hidden=True)
     async def serverlist(self, ctx):
+        """Get a list of servers"""
         list = []
         for guild in self.bot.guilds:
             list.append(guild.name + ':' + str(len(guild.members)))
@@ -255,6 +269,7 @@ class Dev(commands.Cog):
 
     @commands.command(hidden=True)
     async def botservers(self, ctx):
+        """Get the number of servers the bot is in"""
         await ctx.send("I'm in " + str(len(self.bot.guilds)) + " servers")
 
 

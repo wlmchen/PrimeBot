@@ -40,6 +40,7 @@ class Utility(commands.Cog):
 
     @commands.command()
     async def whois(self, ctx, member=None):
+        """Get information about a member"""
         if member is None:
             member = str(ctx.message.author.id)
 
@@ -72,6 +73,7 @@ class Utility(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def githead(self, ctx):
+        """Get info about the latest commit"""
         head = subprocess.run(['git', '--no-pager', 'show', 'HEAD'], stdout=subprocess.PIPE)
         if len(head.stdout.decode('utf-8')) > 2000:
             mystr = head.stdout.decode('utf-8')
@@ -86,6 +88,7 @@ class Utility(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def gitlog(self, ctx):
+        """Get a log of git commits"""
         log = subprocess.run(['git', '--no-pager', 'log'], stdout=subprocess.PIPE)
         if len(log.stdout.decode('utf-8')) > 2000:
             mystr = log.stdout.decode('utf-8')
@@ -149,6 +152,7 @@ class Utility(commands.Cog):
 
     @commands.command(pass_context=True)
     async def poll(self, ctx, question, *options: str):
+        """Create a poll"""
         # options = [(word.lower()) for word in options]
         if len(options) <= 1:
             await ctx.send('You need more than one option to make a poll!')
@@ -175,6 +179,7 @@ class Utility(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def country(self, ctx, *, country):
+        """Get information about a country"""
         json = requests.get("https://restcountries.eu/rest/v2/name/{}".format(country)).json()
         try:
             if json['status'] == 404:
@@ -217,6 +222,7 @@ class Utility(commands.Cog):
 
     @commands.command(aliases=['aw'])
     async def archwiki(self, ctx, *, query):
+        """Search the ArchWiki"""
 
         url = "https://wiki.archlinux.org/index.php?search={}".format(query)
 
@@ -295,6 +301,7 @@ class Utility(commands.Cog):
 
     @commands.command(aliases=['av'])
     async def avatar(self, ctx, *, member: Union[discord.Member, int] = None):
+        """Get a user avatar"""
         if member is None:
             member = ctx.message.author
         else:
@@ -309,6 +316,7 @@ class Utility(commands.Cog):
 
     @commands.command()
     async def apod(self, ctx, date=None):
+        """Get the astronomy picture of the day"""
         API_KEY = primebot.conf['api']['nasa_api_key']
 
         if date is None:
@@ -353,6 +361,9 @@ class Utility(commands.Cog):
 
     @commands.command(name="math")
     async def _math(self, ctx, *, m):
+        """
+        Do math
+        """
         start = time.time()
         try:
             result = str(primebot.utils.parsers.NumericStringParser().eval(m))
@@ -365,7 +376,13 @@ class Utility(commands.Cog):
 
     @commands.command(aliases=['gh'])
     async def github(self, ctx, *, repo):
-        """Get Information about a GitHub repository"""
+        """
+        Get Information about a GitHub repository
+
+        ex.
+
+        <prefix>gh pryme-svg/primebot
+        """
         json = requests.get('https://api.github.com/repos/{}'.format(repo)).json()
         try:
             if json['message'] == "Not Found":
@@ -400,6 +417,7 @@ class Utility(commands.Cog):
 
     @commands.command()
     async def distro(self, ctx, *, arg):
+        """Get information about a GNU/Linux distribution"""
         if arg == "random":
             arg = (random.choice(list(open('primebot/assets/linux.list'))))
 

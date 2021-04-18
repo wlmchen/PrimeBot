@@ -3,7 +3,7 @@ import base64
 
 
 class Encoding(commands.Cog):
-
+    """Encode text into various bases"""
     def __init__(self, bot):
         self.bot = bot
 

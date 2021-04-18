@@ -4,7 +4,7 @@ import discord
 
 class Menu(menus.MenuPages):
     def __init__(self, source):
-        super().__init__(timeout=30.0, source=source)
+        super().__init__(timeout=90.0, source=source)
 
     async def finalize(self, timed_out):
         try:

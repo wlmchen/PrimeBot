@@ -6,6 +6,7 @@ import traceback
 
 
 class Error(commands.Cog):
+    """Handle bot errors"""
     def __init__(self, bot):
         self.bot = bot
 

@@ -5,12 +5,14 @@ from typing import Union
 
 
 class Moderation(commands.Cog):
+    """Moderation commands"""
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(aliases=['changeprefix'])
     @commands.has_permissions(administrator=True)
     async def prefix(self, ctx, prefix: str):
+        """Set bot prefix"""
         guild_id = ctx.guild.id
         result = primebot.db.prefixes.update_one({'guild_id': guild_id}, {"$set": {"prefix": prefix}})
         if result.matched_count > 0:
@@ -48,6 +50,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def log_channel(self, ctx, channel: Union[discord.TextChannel, int]):
+        """Set log channel"""
         guild_id = ctx.guild.id
         if type(channel) == int and self.bot.get_channel(channel) is None:
             raise commands.CommandError("Invalid Channel! ☹️")
@@ -76,6 +79,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member, *, reason=None):
+        """Kick a member"""
         converter = discord.ext.commands.MemberConverter()
         member = await converter.convert(ctx, member)
         if member is None or member == ctx.message.author:
@@ -91,6 +95,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: Union[discord.Member, int], *, reason=None):
+        """Ban a member"""
         user_obj = (
             await self.bot.fetch_user(member) if isinstance(member, int) else member
         )
@@ -113,6 +118,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def unban(self, ctx, *, member):
+        """Unban a member"""
         if '@' in member:
             member = member[1:]
         if '#' not in member:
@@ -142,6 +148,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     @commands.command(aliases=['clean', 'purge'])
     async def clear(self, ctx, amount):
+        """Purge an amount of messages"""
         amount = int(amount)
         await ctx.channel.purge(limit=amount)
 

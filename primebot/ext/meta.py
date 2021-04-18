@@ -195,12 +195,17 @@ class Meta(commands.Cog):
         embed.add_field(name='📁 Repo',
                         value='[Gitlab](https://gitlab.com/pryme-svg/primebot) [Github](https://github.com/pryme-svg/primebot)'
                               '\n\u200b')
-        embed.add_field(name='🕒 Uptime',
+        embed.add_field(name='🕒 uptime',
                         value=await self.uptime()
                         )
         embed.set_footer(text="Created by PrimeTime09#1847")
         embed.timestamp = ctx.message.created_at
         await ctx.send(embed=embed)
+
+    @commands.command(name="uptime")
+    async def _uptime(self, ctx):
+        """Get bot uptime"""
+        await ctx.send(embed=discord.Embed(title='🕒 Uptime', description=self.uptime()))
 
     # SYSTEM
     @commands.command(name='system', ignore_extra=False, aliases=['sys'])
