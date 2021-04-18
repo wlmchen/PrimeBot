@@ -4,7 +4,6 @@ import math
 import operator
 
 from urllib.parse import urlparse, parse_qs
-import requests
 import re
 from tld import get_tld
 
@@ -44,7 +43,7 @@ def amp_to_normal(url):
     :rtype: str or None
     """
     if is_amp(url):
-        r = requests.get(url)
+        r = self.cached_session.get(url)
         return r.url
     else:
         return None

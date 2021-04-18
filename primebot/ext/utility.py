@@ -3,7 +3,6 @@ import asyncio
 import math # noqa
 import time
 import datetime
-import requests_cache
 from pyparsing import ParseException
 
 from primebot.utils.paginator import Menu
@@ -14,7 +13,6 @@ from primebot.utils.scrapers import scrape_crates
 from primebot.utils.formatters import list_to_bullets
 
 from typing import Union
-import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands
 import random
@@ -180,7 +178,7 @@ class Utility(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def country(self, ctx, *, country):
         """Get information about a country"""
-        json = requests.get("https://restcountries.eu/rest/v2/name/{}".format(country)).json()
+        json = await self.bot.cached_session.get("https://restcountries.eu/rest/v2/name/{}".format(country)).json()
         try:
             if json['status'] == 404:
                 raise commands.CommandError(json['message'])
@@ -226,12 +224,12 @@ class Utility(commands.Cog):
 
         url = "https://wiki.archlinux.org/index.php?search={}".format(query)
 
-        html = requests.get(url)
+        html = await self.bot.cached_session.get(url)
         redirected = False
         for e in html.history:
-            if e.status_code == 302:
+            if e.status == 302:
                 redirected = True
-        html_string = html.content
+        html_string = await html.text()
         if redirected is not True:
             links = []
             titles = []
@@ -239,7 +237,7 @@ class Utility(commands.Cog):
             reactions = []
             i = 1
             a = 0
-            e = BeautifulSoup(html.text, 'html.parser')
+            e = BeautifulSoup(html_string, 'html.parser')
 
             def check(reaction, user):
                 return user == ctx.message.author
@@ -250,7 +248,7 @@ class Utility(commands.Cog):
             # max of 9 results
             links = links[:9]
             if len(links) == 0:
-                raise commands.CommandError(":x: Query not Found")
+                raise commands.CommandError("Query not Found")
 
             for link, title in zip(links, titles):
                 description += str(i) + '. ' + '[{}]({})'.format(title, link) + '\n'
@@ -279,9 +277,8 @@ class Utility(commands.Cog):
             urlo = links[reaction-1]
             title = titles[reaction-1]
         if 'urlo' in locals():
-            html_string = requests.get(urlo).text
-        else:
-            html_string = html_string.decode('utf-8')
+            html_string = await self.bot.session.get(urlo)
+            html_string = await html_string.text()
         try:
             test1 = html_string[html_string.index("</ul></div>"):html_string.index("Contents")]
         except ValueError:
@@ -321,11 +318,10 @@ class Utility(commands.Cog):
 
         if date is None:
             url = "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY
-            with requests_cache.disabled():
-                r = requests.get(url)
+            r = await self.bot.session.get(url)
         else:
             url = "https://api.nasa.gov/planetary/apod?api_key=" + API_KEY + "&date=" + date
-            r = requests.get(url)
+            r = await self.bot.cached_session.get(url)
 
         json_file = r.json()
         if 'code' in json_file:
@@ -352,7 +348,8 @@ class Utility(commands.Cog):
         if sourcelanguage not in langs or targetlanguage not in langs:
             return await ctx.send("Invalid Language")
         url = "https://libretranslate.com/translate?q={}&source={}&target={}".format(content, sourcelanguage, targetlanguage)
-        json = requests.post(url).json()
+        json = await self.session.post(url)
+        json = await json.json()
         translated = json['translatedText']
         embed = discord.Embed(title="Translation", description=translated)
         embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
@@ -383,7 +380,8 @@ class Utility(commands.Cog):
 
         <prefix>gh pryme-svg/primebot
         """
-        json = requests.get('https://api.github.com/repos/{}'.format(repo)).json()
+        json = await self.bot.session.get('https://api.github.com/repos/{}'.format(repo))
+        json = await json.json()
         try:
             if json['message'] == "Not Found":
                 raise commands.CommandError("Repo not found")
@@ -422,10 +420,8 @@ class Utility(commands.Cog):
             arg = (random.choice(list(open('primebot/assets/linux.list'))))
 
         url = "http://www.distrowatch.com/table.php?distribution=" + arg
-        html_string = requests.get(url).content
+        html_string = await self.bot.cached_session.get(url).text
         pattern = "<br /><br />"
-
-        html_string = html_string.decode('utf-8')
 
         if "The distribution you requested" in html_string:
             description = ":x: That distro doesn't exist!"

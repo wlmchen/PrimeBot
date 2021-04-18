@@ -2,7 +2,6 @@ import discord
 import json
 import primebot
 import datetime
-import requests
 from discord.ext import commands
 from primebot.utils.checks import is_pt
 
@@ -17,8 +16,8 @@ class Torrent(commands.Cog):
     async def _1337(self, ctx, *, query):
         async with ctx.channel.typing():
             url = 'https://torrent-api1.herokuapp.com/getTorrents?site=1337x&query={}'.format(query)
-            r = requests.get(url)
-            json = r.json()
+            r = await self.bot.cached_session.get(url)
+            json = await r.json()
             embed = discord.Embed(color=0xD63600)
             embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
             embed.set_thumbnail(url="https://1337x.to/images/logo.svg")
@@ -36,8 +35,8 @@ class Torrent(commands.Cog):
     async def nyaa(self, ctx, *, query):
         async with ctx.channel.typing():
             url = 'https://torrent-api1.herokuapp.com/getTorrents?site=nyaa&query={}'.format(query)
-            r = requests.get(url)
-            json = r.json()
+            r = await self.bot.cached_session.get(url)
+            json = await r.json()
             embed = discord.Embed(color=0x0083FF)
             embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
             if not json['torrents']:
@@ -55,8 +54,8 @@ class Torrent(commands.Cog):
     async def rarbg(self, ctx, *, query):
         async with ctx.channel.typing():
             url = 'https://torrent-api1.herokuapp.com/getTorrents?site=Rarbg&query={}'.format(query)
-            r = requests.get(url)
-            json = r.json()
+            r = await self.bot.cached_session.get(url)
+            json = await r.json()
             embed = discord.Embed(color=0x0083FF)
             embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
             embed.set_thumbnail(url="https://rargb.to/static/img/logo_dark_nodomain2_optimized.png")

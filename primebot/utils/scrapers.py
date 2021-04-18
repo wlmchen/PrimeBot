@@ -1,5 +1,5 @@
-import requests
 from primebot.utils.math import convert_size
+import primebot
 from discord.ext import commands
 from bs4 import BeautifulSoup
 import os
@@ -7,7 +7,7 @@ import re
 
 
 def scrape_song_lyrics(url):
-    page = requests.get(url)
+    page = primebot.session.get(url)
     html = BeautifulSoup(page.text, 'html.parser')
     lyrics = html.find('div', class_='lyrics').get_text()
     # remove identifiers like chorus, verse, etc
@@ -19,8 +19,8 @@ def scrape_song_lyrics(url):
 
 def scrape_pypi(query):  # i know this is messy but who cares
     url = "https://pypi.org/pypi/{}/json".format(query)
-    page = requests.get(url)
-    if page.status_code == 404:
+    page = primebot.session.get(url)
+    if page.status == 404:
         raise commands.CommandError("Package not found")
     json = page.json()
     author = json['info']['author']
@@ -35,8 +35,8 @@ def scrape_pypi(query):  # i know this is messy but who cares
 
 def scrape_crates(crate):
     url = "https://crates.io/api/v1/crates/{}".format(crate)
-    raw = requests.get(url)
-    if raw.status_code == 404:
+    raw = primebot.cached_session.get(url)
+    if raw.status == 404:
         raise commands.CommandError("Crate not found")
     json = raw.json()
     crate = json['crate']
@@ -48,7 +48,7 @@ def scrape_crates(crate):
     downloads = crate['downloads']
     created_at = crate['created_at']
     owners = []
-    owner_json = requests.get("https://crates.io{}".format(crate['links']['owners'])).json()['users']
+    owner_json = primebot.cached_session.get("https://crates.io{}".format(crate['links']['owners'])).json()['users']
     for owner in owner_json:
         owners.append('[{}]({})'.format(owner['name'], owner['url']))
     return name, description, version, repo, docs, downloads, created_at, owners
@@ -56,7 +56,7 @@ def scrape_crates(crate):
 
 def scrape_arch(package):
     url = "https://archlinux.org/packages/search/json/?name={}".format(package)
-    raw = requests.get(url)
+    raw = primebot.cached_session.get(url)
     json = raw.json()
     pkg = json['results'][0]
 

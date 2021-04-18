@@ -1,11 +1,9 @@
 git+https://github.com/Rapptz/discord-ext-menus
 
 discord.py
-requests
 xkcd-wrapper
 psutil
 bs4
-requests-cache
 py-cpuinfo
 pyfiglet
 GitPython
@@ -16,3 +14,7 @@ mechanicalsoup
 tld
 dnspython
 pyparsing
+
+aiosqlite
+aiohttp_client_cache
+aiohttp

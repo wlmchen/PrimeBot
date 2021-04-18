@@ -1,5 +1,9 @@
 from .config.config_loader import * # noqa
 from primebot.utils import errors
+
+import aiohttp
+from aiohttp_client_cache import CachedSession, SQLiteBackend
+
 import primebot
 import discord
 from discord.ext import commands
@@ -19,8 +23,14 @@ class PrimeBot(commands.Bot):
         self._cd = commands.CooldownMapping.from_cooldown(2, 3, commands.BucketType.user)
         self.add_check(self.global_cooldown, call_once=True)
 
+        self.loop.create_task(self.__ainit__())
+
         for ext in primebot.conf['exts']:
             self.load_extension('primebot.ext.{}'.format(ext))
+
+    async def __ainit__(self):
+        self.session = aiohttp.ClientSession()
+        self.cached_session = CachedSession(cache=SQLiteBackend('aiohttp_cache'))
 
     async def global_cooldown(self, ctx):
         bucket = self._cd.get_bucket(ctx.message)
@@ -54,7 +64,8 @@ class PrimeBot(commands.Bot):
 
     async def closeman(self):
         await super().close()
-        await self.logout()
+        await self.session.close()
+        await self.cached_session.close()
         primebot.db.close()
 
     def run(self):

@@ -2,8 +2,6 @@ import discord
 from async_timeout import timeout
 import asyncio
 import primebot
-import requests
-import requests_cache
 import json
 from discord.ext import commands
 import random
@@ -114,8 +112,8 @@ class Fun(commands.Cog):
     async def define(self, ctx, *, arg):
         """Search Urban Dictionary"""
         url = "https://api.urbandictionary.com/v0/define?term=" + arg
-        json1 = requests.get(url)
-        data = json1.json()
+        json1 = await self.bot.cached_session.get(url)
+        data = await json1.json()
         if not data["list"]:
             await ctx.send("Word not Found!")
             return
@@ -140,9 +138,8 @@ class Fun(commands.Cog):
     async def quote(self, ctx):
         """Get an inspirational quote"""
         # don't cache this page or every quote will be the same
-        with requests_cache.disabled():
-            response = requests.get("https://zenquotes.io/api/random")
-        json_data = json.loads(response.text)
+        response = await self.bot.session.get("https://zenquotes.io/api/random")
+        json_data = json.loads(await response.text())
         quote = json_data[0]['q'] + " -" + json_data[0]['a']
         embedQuote = discord.Embed(title="Inspirational Quote", description=quote, color=0x282828)
         await ctx.send(embed=embedQuote)
@@ -162,9 +159,8 @@ class Fun(commands.Cog):
     async def catfact(self, ctx):
         """Get a random catfact"""
         url = "https://catfact.ninja/facts"
-        with requests_cache.disabled():
-            response = requests.get(url)
-        data = json.loads(response.text)
+        response = await self.bot.session.get(url)
+        data = await response.json()
         fact = data['data'][0]['fact']
         embed = discord.Embed(title="Cat Fact", description=fact)
         embed.set_footer(text="🐱")
@@ -175,9 +171,8 @@ class Fun(commands.Cog):
         """Get a random name"""
         url = "https://nekos.life/api/v2/name"
 
-        with requests_cache.disabled():
-            response = requests.get(url)
-        data = json.loads(response.text)
+        response = await self.bot.session.get(url)
+        data = await response.json()
         name = data['name']
         embed = discord.Embed(title="Name", description=name)
         embed.set_footer(text="📛")
@@ -187,8 +182,8 @@ class Fun(commands.Cog):
     async def spoiler(self, ctx, *, text):
         """Spoiler every letter"""
         url = "https://nekos.life/api/v2/spoiler?text=" + text
-        json1 = requests.get(url)
-        data = json1.json()
+        json1 = await self.bot.session.get(url)
+        data = await json1.json()
         try:
             if data['msg']:
                 raise commands.CommandError(data['msg'])

@@ -1,7 +1,7 @@
 error.log
 log.txt
 __pycache__/
-requests_cache.sqlite
+aiohttp_cache.sqlite
 .vscode/
 config.yml
 venv/
