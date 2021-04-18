@@ -1,5 +1,4 @@
 import discord
-import unicodedata
 import asyncio
 import math # noqa
 import time
@@ -244,8 +243,10 @@ class Utility(commands.Cog):
                 titles.append(result.find('a')['title'])
             # max of 9 results
             links = links[:9]
+            if len(links) == 0:
+                raise commands.CommandError(":x: Query not Found")
 
-            for link,title in zip(links, titles):
+            for link, title in zip(links, titles):
                 description += str(i) + '. ' + '[{}]({})'.format(title, link) + '\n'
                 i += 1
             embed = discord.Embed(title="Results: " + query, description=description, color=0x1793d1)
