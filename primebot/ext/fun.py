@@ -151,7 +151,9 @@ class Fun(commands.Cog):
         text = f.renderText(arg)
         msg = '```fix\n' + text + '\n```'
         if len(msg) >= 2000:
-            await ctx.send("Discord API limits message content to 2000 characters, please send a shorter message")
+            pages = primebot.utils.paginator.TextPageSource(text, prefix='```fix')
+            menu = primebot.utils.paginator.Menu(pages)
+            await menu.start(ctx)
             return
         await ctx.send(msg)
 
