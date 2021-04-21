@@ -60,10 +60,10 @@ class Events(commands.Cog):
                 if primebot.utils.parsers.is_amp(match):
                     urls.append(await self.amp_to_normal(match))
             if urls:
-                embed = discord.Embed(title="Non AMP Links")
+                embed = discord.Embed(title="Non AMP Links", color=discord.Color.blurple())
                 for url in urls:
                     embed.add_field(name="\u200b", value=url, inline=False)
-                await message.channel.send(embed=embed)
+                await message.reply(embed=embed, mention_author=False)
                 await log_on_message(self, message)
         # google redirects
         matches = primebot.utils.parsers.extract_urls(message.content)
@@ -73,11 +73,11 @@ class Events(commands.Cog):
                 if primebot.utils.parsers.is_google_redirect(match):
                     urls.append(primebot.utils.parsers.follow_google_redirect(match))
             if urls:
-                embed = discord.Embed(title="Un-Googlified Links")
+                embed = discord.Embed(title="Un-Googlified Links", color=discord.Color.blurple())
                 embed.set_footer(text="Or even better, use DuckDuckGo")
                 for url in urls:
                     embed.add_field(name="\u200b", value=url, inline=False)
-                await message.channel.send(embed=embed)
+                await message.reply(embed=embed, mention_author=False)
                 await log_on_message(self, message)
 
         # youtube to indivious
