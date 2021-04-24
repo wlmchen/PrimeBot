@@ -37,11 +37,15 @@ class Error(commands.Cog):
         if isinstance(error, commands.errors.MaxConcurrencyReached):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: " + str(error)))
             return
+        if isinstance(error, commands.errors.BadUnionArgument):
+            await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: Incorrect Parameters"))
+            return
         if isinstance(error, commands.errors.PartialEmojiConversionFailure):
             await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: Could not convert to custom emoji"))
             return
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The command is incomplete, missing one or more parameters!"))
+            # await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=":x: The command is incomplete, missing one or more parameters!"))
+            await ctx.send_help(ctx.command)
             return
         if isinstance(error, commands.errors.NSFWChannelRequired):
             embed = discord.Embed(color=discord.Color.red(), description=":x: This is not an nsfw channel")

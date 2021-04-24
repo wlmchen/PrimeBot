@@ -100,17 +100,22 @@ class Utility(commands.Cog):
             return string[:-2]
 
     @commands.command()
-    async def whois(self, ctx, member=None):
+    async def whois(self, ctx, member: Union[discord.Member, int] = None):
         """Get information about a member"""
-        if member is None:
-            member = str(ctx.message.author.id)
+        origmember = member
+        if origmember is None:
+            member = ctx.message.author
 
         if '@everyone' in ctx.message.content:
             await ctx.send("You may not ping everyone in this command! {}".format(ctx.message.author.mention))
             return
 
         converter = discord.ext.commands.MemberConverter()
-        member = await converter.convert(ctx, member)
+        if type(member) == int:
+            try:
+                member = await converter.convert(ctx, member)
+            except:
+                member = None
         if member is not None:
             embed = discord.Embed()
             embed.set_footer(text=f'UserID: {member.id}')
@@ -127,9 +132,20 @@ class Utility(commands.Cog):
             embed.add_field(name='Avatar Link', value=member.avatar_url, inline=False)
             embed.add_field(name='Roles', value=self._getRoles(member.roles), inline=True)
             await ctx.send(embed=embed)
+            return
+        elif type(origmember) == int and await self.bot.fetch_user(origmember) is not None:
+            member = await self.bot.fetch_user(origmember)
+            embed = discord.Embed()
+            embed.set_footer(text=f'User ID: {member.id}')
+            embed.set_author(name=member.name, icon_url=member.avatar_url)
+            embed.add_field(name='whois (less information due to no mutual guild)', value=member.mention, inline=False)
+            embed.add_field(name='Joined Discord on:', value='{}\n'.format(member.created_at.strftime('%m/%d/%Y %H:%M:%S')), inline=True)
+            embed.add_field(name='Avatar Link', value=member.avatar_url, inline=False)
+            embed.set_thumbnail(url=member.avatar_url)
+            await ctx.send(embed=embed)
+            return
         else:
-            msg = 'You have not specified a user!'
-            await ctx.send(msg)
+            raise commands.CommandError(f'\"{origmember}\" not found')
 
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)

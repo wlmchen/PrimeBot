@@ -205,7 +205,7 @@ class Meta(commands.Cog):
     @commands.command(name="uptime")
     async def _uptime(self, ctx):
         """Get bot uptime"""
-        await ctx.send(embed=discord.Embed(title='🕒 Uptime', description=self.uptime()))
+        await ctx.send(embed=discord.Embed(title='🕒 Uptime', description=await self.uptime()))
 
     # SYSTEM
     @commands.command(name='system', ignore_extra=False, aliases=['sys'])
