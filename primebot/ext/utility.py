@@ -427,7 +427,7 @@ class Utility(commands.Cog):
         if sourcelanguage not in langs or targetlanguage not in langs:
             return await ctx.send("Invalid Language")
         url = "https://libretranslate.com/translate?q={}&source={}&target={}".format(content, sourcelanguage, targetlanguage)
-        json = await self.session.post(url)
+        json = await self.bot.session.post(url)
         json = await json.json()
         translated = json['translatedText']
         embed = discord.Embed(title="Translation", description=translated)

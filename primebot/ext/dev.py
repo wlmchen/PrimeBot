@@ -1,4 +1,5 @@
 import discord
+from typing import Union
 import subprocess
 import io
 import textwrap
@@ -148,11 +149,11 @@ class Dev(commands.Cog):
         await ctx.send(f"```\n{text}```")
 
     @commands.command(hidden=True)
-    async def dm(self, ctx, member, *, message: str):
+    async def dm(self, ctx, member: Union[discord.Member, int], *, message: str):
         """DM a user"""
-        converter = discord.ext.commands.MemberConverter()
-        user = await converter.convert(ctx, member)
-        if not user:
+        if type(member) == int:
+            user = await self.bot.fetch_user(member)
+        if user is None:
             return await ctx.send("Could not find any Umatching UserID ")
 
         try:
