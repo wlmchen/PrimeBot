@@ -426,7 +426,7 @@ class Utility(commands.Cog):
         langs = ['en', 'es', 'ar', 'zh', 'fr', 'de', 'hi', 'ga', 'it', 'ja', 'ko', 'pt', 'ru']
         if sourcelanguage not in langs or targetlanguage not in langs:
             return await ctx.send("Invalid Language")
-        url = "https://libretranslate.com/translate?q={}&source={}&target={}".format(content, sourcelanguage, targetlanguage)
+        url = primebot.conf['translate_url'] + "/translate?q={}&source={}&target={}".format(content, sourcelanguage, targetlanguage)
         json = await self.bot.session.post(url)
         json = await json.json()
         translated = json['translatedText']
