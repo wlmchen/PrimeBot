@@ -126,7 +126,8 @@ class Fun(commands.Cog):
             votes = "👍 " + str(word["thumbs_up"]) + "👎 " + str(word['thumbs_down'])
             definition = definition[0:2048]
             embed = discord.Embed(title=title, description=definition, url=url, color=discord.Color.blurple())
-            embed.add_field(name="Example", value=word['example'][:1024], inline=False)
+            if word['example'] != '':
+                embed.add_field(name="Example", value=word['example'][:1024], inline=False)
             embed.set_footer(text=votes)
             embeds.append(embed)
         pages = primebot.utils.paginator.EmbedsSource(embeds)
