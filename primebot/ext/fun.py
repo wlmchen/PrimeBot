@@ -114,9 +114,17 @@ class Fun(commands.Cog):
         url = "https://api.urbandictionary.com/v0/define?term=" + arg
         json1 = await self.bot.cached_session.get(url)
         data = await json1.json()
-        if not data["list"]:
-            await ctx.send("Word not Found!")
-            return
+        try:
+            if not data["list"]:
+                await ctx.send("Word not Found!")
+                return
+        except:
+            try:
+                await ctx.send(data['error'])
+                return
+            except:
+                await ctx.send("An Error Occured")
+                return
         embeds = []
         for word in data['list']:
             definition = word["definition"]
