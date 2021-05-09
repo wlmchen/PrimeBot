@@ -92,9 +92,9 @@ class Moderation(commands.Cog):
         await member.kick(reason='Kicked by: {}, Reason: {}'.format(ctx.message.author, reason))
         await ctx.send(f'User {member.mention} has been kicked')
 
-    @commands.command()
+    @commands.group(name='ban', invoke_without_command=True)
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member: Union[discord.Member, int], *, reason=None):
+    async def command_ban(self, ctx, member: Union[discord.Member, int], *, reason=None):
         """Ban a member"""
         user_obj = (
             await self.bot.fetch_user(member) if isinstance(member, int) else member
@@ -114,6 +114,21 @@ class Moderation(commands.Cog):
         await ctx.send(f'User {user_obj.mention} has been banned')
         # user = await discord.ext.commands.MemberConverter().convert(ctx, member)
         # await user.send(reason)
+
+    @command_ban.command(name='nodm')
+    async def command_ban_nodm(self, ctx,member: Union[discord.Member, int], *, reason=None):
+        """Ban a member without ban message"""
+        user_obj = (
+            await self.bot.fetch_user(member) if isinstance(member, int) else member
+        )
+        if member is None or member == ctx.message.author:
+            await ctx.send("You cannot ban yourself {}".format(ctx.message.author.mention))
+            return
+        if primebot.db.log_channels.find_one({'guild_id': ctx.guild.id}) is not None:
+            embed = discord.Embed(description="Event: ban\nModerator: {}\nReason: {}\nUser: {}".format(ctx.author.mention, reason, user_obj.mention))
+            await self.bot.get_channel(int(primebot.db.log_channels.find_one({'guild_id': ctx.guild.id})['channel_id'])).send(embed=embed)
+        await ctx.guild.ban(user_obj, reason=f"{ctx.author} ({ctx.author.id}) - {reason}", delete_message_days=0)
+        await ctx.send(f'User {user_obj.mention} has been banned')
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
