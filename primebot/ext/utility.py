@@ -480,7 +480,7 @@ class Utility(commands.Cog):
         if license == "Other":
             license_url = 'other'
         else:
-            license_url = "https://choosealicense.com/licenses/{}".format(json['license']['spdx_id'])
+            license_url = "https://choosealicense.com/licenses/{}".format(json['license']['spdx_id'].lower())
         embed.add_field(name="License", value="[{}]({})".format(license, license_url))
         embed.set_footer(text="Repo created at: {}".format(json['created_at']))
         if json['language'] is not None:
