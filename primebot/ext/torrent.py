@@ -50,11 +50,11 @@ class Torrent(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command(aliases=['rargb'])
-    @commands.cooldown(1, 3, commands.BucketType.user)
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def rarbg(self, ctx, *, query):
         async with ctx.channel.typing():
             i=0
-            url = 'https://torrent-api1.herokuapp.com/getTorrents?site=Rarbg&query={}'.format(query)
+            url = f'https://torrent-api1.herokuapp.com/getTorrents?site=Rarbg&query={query}'
             r = await self.bot.cached_session.get(url)
             json = await r.json()
             embed = discord.Embed(color=0x0083FF)
