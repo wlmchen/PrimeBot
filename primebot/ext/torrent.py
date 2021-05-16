@@ -65,10 +65,10 @@ class Torrent(commands.Cog):
                 await ctx.send(embed=embed)
                 return
             for torrent in json['torrents']:
-                desc = "**[magnet]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['magnet'], torrent['seeds'], torrent['leeches'], torrent['size'])
+                desc = "**[magnet]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['shortlink'], torrent['seeds'], torrent['leeches'], torrent['size'])
                 embed.add_field(name=torrent['name'], value=desc, inline=False)
                 i+=1
-                if i <= 3:
+                if i >= 3:
                     break
             embed.timestamp = datetime.datetime.utcnow()
             await ctx.send(embed=embed)
