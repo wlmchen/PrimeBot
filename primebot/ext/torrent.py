@@ -53,6 +53,7 @@ class Torrent(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def rarbg(self, ctx, *, query):
         async with ctx.channel.typing():
+            i=0
             url = 'https://torrent-api1.herokuapp.com/getTorrents?site=Rarbg&query={}'.format(query)
             r = await self.bot.cached_session.get(url)
             json = await r.json()
@@ -66,6 +67,9 @@ class Torrent(commands.Cog):
             for torrent in json['torrents']:
                 desc = "**[magnet]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['magnet'], torrent['seeds'], torrent['leeches'], torrent['size'])
                 embed.add_field(name=torrent['name'], value=desc, inline=False)
+                i+=1
+                if i <= 3:
+                    break
             embed.timestamp = datetime.datetime.utcnow()
             await ctx.send(embed=embed)
 
