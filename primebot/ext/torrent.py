@@ -58,15 +58,13 @@ class Torrent(commands.Cog):
             json = await r.json()
             embed = discord.Embed(color=0x0083FF)
             embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
-            embed.set_thumbnail(url="https://rargb.to/static/img/logo_dark_nodomain2_optimized.png")
+            embed.set_thumbnail(url="https://dyncdn2.com/static/20/img/logo_dark_nodomain2_optimized.png")
             if not json['torrents']:
                 embed = discord.Embed(description=":x: Query not found", color=0xD63600)
                 await ctx.send(embed=embed)
                 return
             for torrent in json['torrents']:
-                if torrent['shortlink'] == "":
-                    desc = "**[magnet]({})** | **[rarbg]({})** | Seeds: {} | Leeches: {} | Size: {}".format("magnet not found", torrent['link'], torrent['seeds'], torrent['leeches'], torrent['size'])
-                desc = "**[magnet]({})** | **[rarbg]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['shortlink'], torrent['link'], torrent['seeds'], torrent['leeches'], torrent['size'])
+                desc = "**[magnet]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['magnet'], torrent['seeds'], torrent['leeches'], torrent['size'])
                 embed.add_field(name=torrent['name'], value=desc, inline=False)
             embed.timestamp = datetime.datetime.utcnow()
             await ctx.send(embed=embed)
