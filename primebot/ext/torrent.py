@@ -50,7 +50,7 @@ class Torrent(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command(aliases=['rargb'])
-    @commands.cooldown(1, 2, commands.BucketType.user)
+    @commands.cooldown(1, 2, commands.BucketType.default)
     async def rarbg(self, ctx, *, query):
         async with ctx.channel.typing():
             i=0
