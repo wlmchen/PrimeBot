@@ -1,15 +1,69 @@
 import discord
+import asyncio
 import json
 import primebot
 import datetime
 from discord.ext import commands
 from primebot.utils.checks import is_pt
 
+def convertBytes(num):
+    step_unit = 1000.0
+    for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
+        if num < step_unit:
+            return "%3.1f %s" % (num, x)
+        num /= step_unit
+
 
 class Torrent(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    async def shorten_all(self,urls):
+        tasks = []
+        for url in urls:
+            task = asyncio.create_task(self.shorten(url))
+            tasks.append(task)
+        results = await asyncio.gather(*tasks)
+        return results
+
+
+    async def shorten(self, magnet):
+        url = "http://mgnet.me/api/create?&format=json&opt=&m={}".format(magnet)
+        e = await self.bot.session.get(url)
+        e = json.loads(await e.text())
+        return e['shorturl']
+
+
+    async def search_rarbg(self, query):
+        torrents = []
+        magnets = []
+        i = 0
+        url = f"https://torrentapi.org/pubapi_v2.php?mode=search&search_string={query}&token={self.bot.rarbg_token}&app_id=torrent-api&format=json_extended&sort=seeders"
+        source = await self.bot.cached_session.get(url)
+        source = await source.text()
+        source = json.loads(source)
+        try:
+            for torrent in source['torrent_results']:
+                torrents.append({
+                    "name": torrent['title'],
+                    "seeds": torrent['seeders'],
+                    "leeches": torrent['leechers'],
+                    "size": convertBytes(torrent['size']),
+                    "magnet": torrent['download'],
+                    "category": torrent['category']
+                    })
+                magnets.append(torrent['download'])
+        except:
+            return []
+
+        shortlinks = await self.shorten_all(magnets)
+
+        for torrent, magnet in zip(torrents, shortlinks):
+            torrent['shortlink'] = magnet
+
+        return torrents
+
 
     @commands.command(hidden=True, aliases=['1337'])
     @commands.cooldown(1, 3, commands.BucketType.user)
@@ -54,17 +108,16 @@ class Torrent(commands.Cog):
     async def rarbg(self, ctx, *, query):
         async with ctx.channel.typing():
             i=0
-            url = f'https://torrent-api1.herokuapp.com/getTorrents?site=Rarbg&query={query}'
-            r = await self.bot.cached_session.get(url)
-            json = await r.json()
+            json = await self.search_rarbg(query)
             embed = discord.Embed(color=0x0083FF)
             embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
             embed.set_thumbnail(url="https://dyncdn2.com/static/20/img/logo_dark_nodomain2_optimized.png")
-            if not json['torrents']:
+            print(json)
+            if not json:
                 embed = discord.Embed(description=":x: Query not found", color=0xD63600)
                 await ctx.send(embed=embed)
                 return
-            for torrent in json['torrents']:
+            for torrent in json:
                 desc = "**[magnet]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['shortlink'], torrent['seeds'], torrent['leeches'], torrent['size'])
                 embed.add_field(name=torrent['name'], value=desc, inline=False)
                 i+=1
