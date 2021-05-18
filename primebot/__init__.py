@@ -4,8 +4,11 @@ from primebot.utils import errors
 import aiohttp
 from aiohttp_client_cache import CachedSession, SQLiteBackend
 
+import json
+
 import primebot
 import discord
+from discord.ext import tasks
 from discord.ext import commands
 
 
@@ -23,10 +26,20 @@ class PrimeBot(commands.Bot):
         self._cd = commands.CooldownMapping.from_cooldown(2, 3, commands.BucketType.user)
         self.add_check(self.global_cooldown, call_once=True)
 
+        self.get_rarbg_token.start()
+
         self.loop.create_task(self.__ainit__())
 
         for ext in primebot.conf['exts']:
             self.load_extension('primebot.ext.{}'.format(ext))
+
+    @tasks.loop(seconds=900)
+    async def get_rarbg_token(self):
+        source = await self.cached_session.get("https://torrentapi.org/pubapi_v2.php?get_token=get_token&app_id=ef")
+        source = await source.text()
+        source = json.loads(source)
+        self.rarbg_token = source['token']
+
 
     async def __ainit__(self):
         self.session = aiohttp.ClientSession()
