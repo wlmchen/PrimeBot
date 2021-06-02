@@ -69,7 +69,7 @@ class Torrent(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def _1337(self, ctx, *, query):
         async with ctx.channel.typing():
-            url = 'https://torrent-api1.herokuapp.com/getTorrents?site=1337x&query={}'.format(query)
+            url = 'https://torrent-api.prymesvg.repl.co/getTorrents?site=1337x&query={}'.format(query)
             r = await self.bot.cached_session.get(url)
             json = await r.json()
             embed = discord.Embed(color=0xD63600)
@@ -88,7 +88,7 @@ class Torrent(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def nyaa(self, ctx, *, query):
         async with ctx.channel.typing():
-            url = 'https://torrent-api1.herokuapp.com/getTorrents?site=nyaa&query={}'.format(query)
+            url = 'https://torrent-api.prymesvg.repl.co/getTorrents?site=nyaa&query={}'.format(query)
             r = await self.bot.cached_session.get(url)
             json = await r.json()
             embed = discord.Embed(color=0x0083FF)
@@ -108,16 +108,17 @@ class Torrent(commands.Cog):
     async def rarbg(self, ctx, *, query):
         async with ctx.channel.typing():
             i=0
-            json = await self.search_rarbg(query)
+            url = 'https://torrent-api.prymesvg.repl.co/getTorrents?site=Rarbg&query={}'.format(query)
+            r = await self.bot.cached_session.get(url)
+            json = await r.json()
             embed = discord.Embed(color=0x0083FF)
             embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
             embed.set_thumbnail(url="https://dyncdn2.com/static/20/img/logo_dark_nodomain2_optimized.png")
-            print(json)
-            if not json:
+            if not json['torrents']:
                 embed = discord.Embed(description=":x: Query not found", color=0xD63600)
                 await ctx.send(embed=embed)
                 return
-            for torrent in json:
+            for torrent in json['torrents']:
                 desc = "**[magnet]({})** | Seeds: {} | Leeches: {} | Size: {}".format(torrent['shortlink'], torrent['seeds'], torrent['leeches'], torrent['size'])
                 embed.add_field(name=torrent['name'], value=desc, inline=False)
                 i+=1
