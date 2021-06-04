@@ -43,7 +43,11 @@ class PrimeBot(commands.Bot):
 
     async def __ainit__(self):
         self.session = aiohttp.ClientSession()
-        self.cached_session = CachedSession(cache=SQLiteBackend('aiohttp_cache'))
+        self.cached_session = CachedSession(cache=SQLiteBackend(
+            cache_name='aiohttp_cache',
+            expire_after=60*60*6, # 6 hours
+            allowed_codes=(200, 418)
+            ))
 
     async def global_cooldown(self, ctx):
         bucket = self._cd.get_bucket(ctx.message)
