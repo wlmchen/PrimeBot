@@ -136,7 +136,7 @@ class Torrent(commands.Cog):
         torrents = []
         index = 0
         for result in js['results']:
-            torrents.append({'name': result['groupName'], 'id': result['groupId'], 'size': primebot.utils.convert_size(result['maxSize']), 'seeders': result['totalSeeders'], 'leechers': result['totalLeechers'], 'year': result['groupYear'], 'artist': result['artist']})
+            torrents.append({'name': result['groupName'], 'id': result['groupId'], 'size': primebot.utils.math.convert_size(result['maxSize']), 'seeders': result['totalSeeders'], 'leechers': result['totalLeechers'], 'year': result['groupYear'], 'artist': result['artist']})
             torrents[index]['link'] = "https://bemaniso.ws/torrents.php?id={}".format(str(torrents[index]['id']))
             index += 1
             if index >= 3:
@@ -157,7 +157,7 @@ class Torrent(commands.Cog):
         torrents = []
         index = 0
         for result in js['results']:
-            torrents.append({'name': result['groupName'], 'id': result['groupId'], 'size': primebot.utils.convert_size(result['maxSize']), 'seeders': result['totalSeeders'], 'leechers': result['totalLeechers'], 'artist': result['artist'], 'year': result['groupYear']})
+            torrents.append({'name': result['groupName'], 'id': result['groupId'], 'size': primebot.utils.math.convert_size(result['maxSize']), 'seeders': result['totalSeeders'], 'leechers': result['totalLeechers'], 'artist': result['artist'], 'year': result['groupYear']})
             torrents[index]['link'] = "https://orpheus.network/torrents.php?id={}".format(str(torrents[index]['id']))
             index += 1
             if index >= 3:
