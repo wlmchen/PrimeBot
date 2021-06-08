@@ -127,7 +127,7 @@ class Torrent(commands.Cog):
             embed.timestamp = datetime.datetime.utcnow()
             await ctx.send(embed=embed)
 
-    @commands.command(hidden=True)
+    @commands.command(hidden=True, enabled=False)
     @is_pt()
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def sows(self, ctx, *, query):
@@ -148,7 +148,7 @@ class Torrent(commands.Cog):
             embed.add_field(name=torrent['name'], value=desc, inline=False)
         await ctx.send(embed=embed)
 
-    @commands.command(hidden=True)
+    @commands.command(hidden=True, enabled=False)
     @is_pt()
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def ops(self, ctx, *, query):
