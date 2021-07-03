@@ -69,7 +69,7 @@ class Torrent(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def _1337(self, ctx, *, query):
         async with ctx.channel.typing():
-            url = 'https://torrent-api.prymesvg.repl.co/getTorrents?site=1337x&query={}'.format(query)
+            url = 'https://torrent-api1.herokuapp.com/getTorrents?site=1337x&query={}'.format(query)
             r = await self.bot.cached_session.get(url)
             json = await r.json()
             embed = discord.Embed(color=0xD63600)
