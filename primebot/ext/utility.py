@@ -499,7 +499,8 @@ class Utility(commands.Cog):
             arg = (random.choice(list(open('primebot/assets/linux.list'))))
 
         url = "http://www.distrowatch.com/table.php?distribution=" + arg
-        html_string = await self.bot.cached_session.get(url).text
+        html_string = await self.bot.cached_session.get(url)
+        html_string = await html_string.text()
         pattern = "<br /><br />"
 
         if "The distribution you requested" in html_string:
