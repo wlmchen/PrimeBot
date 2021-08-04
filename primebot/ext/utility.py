@@ -18,6 +18,12 @@ import random
 import primebot
 import subprocess
 
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36 Edg/83.0.478.45",
+    "Accept-Encoding": "*",
+    "Connection": "keep-alive",
+}
+
 
 class Utility(commands.Cog):
 
@@ -499,7 +505,7 @@ class Utility(commands.Cog):
             arg = (random.choice(list(open('primebot/assets/linux.list'))))
 
         url = "https://distrowatch.com/table.php?distribution=" + arg
-        html_string = await self.bot.cached_session.get(url)
+        html_string = await self.bot.cached_session.get(url, headers=headers)
         html_string = await html_string.text()
         pattern = "<br /><br />"
 
