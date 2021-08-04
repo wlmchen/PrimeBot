@@ -498,7 +498,7 @@ class Utility(commands.Cog):
         if arg == "random":
             arg = (random.choice(list(open('primebot/assets/linux.list'))))
 
-        url = "http://www.distrowatch.com/table.php?distribution=" + arg
+        url = "https://distrowatch.com/table.php?distribution=" + arg
         html_string = await self.bot.cached_session.get(url)
         html_string = await html_string.text()
         pattern = "<br /><br />"
