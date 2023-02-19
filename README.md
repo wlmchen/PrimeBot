@@ -38,11 +38,11 @@ A personal bot that runs on Discord.
 | `>define (term)` | `df`,  `urbandict`, `ud` | Get definitions from urbandict |
 | `>figlet (text)` | `ascii` | Get ascii art |
 | `>invite` | N/A | Invite the bot |
-| `>b64encode` | `b64e` | Encode text into base64 |
+| `>b64encode` | `b64` | Encode text into base64 |
 | `>b64decode` | `b64d` | Decode text from base64 |
-| `>b16encode` | `b16e` | Encode text into base16 |
+| `>b16encode` | `b16` | Encode text into base16 |
 | `>b16decode` | `b16d` | Decode text from base16 |
-| `>b32encode` | `b32e` | Encode text into base32 |
+| `>b32encode` | `b32` | Encode text into base32 |
 | `>b32decode` | `b32d` | Decode text from base32 |
-| `>b85encode` | `b85e` | Encode text into base85 |
+| `>b85encode` | `b85` | Encode text into base85 |
 | `>b85decode` | `b85d` | Decode text from base85 |
