@@ -63,7 +63,7 @@ class Encoding(commands.Cog):
         s2 = d.decode("UTF-8")
         return s2
 
-    @commands.command(aliases=['b64e'])
+    @commands.command(aliases=['b64'])
     async def b64encode(self, ctx, *, arg):
         """
         Encode text into base64
@@ -79,7 +79,7 @@ class Encoding(commands.Cog):
         to_decode = arg
         await ctx.send(self.b64_to_str(to_decode))
 
-    @commands.command(aliases=['b16e'])
+    @commands.command(aliases=['b16'])
     async def b16encode(self, ctx, *, arg):
         """
         Encode text into base16
@@ -95,7 +95,7 @@ class Encoding(commands.Cog):
         to_decode = arg
         await ctx.send(self.b16_to_str(to_decode))
 
-    @commands.command(aliases=['b32e'])
+    @commands.command(aliases=['b32'])
     async def b32encode(self, ctx, *, arg):
         """
         Encode text into base32
@@ -111,7 +111,7 @@ class Encoding(commands.Cog):
         to_decode = arg
         await ctx.send(self.b32_to_str(to_decode))
 
-    @commands.command(aliases=['b85e'])
+    @commands.command(aliases=['b85'])
     async def b85encode(self, ctx, *, arg):
         """
         Encode text into base85
